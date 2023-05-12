@@ -32,7 +32,7 @@
         <x-auth-button>{{ __('Login') }}</x-auth-button>
     </form>
 
-    <div class="text-sm text-center text-slate-500">
+    <div class="mb-1 text-sm text-center text-slate-500">
         {{ __('Belum memiliki akun?') }} <a href="{{ route('register') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30">{{ __('Registrasi') }}</a>
     </div>
 </div>

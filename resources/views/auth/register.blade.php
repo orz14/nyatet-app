@@ -1,59 +1,30 @@
-<x-guest-layout>
+@extends('layouts.guest')
+@section('content')
+<div class="w-full max-w-md overflow-hidden">
+    <x-logo />
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        {{-- Name --}}
+        <x-form-auth type="text" name="name" ph="Masukkan Nama" value="{{ old('name') }}" required autofocus>{{ __('Nama') }}</x-form-auth>
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block w-full mt-1" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+        {{-- Username --}}
+        <x-form-auth type="text" name="username" ph="Masukkan Username" value="{{ old('username') }}" required>{{ __('Username') }}</x-form-auth>
 
-        <!-- Username -->
-        <div class="mt-4">
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block w-full mt-1" type="text" name="username" :value="old('username')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-        </div>
+        {{-- Email Address --}}
+        <x-form-auth type="email" name="email" ph="Masukkan Email" value="{{ old('email') }}" required>{{ __('Email') }}</x-form-auth>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        {{-- Password --}}
+        <x-form-auth type="password" name="password" ph="Masukkan Password" required>{{ __('Password') }}</x-form-auth>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        {{-- Confirm Password --}}
+        <x-form-auth type="password" name="password_confirmation" ph="Konfirmasi Password" required>{{ __('Konfirmasi Password') }}</x-form-auth>
 
-            <x-text-input id="password" class="block w-full mt-1"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block w-full mt-1"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ml-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+        <x-auth-button class="mt-5">{{ __('Daftar') }}</x-auth-button>
     </form>
-</x-guest-layout>
+
+    <div class="mb-1 text-sm text-center text-slate-500">
+        {{ __('Sudah memiliki akun?') }} <a href="{{ route('login') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30">{{ __('Login') }}</a>
+    </div>
+</div>
+@endsection
