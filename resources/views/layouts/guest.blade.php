@@ -3,7 +3,7 @@
     <head>
         @include('partials.meta')
     </head>
-    <body class="flex flex-wrap items-center justify-center min-h-screen antialiased text-black bg-white">
+    <body class="flex flex-wrap items-center justify-center min-h-screen antialiased font-semibold text-black bg-white">
         <main class="container flex justify-center p-4">
             @yield('content')
         </main>

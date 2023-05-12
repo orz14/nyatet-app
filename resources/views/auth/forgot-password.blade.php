@@ -1,25 +1,27 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+@extends('layouts.guest')
+@section('content')
+<div class="w-full max-w-md overflow-hidden">
+    <div class="w-full max-w-sm mx-auto mb-2 text-sm text-gray-600">
+        {{ __('Masukkan alamat email yang terkait dengan akun Anda dan kami akan mengirimkan tautan untuk mengatur ulang kata sandi Anda.') }}
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    {{-- Session Status --}}
+    <x-auth-session-status :status="session('status')" />
 
     <form method="POST" action="{{ route('password.email') }}">
         @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        {{-- Email Address --}}
+        <x-form-auth type="email" name="email" ph="Masukkan Email" value="{{ old('email') }}" required autofocus>{{ __('Email') }}</x-form-auth>
+        
+        <div class="w-full max-w-sm mx-auto mt-5 sm:flex sm:flex-row-reverse sm:gap-2">
+            <x-auth-button>
+                {{ __('Kirim Tautan') }}
+            </x-auth-button>
+            
+            <div class="w-full max-w-sm mx-auto mb-5">
+                <a href="{{ route('login') }}" class="text-white border-none bg-slate-400 hover:bg-slate-500 btn btn-block">Kembali</a>
+            </div>
         </div>
     </form>
-</x-guest-layout>
+</div>
+@endsection
