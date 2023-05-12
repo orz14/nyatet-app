@@ -8,10 +8,16 @@ module.exports = {
         "./resources/views/**/*.blade.php",
     ],
 
+    darkMode: "class",
+
     theme: {
+        container: {
+            center: true,
+            padding: "16px",
+        },
         extend: {
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["Poppins", ...defaultTheme.fontFamily.sans],
             },
         },
     },

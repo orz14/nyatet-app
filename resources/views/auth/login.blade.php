@@ -1,47 +1,39 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.guest')
+@section('content')
+<div class="w-full max-w-md overflow-hidden">
+    <x-logo />
+
+    {{-- Session Status --}}
+    <x-auth-session-status :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
+        {{-- Username --}}
+        <x-form-auth type="text" name="username" ph="Masukkan Username" value="{{ old('username') }}" required autofocus>{{ __('Username') }}</x-form-auth>
 
-        <!-- Username -->
-        <div>
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block w-full mt-1" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-        </div>
+        {{-- Password --}}
+        <x-form-auth type="password" name="password" ph="Masukkan Password" required>{{ __('Password') }}</x-form-auth>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <div class="flex items-center justify-between w-full max-w-sm mx-auto mt-4 mb-5 text-sm">
+            {{-- Remember Me --}}
+            <div class="inline-flex items-center gap-x-2">
+                <input class="text-teal-700 transition-all duration-300 ease-in-out bg-white border-teal-700 rounded shadow-sm focus:border-teal-700 focus:ring focus:ring-teal-600/20 focus:ring-opacity-80" type="checkbox" name="remember" id="remember">
+                <label class="select-none text-slate-500" for="remember">
+                    {{ __('Ingat saya') }}
+                </label>
+            </div>
 
-            <x-text-input id="password" class="block w-full mt-1"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="text-indigo-600 border-gray-300 rounded shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
+            {{-- Lupa Password --}}
             @if (Route::has('password.request'))
-                <a class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+            <a href="{{ route('password.request') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30">{{ __('Lupa Password?') }}</a>
             @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
+
+        <x-auth-button>{{ __('Login') }}</x-auth-button>
     </form>
-</x-guest-layout>
+
+    <div class="text-sm text-center text-slate-500">
+        {{ __('Belum memiliki akun?') }} <a href="{{ route('register') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30">{{ __('Registrasi') }}</a>
+    </div>
+</div>
+@endsection
