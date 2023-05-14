@@ -11,16 +11,16 @@
         @csrf
 
         {{-- Password Reset Token --}}
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+        <x-hidden name="token" value="{{ $request->route('token') }}" />
         
         {{-- Email Address --}}
-        <input type="hidden" name="email" value="{{ old('email', $request->email) }}">
+        <x-hidden name="email" value="{{ old('email', $request->email) }}" />
 
         {{-- Password --}}
         <x-form-auth type="password" name="password" ph="Masukkan Password Baru" required autofocus>{{ __('Password Baru') }}</x-form-auth>
 
         {{-- Confirm Password --}}
-        <x-form-auth type="password" name="password_confirmation" ph="Konfirmasi Password Baru" required autofocus>{{ __('Konfirmasi Password Baru') }}</x-form-auth>
+        <x-form-auth type="password" name="password_confirmation" ph="Konfirmasi Password Baru" required>{{ __('Konfirmasi Password Baru') }}</x-form-auth>
 
         <x-auth-button class="mt-3">{{ __('Reset Password') }}</x-auth-button>
     </form>
