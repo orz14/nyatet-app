@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .container {
-    @apply max-w-6xl;
+    @apply max-w-5xl;
 }
 
 .nav {
@@ -20,7 +20,7 @@
 }
 
 .nav .menutet {
-    @apply w-3/5 flex justify-center items-center gap-10;
+    @apply w-3/5 flex justify-center items-center gap-5 sm:gap-10;
 }
 
 .nav .menu-item {

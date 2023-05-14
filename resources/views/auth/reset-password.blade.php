@@ -1,7 +1,9 @@
 @extends('layouts.guest')
 @section('content')
 <div class="w-full max-w-md overflow-hidden">
-    <x-logo />
+    <div class="mb-5">
+        <x-logo class="h-auto mx-auto pointer-events-none select-none w-36" />
+    </div>
 
     <div class="text-center">
         <x-error name="email" />

@@ -4,7 +4,13 @@
         @include('partials.meta')
     </head>
     <body class="min-h-screen antialiased font-semibold text-black bg-teal-50">
-        @yield('content')
+        <x-header />
+        
+        <main class="container -mt-12">
+            @yield('content')
+        </main>
+
+        <x-footer />
 
         <script>
             feather.replace()
