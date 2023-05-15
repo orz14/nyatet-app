@@ -7,7 +7,7 @@
 
         <div class="menutet">
             <a href="{{ route('todo.index') }}" class="menu-item {{ Request::is('todo*') ? 'menu-item-active' : '' }}">{{ __('Todo List') }}</a>
-            <a href="#" class="menu-item {{ Request::is('note*') ? 'menu-item-active' : '' }}">{{ __('Note') }}</a>
+            <a href="{{ route('note.index') }}" class="menu-item {{ Request::is('note*') ? 'menu-item-active' : '' }}">{{ __('Note') }}</a>
         </div>
         
         <div class="ctas">

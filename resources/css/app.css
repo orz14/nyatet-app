@@ -7,7 +7,7 @@
 }
 
 .nav {
-    @apply pt-3;
+    @apply pt-2 sm:pt-3;
 }
 
 .nav .container {
@@ -33,4 +33,16 @@
 
 .nav .ctas {
     @apply text-right;
+}
+
+.todo-hijau {
+    @apply !bg-teal-400 !border-teal-400;
+}
+
+.todo-merah {
+    @apply !bg-red-400 !border-red-400;
+}
+
+.ckeditor ul {
+    @apply list-[square] pl-5;
 }

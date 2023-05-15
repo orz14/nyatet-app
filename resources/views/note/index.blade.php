@@ -1,0 +1,41 @@
+@extends('layouts.app')
+@section('hero')
+<h1 class="text-2xl font-normal sm:text-3xl md:text-4xl lg:font-light lg:text-6xl mb-7">
+    {{ __('Catatan') }}
+</h1>
+<a href="{{ route('note.create') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600">{{ __('Tambahkan Catatan') }}</a>
+@endsection
+
+@section('content')
+@if ($datas->count())
+@foreach ($datas as $data)
+<div class="mb-4 transition-all duration-300 ease-in-out bg-white border-4 rounded-none border-teal-400/50 card hover:border-teal-400">
+    <div class="p-4 leading-none card-body">
+        <div class="flex items-center justify-between">
+            <a href="{{ route('note.edit', $data->slug) }}">
+                <div class="font-bold underline">{{ isset($data->title) ? $data->decrypt($data->title) : 'Tanpa Judul' }}</div>
+                <div class="text-xs font-bold">{{ \Carbon\Carbon::parse($data->updated_at)->translatedFormat('Y/m/d H:i') }}</div>
+            </a>
+            <div>
+                <form method="POST" action="{{ route('todo.destroy', $data->slug) }}" class="block sm:inline-block">
+                    @csrf
+                    @method('DELETE')
+                    <x-todo-button class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
+                </form>
+                <form method="POST" action="{{ route('todo.update', $data->slug) }}" class="block sm:inline-block">
+                    @csrf
+                    @method('PATCH')
+                    <x-todo-button class="text-amber-600 bg-amber-100 hover:bg-amber-200" icon="unlock" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+<div class="mb-4">
+    {{ $datas->links() }}
+</div>
+@else
+<x-blank>{{ __('Tidak ada catatan.') }}</x-blank>
+@endif
+@endsection
