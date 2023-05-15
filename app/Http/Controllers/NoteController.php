@@ -11,13 +11,13 @@ class NoteController extends Controller
     public function index()
     {
         $datas = Note::whereUserId(auth()->user()->id)->orderBy('updated_at', 'desc')->paginate(20);
-
+        
         return view('note.index', [
             'title' => 'Note',
             'datas' => $datas,
         ]);
     }
-
+    
     public function create()
     {
         return view('note.create', [
@@ -25,7 +25,7 @@ class NoteController extends Controller
             'ckeditor' => true,
         ]);
     }
-
+    
     public function store(Request $request)
     {
         $rules = [
@@ -34,7 +34,7 @@ class NoteController extends Controller
         if($request->title) {
             $rules['title'] = ['string'];
         }
-
+        
         $validatedData = $request->validate($rules);
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['slug'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10);
@@ -44,38 +44,56 @@ class NoteController extends Controller
         } else {
             $validatedData['title'] = null;
         }
-
+        
         Note::create($validatedData);
         return to_route('note.index');
     }
-
+    
     public function edit(Note $note)
     {
-        return view('note.edit', [
-            'title' => 'Edit Note',
-            'data' => $note,
-            'ckeditor' => true,
-        ]);
+        if($note->user_id == auth()->user()->id) {
+            return view('note.edit', [
+                'title' => 'Edit Note',
+                'data' => $note,
+                'ckeditor' => true,
+            ]);
+        } else {
+            return to_route('note.index');
+        }
     }
-
+    
     public function update(Request $request, Note $note)
     {
-        $rules = [
-            'note' => ['required', 'string'],
-        ];
-        if($request->title) {
-            $rules['title'] = ['string'];
-        }
-
-        $validatedData = $request->validate($rules);
-        $validatedData['note'] = Crypt::encryptString($request->note);
-        if($request->title) {
-            $validatedData['title'] = Crypt::encryptString($request->title);
+        if($note->user_id == auth()->user()->id) {
+            $rules = [
+                'note' => ['required', 'string'],
+            ];
+            if($request->title) {
+                $rules['title'] = ['string'];
+            }
+            
+            $validatedData = $request->validate($rules);
+            $validatedData['note'] = Crypt::encryptString($request->note);
+            if($request->title) {
+                $validatedData['title'] = Crypt::encryptString($request->title);
+            } else {
+                $validatedData['title'] = null;
+            }
+            
+            $note->update($validatedData);
+            return to_route('note.index');
         } else {
-            $validatedData['title'] = null;
+            return to_route('note.index');
         }
-
-        $note->update($validatedData);
-        return to_route('note.index');
+    }
+    
+    public function destroy(Note $note)
+    {
+        if($note->user_id == auth()->user()->id) {
+            $note->delete();
+            return back();
+        } else {
+            return to_route('note.index');
+        }
     }
 }

@@ -17,15 +17,10 @@
                 <div class="text-xs font-bold">{{ \Carbon\Carbon::parse($data->updated_at)->translatedFormat('Y/m/d H:i') }}</div>
             </a>
             <div>
-                <form method="POST" action="{{ route('todo.destroy', $data->slug) }}" class="block sm:inline-block">
+                <form method="POST" action="{{ route('note.destroy', $data->slug) }}" class="block sm:inline-block">
                     @csrf
                     @method('DELETE')
                     <x-todo-button class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
-                </form>
-                <form method="POST" action="{{ route('todo.update', $data->slug) }}" class="block sm:inline-block">
-                    @csrf
-                    @method('PATCH')
-                    <x-todo-button class="text-amber-600 bg-amber-100 hover:bg-amber-200" icon="unlock" />
                 </form>
             </div>
         </div>

@@ -46,3 +46,17 @@
 .ckeditor ul {
     @apply list-[square] pl-5;
 }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    @apply appearance-none w-2 h-2;
+}
+::-webkit-scrollbar-thumb {
+    @apply bg-teal-400;
+}
+::-webkit-scrollbar-track {
+    @apply bg-teal-50;
+}
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-teal-500;
+}

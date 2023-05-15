@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('note', [NoteController::class, 'store'])->name('note.store');
     Route::get('note/{note}/edit', [NoteController::class, 'edit'])->name('note.edit');
     Route::patch('note/{note}', [NoteController::class, 'update'])->name('note.update');
+    Route::delete('note/{note}', [NoteController::class, 'destroy'])->name('note.destroy');
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
