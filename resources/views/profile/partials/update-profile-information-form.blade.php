@@ -1,41 +1,27 @@
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
-
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <h2 class="block px-4 py-3 text-lg font-bold text-teal-900 bg-teal-200 rounded-lg">
+        {{ __('Informasi Profil') }}
+    </h2>
+    
+    <form method="POST" action="{{ route('profile.update') }}">
         @csrf
-        @method('patch')
-
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="block w-full mt-1" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
-
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="block w-full mt-1" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-        </div>
-
+        @method('PATCH')
+        {{-- Nama --}}
+        <x-form-input type="text" name="name" ph="Masukkan Nama Anda" value="{{ old('name', $user->name) }}" required>{{ __('Nama') }}</x-form-input>
+        
+        {{-- Username --}}
+        <x-form-input type="text" name="usernameku" value="{{ $user->username }}" disabled>{{ __('Username') }}</x-form-input>
+        
+        {{-- Email --}}
+        <x-form-input type="email" name="email" ph="Masukkan Email Anda" value="{{ old('email', $user->email) }}" required>{{ __('Email') }}</x-form-input>
+        
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+            <button type="submit" class="text-white bg-teal-500 border-none btn hover:bg-teal-600">
+                {{ __('Simpan Profil') }}
+            </button>
+            
+            @if (session('notif') === 'profile-updated')
+            <p id="status" class="text-sm text-emerald-600">{{ __('Berhasil Disimpan.') }}</p>
             @endif
         </div>
     </form>

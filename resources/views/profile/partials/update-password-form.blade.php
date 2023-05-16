@@ -1,47 +1,27 @@
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-        </p>
-    </header>
-
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+    <h2 class="block px-4 py-3 text-lg font-bold text-teal-900 bg-teal-200 rounded-lg">
+        {{ __('Ubah Password') }}
+    </h2>
+    
+    <form method="POST" action="{{ route('password.update') }}">
         @csrf
-        @method('put')
-
-        <div>
-            <x-input-label for="current_password" :value="__('Current Password')" />
-            <x-text-input id="current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-        </div>
-
-        <div>
-            <x-input-label for="password" :value="__('New Password')" />
-            <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
-        </div>
-
-        <div>
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
-        </div>
-
+        @method('PUT')
+        {{-- Password Saat Ini --}}
+        <x-form-input type="password" name="current_password" ph="Masukkan Password Saat Ini" required>{{ __('Password Saat Ini') }}</x-form-input>
+        
+        {{-- Password Baru --}}
+        <x-form-input type="password" name="password" ph="Masukkan Password Baru" required>{{ __('Password Baru') }}</x-form-input>
+        
+        {{-- Konfirmasi Password Baru --}}
+        <x-form-input type="password" name="password_confirmation" ph="Konfirmasi Password Baru" required>{{ __('Konfirmasi Password Baru') }}</x-form-input>
+        
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'password-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+            <button type="submit" class="text-white bg-teal-500 border-none btn hover:bg-teal-600">
+                {{ __('Simpan Password') }}
+            </button>
+            
+            @if (session('notif') === 'password-updated')
+            <p id="status" class="text-sm text-emerald-600">{{ __('Berhasil Disimpan.') }}</p>
             @endif
         </div>
     </form>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 class TodoController extends Controller
@@ -29,27 +30,42 @@ class TodoController extends Controller
         $validatedData['content'] = Crypt::encryptString($request->content);
         $validatedData['date'] = date('Y-m-d');
         
-        Todo::create($validatedData);
-        return back();
+        try {
+            Todo::create($validatedData);
+            return back()->with('status', 'List Berhasil Ditambahkan.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('err', '[500] Server Error');
+        }
     }
     
     public function update(Todo $todo)
     {
         if($todo->user_id == auth()->user()->id) {
-            $todo->update(['is_done' => true]);
-            return back();
+            try {
+                $todo->update(['is_done' => true]);
+                return back();
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                return back()->with('err', '[500] Server Error');
+            }
         } else {
-            return to_route('todo.index');
+            return to_route('todo.index')->with('err', 'Anda Tidak Memiliki Akses.');
         }
     }
     
     public function destroy(Todo $todo)
     {
         if($todo->user_id == auth()->user()->id) {
-            $todo->delete();
-            return back();
+            try {
+                $todo->delete();
+                return back()->with('status', 'List Berhasil Dihapus.');
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                return back()->with('err', '[500] Server Error');
+            }
         } else {
-            return to_route('todo.index');
+            return to_route('todo.index')->with('err', 'Anda Tidak Memiliki Akses.');
         }
     }
     

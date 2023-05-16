@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 class NoteController extends Controller
@@ -45,8 +46,13 @@ class NoteController extends Controller
             $validatedData['title'] = null;
         }
         
-        Note::create($validatedData);
-        return to_route('note.index');
+        try {
+            Note::create($validatedData);
+            return to_route('note.index')->with('status', 'Catatan Berhasil Ditambahkan.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return to_route('note.index')->with('err', '[500] Server Error');
+        }
     }
     
     public function edit(Note $note)
@@ -58,7 +64,7 @@ class NoteController extends Controller
                 'ckeditor' => true,
             ]);
         } else {
-            return to_route('note.index');
+            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
         }
     }
     
@@ -80,20 +86,30 @@ class NoteController extends Controller
                 $validatedData['title'] = null;
             }
             
-            $note->update($validatedData);
-            return to_route('note.index');
+            try {
+                $note->update($validatedData);
+                return to_route('note.index')->with('status', 'Catatan Berhasil Diedit.');
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                return to_route('note.index')->with('err', '[500] Server Error');
+            }
         } else {
-            return to_route('note.index');
+            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
         }
     }
     
     public function destroy(Note $note)
     {
         if($note->user_id == auth()->user()->id) {
-            $note->delete();
-            return back();
+            try {
+                $note->delete();
+                return back()->with('status', 'Catatan Berhasil Dihapus.');
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                return back()->with('err', '[500] Server Error');
+            }
         } else {
-            return to_route('note.index');
+            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
         }
     }
 }

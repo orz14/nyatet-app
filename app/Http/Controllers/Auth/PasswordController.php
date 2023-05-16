@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 
 class PasswordController extends Controller
 {
@@ -15,15 +17,23 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $validated = $request->validateWithBag('updatePassword', [
-            'current_password' => ['required', 'current_password'],
+        $request->validate([
+            'current_password' => ['required'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
+        if(Hash::check($request->current_password, auth()->user()->password)) {
+            try {
+                $request->user()->update(['password' => Hash::make($request->password)]);
+                return back()->with('notif', 'password-updated');
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                return back()->with('err', '[500] Server Error');
+            }
+        }
 
-        return back()->with('status', 'password-updated');
+        throw ValidationException::withMessages([
+            'current_password' => 'The password is incorrect.',
+        ]);
     }
 }

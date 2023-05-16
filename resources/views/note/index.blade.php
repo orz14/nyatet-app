@@ -1,9 +1,13 @@
 @extends('layouts.app')
 @section('hero')
-<h1 class="text-2xl font-normal sm:text-3xl md:text-4xl lg:font-light lg:text-6xl mb-7">
+<h1 class="text-2xl font-normal sm:text-3xl md:text-4xl lg:font-light lg:text-6xl">
     {{ __('Catatan') }}
 </h1>
-<a href="{{ route('note.create') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600">{{ __('Tambahkan Catatan') }}</a>
+
+{{-- Session Status --}}
+<x-session-status />
+
+<a href="{{ route('note.create') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600 mt-7">{{ __('Tambahkan Catatan') }}</a>
 @endsection
 
 @section('content')

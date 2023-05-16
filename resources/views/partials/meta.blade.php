@@ -13,3 +13,6 @@
 {{-- Scripts --}}
 <script src="https://unpkg.com/feather-icons"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+{{-- Prefetch --}}
+<link rel="dns-prefetch" href="//cdn.ckeditor.com" />
