@@ -4,7 +4,7 @@
             <x-icon class="w-auto h-8 pointer-events-none select-none sm:hidden" />
             <x-logo class="hidden w-auto h-8 pointer-events-none select-none sm:block" />
         </div>
-
+        
         <div class="menutet">
             <a href="{{ route('todo.index') }}" class="menu-item {{ Request::is('todo*') ? 'menu-item-active' : '' }}">{{ __('Todo List') }}</a>
             <a href="{{ route('note.index') }}" class="menu-item {{ Request::is('note*') ? 'menu-item-active' : '' }}">{{ __('Note') }}</a>
@@ -20,12 +20,9 @@
                     <li><a href="{{ config('app.url') }}/log" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60">{{ __('Log') }}</a></li>
                     @endcan
                     <li><a href="{{ route('profile.edit') }}" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60">{{ __('Profil') }}</a></li>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <li>
-                            <button type="submit" class="hover:bg-red-100/80 active:text-black active:bg-red-100/80">{{ __('Logout') }}</button>
-                        </li>
-                    </form>
+                    <li>
+                        <button x-data x-on:click="$store.modal.logout = true" type="button" id="button-logout-open" class="hover:bg-red-100/80 active:text-black active:bg-red-100/80">{{ __('Logout') }}</button>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -18,6 +18,28 @@
 </script>
 
 <script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('modal', {
+            logout: false,
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#button-logout-open").click(function() {
+            $("#modal-logout-dialog").removeClass("invisible");
+            $("#modal-logout-dialog").addClass("visible");
+        });
+
+        $("#button-logout-close").click(function() {
+            $("#modal-logout-dialog").removeClass("visible");
+            $("#modal-logout-dialog").addClass("invisible");
+        });
+    });
+</script>
+
+<script>
     // Session Status
     $('#status').delay(4000).fadeOut(300);
 </script>
