@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "pint": "./vendor/bin/pint"
     },
     "devDependencies": {
         "@hotwired/turbo": "^7.2.5",
