@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Note;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class NoteSeeder extends Seeder
 {

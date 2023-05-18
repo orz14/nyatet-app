@@ -1,1 +1,1 @@
-<img {{ $attributes->merge(['src' => asset('img/logo/logo-nyatet-app.png'), 'alt' => 'Nyatet App']) }}>
+<img {{ $attributes->merge(['src' => 'https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/logo-nyatet-app.png', 'alt' => 'Nyatet App']) }}>
