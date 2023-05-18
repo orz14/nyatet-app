@@ -26,6 +26,7 @@ class NoteController extends Controller
     {
         return view('note.create', [
             'title' => 'Add Note',
+            'ckeditor' => true,
         ]);
     }
     
@@ -64,6 +65,7 @@ class NoteController extends Controller
                 return view('note.edit', [
                     'title' => 'Edit Note',
                     'data' => $note,
+                    'ckeditor' => true,
                 ]);
             } else {
                 return to_route('note.index')->with('err', 'Akses Ditolak.');

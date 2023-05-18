@@ -16,11 +16,11 @@
 
 .nav .brand,
 .nav .ctas {
-    @apply w-1/5;
+    @apply w-1/2 md:w-1/5;
 }
 
 .nav .menutet {
-    @apply w-3/5 flex justify-center items-center gap-5 sm:gap-10;
+    @apply hidden md:w-3/5 md:flex md:justify-center md:items-center md:gap-10;
 }
 
 .nav .menu-item {
@@ -33,6 +33,10 @@
 
 .nav .ctas {
     @apply text-right;
+}
+
+.btm-nav .active {
+    @apply !bg-teal-500 !border-t-4 !border-teal-800;
 }
 
 .todo-hijau {

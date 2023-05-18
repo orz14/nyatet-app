@@ -16,7 +16,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Nyatet App'),
+    'description' => env('APP_DESCRIPTION', 'Todo List & Note Application'),
+    'keywords' => env('APP_KEYWORDS', 'todo list, note, list, catatan, aplikasi, oriz wahyu n, orzcode'),
 
     /*
     |--------------------------------------------------------------------------

@@ -12,6 +12,8 @@
 
         <x-footer />
 
+        <x-bottom-nav />
+
         @include('partials.modal')
 
         @include('partials.script')
