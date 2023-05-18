@@ -1,5 +1,5 @@
 <section>
-    <h2 class="block px-4 py-3 text-lg font-bold text-teal-900 bg-teal-200 rounded-lg">
+    <h2 class="block px-4 py-3 text-lg font-bold text-center text-teal-900 bg-teal-200 rounded-lg sm:text-left">
         {{ __('Ubah Password') }}
     </h2>
     

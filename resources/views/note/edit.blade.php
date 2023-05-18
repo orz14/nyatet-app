@@ -12,7 +12,7 @@
             @csrf
             @method('PATCH')
             {{-- Title --}}
-            <x-form-input type="text" name="title" ph="Masukkan Judul Catatan" value="{{ old('title', isset($data->title) ? $data->decrypt($data->title) : '') }}" autofocus>{{ __('Title') }}</x-form-input>
+            <x-form-input type="text" name="title" ph="Masukkan Judul Catatan" value="{{ old('title', isset($data->title) ? $data->decrypt($data->title) : '') }}">{{ __('Title') }}</x-form-input>
             
             {{-- Note --}}
             <x-ckeditor name="note" ph="Masukkan Catatan" value="{!! old('note', $data->decrypt($data->note)) !!}">{{ __('Note') }}</x-ckeditor>

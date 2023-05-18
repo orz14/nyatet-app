@@ -24,8 +24,8 @@
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="article:author" content="https://orzproject.my.id/">
 <meta property="article:publisher" content="https://orzproject.my.id/">
-<meta name="google-site-verification" content="" />
-<meta name="msvalidate.01" content="" />
+<meta name="google-site-verification" content="dxkAHdf8jg1-2rmTH-QGkIMSYY7s0EwcEffohbUQCt8" />
+<meta name="msvalidate.01" content="26E64DF8D8B14C5AF83FBD804474B8C4" />
 
 <!-- Primary Meta Tags -->
 <title>{{ isset($title) ? $title . __(' · ') : '' }}{{ config('app.name') }}</title>
