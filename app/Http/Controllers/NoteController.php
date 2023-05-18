@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 
 class NoteController extends Controller
@@ -16,6 +17,8 @@ class NoteController extends Controller
         return view('note.index', [
             'title' => 'Note',
             'datas' => $datas,
+            'modalDelete' => true,
+            'modalLock' => true,
         ]);
     }
     
@@ -23,7 +26,6 @@ class NoteController extends Controller
     {
         return view('note.create', [
             'title' => 'Add Note',
-            'ckeditor' => true,
         ]);
     }
     
@@ -58,11 +60,14 @@ class NoteController extends Controller
     public function edit(Note $note)
     {
         if($note->user_id == auth()->user()->id) {
-            return view('note.edit', [
-                'title' => 'Edit Note',
-                'data' => $note,
-                'ckeditor' => true,
-            ]);
+            if(!isset($note->password)) {
+                return view('note.edit', [
+                    'title' => 'Edit Note',
+                    'data' => $note,
+                ]);
+            } else {
+                return to_route('note.index')->with('err', 'Akses Ditolak.');
+            }
         } else {
             return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
         }
@@ -92,6 +97,44 @@ class NoteController extends Controller
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
                 return to_route('note.index')->with('err', '[500] Server Error');
+            }
+        } else {
+            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
+        }
+    }
+    
+    public function lock(Request $request, Note $note)
+    {
+        if($note->user_id == auth()->user()->id) {
+            if($request->password) {
+                try {
+                    $note->update(['password' => Hash::make($request->password)]);
+                    return back()->with('status', 'Password Berhasil Disimpan.');
+                } catch (\Exception $e) {
+                    Log::error($e->getMessage());
+                    return back()->with('err', '[500] Server Error');
+                }
+            }
+        } else {
+            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
+        }
+    }
+    
+    public function unlock(Request $request, Note $note)
+    {
+        if($note->user_id == auth()->user()->id) {
+            if($request->password) {
+                if(Hash::check($request->password, $note->password)) {
+                    try {
+                        $note->update(['password' => null]);
+                        return back()->with('status', 'Catatan Berhasil Dibuka.');
+                    } catch (\Exception $e) {
+                        Log::error($e->getMessage());
+                        return back()->with('err', '[500] Server Error');
+                    }
+                } else {
+                    return back()->with('err', 'Password Yang Anda Masukkan Salah.');
+                }
             }
         } else {
             return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');

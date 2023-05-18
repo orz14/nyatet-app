@@ -19,6 +19,7 @@ class ProfileController extends Controller
         return view('profile.edit', [
             'title' => 'Profil',
             'user' => $request->user(),
+            'modalDelete' => true,
         ]);
     }
 

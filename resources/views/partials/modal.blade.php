@@ -1,32 +1,94 @@
 {{-- Modal Logout --}}
-<div x-data x-show="$store.modal.logout" x-transition:enter="ease-out duration-300" x-transition:leave="ease-in duration-200" id="modal-logout-dialog" class="relative z-10 invisible" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div x-show="$store.modal.logout" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" id="modal-logout-backdrop" class="fixed inset-0 transition-opacity bg-teal-900/80"></div>
-    <div class="fixed inset-0 z-10 overflow-y-auto">
-        <div class="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-            <div id="modal-logout-panel" x-show="$store.modal.logout" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative w-full overflow-hidden text-left transition-all transform bg-white shadow-xl rounded-2xl sm:my-8 sm:max-w-lg">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <div class="px-5 bg-white pt-7 sm:p-7 sm:pb-0">
-                        <div>
-                            <div class="mt-3 sm:mt-0">
-                                <h3 class="text-lg font-bold leading-6 text-slate-900" id="modal-title">{{ __('Konfirmasi') }}</h3>
-                                <div class="my-2">
-                                    <p class="text-sm text-slate-700">{{ __('Apakah anda yakin ingin logout ?') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
-                        <button type="submit" class="inline-flex justify-center w-full text-white bg-red-500 border-none sm:ml-1 sm:w-auto btn hover:bg-red-600">
-                            {{ __('Logout') }}
-                        </button>
-
-                        <button x-on:click="$store.modal.logout = false" type="button" id="button-logout-close" class="inline-flex justify-center w-full text-black bg-transparent border-none sm:ml-1 sm:w-auto btn hover:bg-transparent">
-                            {{ __('Batal') }}
-                        </button>
-                    </div>
-                </form>
+<x-modal modal="$store.modal.logout" dialog="modal-logout-dialog">
+    <div class="px-5 bg-white sm:p-7 sm:pb-0">
+        <div>
+            <div class="mt-5 sm:mt-0">
+                <x-modal-title>{{ __('Konfirmasi') }}</x-modal-title>
+                <div class="my-2">
+                    <p class="text-sm text-slate-700">{{ __('Apakah anda yakin ingin logout ?') }}</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <x-modal-button type="submit" class="text-white bg-red-500 hover:bg-red-600">{{ __('Logout') }}</x-modal-button>
+        </form>
+        
+        <x-modal-button x-on:click="$store.modal.logout = false" type="button" id="button-logout-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
+    </div>
+</x-modal>
+
+@isset($modalDelete)
+{{-- Modal Delete --}}
+<x-modal modal="$store.modal.delete" dialog="modal-delete-dialog">
+    <div class="px-5 bg-white sm:p-7 sm:pb-0">
+        <div>
+            <div class="mt-5 sm:mt-0">
+                <x-modal-title>{{ __('Konfirmasi') }}</x-modal-title>
+                <div class="my-2">
+                    <p class="text-sm text-slate-700">{{ __('Yakin ingin menghapus data ?') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+        <form method="POST" id="delete_link">
+            @csrf
+            @method('DELETE')
+            <x-modal-button type="submit" class="text-white bg-red-500 hover:bg-red-600">{{ __('Hapus') }}</x-modal-button>
+        </form>
+        
+        <x-modal-button x-on:click="$store.modal.delete = false" type="button" id="button-delete-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
+    </div>
+</x-modal>
+@endisset
+
+@isset($modalLock)
+{{-- Modal Lock --}}
+<x-modal modal="$store.modal.lock" dialog="modal-lock-dialog">
+    <form method="POST" id="data_link">
+        @csrf
+        @method('PATCH')
+        <div class="px-5 bg-white sm:p-7 sm:pb-0">
+            <div>
+                <div class="mt-5 sm:mt-0">
+                    <x-modal-title>{{ __('Atur Password Catatan') }}</x-modal-title>
+                    <div class="my-2">
+                        <x-form-input type="password" name="password" ph="Masukkan Password" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+            <x-modal-button type="submit" class="text-white bg-teal-500 hover:bg-teal-600">{{ __('Kunci') }}</x-modal-button>
+            
+            <x-modal-button x-on:click="$store.modal.lock = false" type="button" id="button-lock-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
+        </div>
+    </form>
+</x-modal>
+
+{{-- Modal Unlock --}}
+<x-modal modal="$store.modal.unlock" dialog="modal-unlock-dialog">
+    <form method="POST" id="data_link_2">
+        @csrf
+        @method('PATCH')
+        <div class="px-5 bg-white sm:p-7 sm:pb-0">
+            <div>
+                <div class="mt-5 sm:mt-0">
+                    <x-modal-title>{{ __('Buka Password Catatan') }}</x-modal-title>
+                    <div class="my-2">
+                        <x-form-input type="password" name="password" ph="Masukkan Password" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+            <x-modal-button type="submit" class="text-white bg-teal-500 hover:bg-teal-600">{{ __('Buka') }}</x-modal-button>
+            
+            <x-modal-button x-on:click="$store.modal.unlock = false" type="button" id="button-unlock-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
+        </div>
+    </form>
+</x-modal>
+@endisset

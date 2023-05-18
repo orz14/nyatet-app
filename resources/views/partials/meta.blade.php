@@ -16,3 +16,7 @@
 
 {{-- Prefetch --}}
 <link rel="dns-prefetch" href="//cdn.ckeditor.com" />
+
+@if(session()->has('reload'))
+<meta content='0;url={{ url()->current() }}' http-equiv='refresh'/>
+@endif

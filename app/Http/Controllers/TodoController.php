@@ -17,6 +17,7 @@ class TodoController extends Controller
         return view('todo.index', [
             'title' => 'Todo List',
             'datas' => $datas,
+            'modalDelete' => true,
         ]);
     }
     

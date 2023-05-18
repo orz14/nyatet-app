@@ -43,6 +43,14 @@
     @apply !bg-red-400 !border-red-400;
 }
 
+.note-locked {
+    @apply !border-red-400;
+}
+
+.ckeditor a {
+    @apply underline;
+}
+
 .ckeditor ul {
     @apply list-[square] pl-5;
 }

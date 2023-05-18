@@ -19,22 +19,33 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
-    Route::get('todo', [TodoController::class, 'index'])->name('todo.index');
-    Route::post('todo', [TodoController::class, 'store'])->name('todo.store');
-    Route::patch('todo/{todo}', [TodoController::class, 'update'])->name('todo.update');
-    Route::delete('todo/{todo}', [TodoController::class, 'destroy'])->name('todo.destroy');
-    Route::get('todo/history', [TodoController::class, 'history'])->name('todo.history');
+    // Todo
+    Route::prefix('todo')->controller(TodoController::class)->name('todo.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::patch('{todo}', 'update')->name('update');
+        Route::delete('{todo}', 'destroy')->name('destroy');
+        Route::get('history', 'history')->name('history');
+    });
 
-    Route::get('note', [NoteController::class, 'index'])->name('note.index');
-    Route::get('note/add', [NoteController::class, 'create'])->name('note.create');
-    Route::post('note', [NoteController::class, 'store'])->name('note.store');
-    Route::get('note/{note}/edit', [NoteController::class, 'edit'])->name('note.edit');
-    Route::patch('note/{note}', [NoteController::class, 'update'])->name('note.update');
-    Route::delete('note/{note}', [NoteController::class, 'destroy'])->name('note.destroy');
+    // Note
+    Route::prefix('note')->controller(NoteController::class)->name('note.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('add', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('{note}/edit', 'edit')->name('edit');
+        Route::patch('{note}', 'update')->name('update');
+        Route::patch('{note}/lock', 'lock')->name('lock');
+        Route::patch('{note}/unlock', 'unlock')->name('unlock');
+        Route::delete('{note}', 'destroy')->name('destroy');
+    });
 
-    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profile
+    Route::prefix('profile')->controller(ProfileController::class)->name('profile.')->group(function () {
+        Route::get('/', 'edit')->name('edit');
+        Route::patch('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

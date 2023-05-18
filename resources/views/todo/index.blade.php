@@ -33,11 +33,8 @@
         <div class="flex items-center justify-between">
             <div class="pr-2">{{ $data->decrypt($data->content) }}</div>
             <div>
-                <form method="POST" action="{{ route('todo.destroy', $data->slug) }}" class="block sm:inline-block">
-                    @csrf
-                    @method('DELETE')
-                    <x-todo-button class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
-                </form>
+                <x-todo-button x-data x-on:click="modal_delete_open('{{ route('todo.destroy', $data->slug) }}')" class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
+                    
                 @if($data->is_done == false)
                 <form method="POST" action="{{ route('todo.update', $data->slug) }}" class="block sm:inline-block">
                     @csrf

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug', 12)->unique();
             $table->text('title')->nullable();
             $table->text('note');
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }

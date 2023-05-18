@@ -17,7 +17,7 @@
                 </label>
                 <ul tabindex="0" class="p-2 bg-white shadow dropdown-content menu rounded-box w-52">
                     @can('admin')
-                    <li><a href="{{ config('app.url') }}/log" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60">{{ __('Log') }}</a></li>
+                    <li><a href="{{ config('app.url') }}/log" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" target="_blank">{{ __('Log') }}</a></li>
                     @endcan
                     <li><a href="{{ route('profile.edit') }}" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60">{{ __('Profil') }}</a></li>
                     <li>

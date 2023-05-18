@@ -13,19 +13,21 @@
 @section('content')
 @if ($datas->count())
 @foreach ($datas as $data)
-<div class="mb-4 transition-all duration-300 ease-in-out bg-white border-4 rounded-none border-teal-400/50 card hover:border-teal-400">
+<div class="mb-4 transition-all duration-300 ease-in-out bg-white border-4 rounded-none border-teal-400/50 card hover:border-teal-400 @isset($data->password) note-locked @endisset">
     <div class="p-4 leading-none card-body">
         <div class="flex items-center justify-between">
-            <a href="{{ route('note.edit', $data->slug) }}">
+            <a @isset($data->password) x-data x-on:click="modal_unlock_open('{{ route('note.unlock', $data->slug) }}')" @else href="{{ route('note.edit', $data->slug) }}" @endisset class="cursor-pointer">
                 <div class="font-bold underline">{{ isset($data->title) ? $data->decrypt($data->title) : 'Tanpa Judul' }}</div>
                 <div class="text-xs font-bold">{{ \Carbon\Carbon::parse($data->updated_at)->translatedFormat('Y/m/d H:i') }}</div>
             </a>
             <div>
-                <form method="POST" action="{{ route('note.destroy', $data->slug) }}" class="block sm:inline-block">
-                    @csrf
-                    @method('DELETE')
-                    <x-todo-button class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
-                </form>
+                <x-todo-button x-data x-on:click="modal_delete_open('{{ route('note.destroy', $data->slug) }}')" class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
+                
+                @isset($data->password)
+                <x-todo-button x-data x-on:click="modal_unlock_open('{{ route('note.unlock', $data->slug) }}')" class="text-amber-800 bg-amber-300 hover:bg-amber-400" icon="lock" />
+                @else
+                <x-todo-button x-data x-on:click="modal_lock_open('{{ route('note.lock', $data->slug) }}')" class="text-amber-600 bg-amber-100 hover:bg-amber-200" icon="unlock" />
+                @endisset
             </div>
         </div>
     </div>
