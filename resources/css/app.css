@@ -59,6 +59,10 @@
     @apply list-[square] pl-5;
 }
 
+.input-err {
+    @apply !text-red-700 !border-red-700 focus:!ring-red-600/20 focus:!border-red-500;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     @apply appearance-none w-2 h-2;
