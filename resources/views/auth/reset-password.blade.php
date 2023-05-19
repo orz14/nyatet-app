@@ -1,4 +1,12 @@
 @extends('layouts.guest')
+@push('styles')
+@livewireStyles
+@endpush
+
+@push('scripts')
+@livewireScripts
+@endpush
+
 @section('content')
 <div class="w-full max-w-md overflow-hidden">
     <div class="mb-5">
@@ -11,18 +19,13 @@
 
     <form method="POST" action="{{ route('password.store') }}" autocomplete="off">
         @csrf
-
         {{-- Password Reset Token --}}
         <x-hidden name="token" value="{{ $request->route('token') }}" />
         
         {{-- Email Address --}}
         <x-hidden name="email" value="{{ old('email', $request->email) }}" />
 
-        {{-- Password --}}
-        <x-form-auth type="password" name="password" ph="Masukkan Password Baru" required autofocus>{{ __('Password Baru') }}</x-form-auth>
-
-        {{-- Confirm Password --}}
-        <x-form-auth type="password" name="password_confirmation" ph="Konfirmasi Password Baru" required>{{ __('Konfirmasi Password Baru') }}</x-form-auth>
+        @livewire('reset-password')
 
         <x-auth-button class="mt-3">{{ __('Reset Password') }}</x-auth-button>
     </form>
