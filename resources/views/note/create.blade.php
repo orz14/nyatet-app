@@ -8,7 +8,7 @@
 @section('content')
 <div class="mb-4 bg-white border-4 rounded-none border-teal-400/50 card">
     <div class="card-body">
-        <form method="POST" action="{{ route('note.store') }}">
+        <form method="POST" action="{{ route('note.store') }}" autocomplete="off">
             @csrf
             {{-- Title --}}
             <x-form-input type="text" name="title" ph="Masukkan Judul Catatan" value="{{ old('title') }}" autofocus>{{ __('Title') }}</x-form-input>

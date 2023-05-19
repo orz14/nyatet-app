@@ -8,7 +8,7 @@
     {{-- Session Status --}}
     <x-auth-session-status :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" autocomplete="off">
         @csrf
         {{-- Email Address --}}
         <x-form-auth type="email" name="email" ph="Masukkan Email" value="{{ old('email') }}" required autofocus>{{ __('Email') }}</x-form-auth>

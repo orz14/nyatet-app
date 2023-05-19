@@ -8,7 +8,7 @@
 <x-session-status />
 
 <div class="text-xl font-medium my-7">
-    <form method="POST" action="{{ route('todo.store') }}">
+    <form method="POST" action="{{ route('todo.store') }}" autocomplete="off">
         @csrf
         <div class="form-control">
             <div class="justify-center input-group">

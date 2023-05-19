@@ -48,7 +48,7 @@
 @isset($modalLock)
 {{-- Modal Lock --}}
 <x-modal modal="$store.modal.lock" dialog="modal-lock-dialog">
-    <form method="POST" id="data_link">
+    <form method="POST" id="data_link" autocomplete="off">
         @csrf
         @method('PATCH')
         <div class="px-5 bg-white sm:p-7 sm:pb-0">
@@ -71,7 +71,7 @@
 
 {{-- Modal Unlock --}}
 <x-modal modal="$store.modal.unlock" dialog="modal-unlock-dialog">
-    <form method="POST" id="data_link_2">
+    <form method="POST" id="data_link_2" autocomplete="off">
         @csrf
         @method('PATCH')
         <div class="px-5 bg-white sm:p-7 sm:pb-0">

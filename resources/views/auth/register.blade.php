@@ -5,7 +5,7 @@
         <x-logo class="h-auto mx-auto pointer-events-none select-none w-36" />
     </div>
 
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" autocomplete="off">
         @csrf
         {{-- Name --}}
         <x-form-auth type="text" name="name" ph="Masukkan Nama" value="{{ old('name') }}" required autofocus>{{ __('Nama') }}</x-form-auth>

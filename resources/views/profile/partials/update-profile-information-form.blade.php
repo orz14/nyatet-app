@@ -3,7 +3,7 @@
         {{ __('Informasi Profil') }}
     </h2>
     
-    <form method="POST" action="{{ route('profile.update') }}">
+    <form method="POST" action="{{ route('profile.update') }}" autocomplete="off">
         @csrf
         @method('PATCH')
         {{-- Nama --}}
