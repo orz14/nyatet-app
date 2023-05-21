@@ -78,6 +78,7 @@ class TodoController extends Controller
         return view('todo.history', [
             'title' => 'History List',
             'datas' => $datas,
+            'modalDelete' => true,
         ]);
     }
 }

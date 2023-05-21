@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+    <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <x-modal-button type="submit" class="text-white bg-red-500 hover:bg-red-600">{{ __('Logout') }}</x-modal-button>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+    <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
         <form method="POST" id="delete_link">
             @csrf
             @method('DELETE')
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+        <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
             <x-modal-button type="submit" class="text-white bg-teal-500 hover:bg-teal-600">{{ __('Kunci') }}</x-modal-button>
             
             <x-modal-button x-on:click="$store.modal.lock = false" type="button" id="button-lock-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <div class="px-4 py-4 bg-slate-50 sm:flex sm:flex-row-reverse">
+        <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
             <x-modal-button type="submit" class="text-white bg-teal-500 hover:bg-teal-600">{{ __('Buka') }}</x-modal-button>
             
             <x-modal-button x-on:click="$store.modal.unlock = false" type="button" id="button-unlock-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
