@@ -1,12 +1,4 @@
 @extends('layouts.guest')
-@push('styles')
-@livewireStyles
-@endpush
-
-@push('scripts')
-@livewireScripts
-@endpush
-
 @section('content')
 <div class="w-full max-w-md overflow-hidden">
     <div class="mb-5">

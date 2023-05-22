@@ -2,14 +2,12 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#" class="scroll-smooth">
     <head>
         @include('partials.meta')
-        
-        @stack('styles')
+        @livewireStyles
     </head>
-    <body class="flex flex-wrap items-center justify-center min-h-screen antialiased font-semibold text-black bg-white">
+    <body class="flex flex-wrap items-center justify-center min-h-screen antialiased font-semibold text-black bg-white" data-turbo-frame="reload">
         <main class="container flex justify-center p-4">
             @yield('content')
         </main>
-
-        @stack('scripts')
+        @livewireScripts
     </body>
 </html>
