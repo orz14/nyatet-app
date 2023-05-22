@@ -25,12 +25,12 @@ class DbBackup extends Command
      */
     public function handle()
     {
-        $filename = "orz-db-backup-".date("dmy", time()).".sql";
-        $path = storage_path()."/app/backup/".$filename;
-        if(env('APP_ENV') == 'production') {
-            $command = "mysqldump --defaults-extra-file=".env('DUMP_SQL')." ".env('DB_DATABASE')." > ".$path;
-        } else if(env('APP_ENV') == 'local') {
-            $command = "mysqldump --user=".env('DB_USERNAME')." --password=".env('DB_PASSWORD')." --host=".env('DB_HOST')." ".env('DB_DATABASE')." > ".$path;
+        $filename = 'orz-db-backup-'.date('dmy', time()).'.sql';
+        $path = storage_path().'/app/backup/'.$filename;
+        if (env('APP_ENV') == 'production') {
+            $command = 'mysqldump --defaults-extra-file='.env('DUMP_SQL').' '.env('DB_DATABASE').' > '.$path;
+        } elseif (env('APP_ENV') == 'local') {
+            $command = 'mysqldump --user='.env('DB_USERNAME').' --password='.env('DB_PASSWORD').' --host='.env('DB_HOST').' '.env('DB_DATABASE').' > '.$path;
         }
         exec($command);
     }

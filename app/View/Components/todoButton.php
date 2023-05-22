@@ -12,6 +12,7 @@ class todoButton extends Component
      * Create a new component instance.
      */
     public $icon;
+
     public function __construct($icon = null)
     {
         $this->icon = $icon;

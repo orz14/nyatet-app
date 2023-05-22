@@ -12,7 +12,9 @@ class modal extends Component
      * Create a new component instance.
      */
     public $modal;
+
     public $dialog;
+
     public function __construct($modal = null, $dialog = null)
     {
         $this->modal = $modal;

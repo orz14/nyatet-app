@@ -12,8 +12,11 @@ class formAuth extends Component
      * Create a new component instance.
      */
     public $type;
+
     public $name;
+
     public $ph;
+
     public function __construct($type = null, $name = null, $ph = null)
     {
         $this->type = $type;

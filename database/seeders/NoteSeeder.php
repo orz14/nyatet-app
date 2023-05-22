@@ -13,7 +13,7 @@ class NoteSeeder extends Seeder
      */
     public function run(): void
     {
-        for($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             Note::create([
                 'user_id' => 1,
                 'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),

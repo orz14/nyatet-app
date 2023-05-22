@@ -12,8 +12,11 @@ class ckeditor extends Component
      * Create a new component instance.
      */
     public $name;
+
     public $ph;
+
     public $value;
+
     public function __construct($name = null, $ph = null, $value = null)
     {
         $this->name = $name;

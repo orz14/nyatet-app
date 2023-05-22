@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Note extends Model
 {
@@ -20,6 +20,7 @@ class Note extends Model
     public function decrypt($data)
     {
         $decrypted = Crypt::decryptString($data);
+
         return $decrypted;
     }
 }

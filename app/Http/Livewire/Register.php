@@ -7,16 +7,20 @@ use Livewire\Component;
 class Register extends Component
 {
     public $name;
+
     public $username;
+
     public $email;
+
     public $password;
+
     public $password_confirmation;
-    
+
     public function render()
     {
         return view('livewire.register');
     }
-    
+
     protected $rules = [
         'name' => ['required', 'string', 'max:255'],
         'username' => ['required', 'string', 'max:20', 'unique:users'],

@@ -12,6 +12,7 @@ class error extends Component
      * Create a new component instance.
      */
     public $name;
+
     public function __construct($name = null)
     {
         $this->name = $name;
