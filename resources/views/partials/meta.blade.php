@@ -4,11 +4,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="canonical" href="{{ url()->current() }}">
-<link rel="icon" sizes="32x32" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-32.png">
-<link rel="icon" sizes="192x192" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-192.png">
-<link rel="apple-touch-icon-precomposed" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-180.png">
-<meta name="msapplication-TileImage" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-144.png">
-<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.png">
+<link rel="icon" sizes="32x32" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-32.webp">
+<link rel="icon" sizes="192x192" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-192.webp">
+<link rel="apple-touch-icon-precomposed" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-180.webp">
+<meta name="msapplication-TileImage" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app-144.webp">
+<link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.webp">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="robots" content="index, follow">
 <meta name="geo.country" content="id">
@@ -38,14 +38,14 @@
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:title" content="{{ isset($title) ? $title . __(' · ') : '' }}{{ config('app.name') }}">
 <meta property="og:description" content="{{ config('app.description') }}">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.webp">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ url()->current() }}">
 <meta property="twitter:title" content="{{ isset($title) ? $title . __(' · ') : '' }}{{ config('app.name') }}">
 <meta property="twitter:description" content="{{ config('app.description') }}">
-<meta property="twitter:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.png">
+<meta property="twitter:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.webp">
 
 <!-- Style -->
 <meta name="theme-color" content="#14b8a6">
