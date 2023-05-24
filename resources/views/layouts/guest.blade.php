@@ -4,7 +4,7 @@
         @include('partials.meta')
         @livewireStyles
     </head>
-    <body class="flex flex-wrap items-center justify-center min-h-screen antialiased font-semibold text-black bg-white" data-turbo-frame="reload">
+    <body class="flex flex-wrap items-center justify-center min-h-screen antialiased font-semibold text-black bg-white">
         <main class="container flex justify-center p-4">
             @yield('content')
         </main>

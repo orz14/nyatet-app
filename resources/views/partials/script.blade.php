@@ -1,7 +1,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    feather.replace()
+    feather.replace();
 </script>
 
 <script>
@@ -68,7 +68,7 @@
         
         $("#data_link").attr("action", data_url);
     }
-
+    
     // Modal Unlock
     $("#button-unlock-close").click(function() {
         $("#modal-unlock-dialog").removeClass("visible");
