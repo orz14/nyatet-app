@@ -15,13 +15,13 @@
         {{-- Konfirmasi Password Baru --}}
         <x-form-input type="password" name="password_confirmation" ph="Konfirmasi Password Baru" required>{{ __('Konfirmasi Password Baru') }}</x-form-input>
         
-        <div class="flex items-center gap-4">
-            <button type="submit" class="text-white bg-teal-500 border-none btn hover:bg-teal-600">
+        <div class="block pt-2 text-center sm:flex sm:items-center sm:gap-4 sm:text-left">
+            <button type="submit" class="text-white bg-teal-500 border-none btn max-[639px]:btn-block hover:bg-teal-600">
                 {{ __('Simpan Password') }}
             </button>
             
             @if (session('notif') === 'password-updated')
-            <p id="status" class="text-sm text-emerald-600">{{ __('Berhasil Disimpan.') }}</p>
+            <p id="status" class="mt-2 text-sm text-emerald-600 sm:mt-0">{{ __('Berhasil Disimpan.') }}</p>
             @endif
         </div>
     </form>

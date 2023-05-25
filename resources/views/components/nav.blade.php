@@ -12,7 +12,7 @@
         
         <div class="ctas">
             <div class="dropdown dropdown-bottom dropdown-end">
-                <label tabindex="0" class="p-3 m-0 text-base font-bold text-black normal-case bg-teal-100 border-none rounded-full btn hover:bg-teal-100/50">
+                <label tabindex="0" class="p-3 m-0 text-base font-bold text-black normal-case bg-teal-100 border-none rounded-full orz-pointer btn hover:bg-teal-100/50">
                     <i data-feather="user"></i>
                 </label>
                 <ul tabindex="0" class="p-2 bg-white shadow dropdown-content menu rounded-box w-52">

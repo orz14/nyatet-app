@@ -6,7 +6,7 @@
 *,
 .orz-cursor {
     cursor: url(https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/cursor/orz-cursor.png),
-        default !important;
+        default;
 }
 a,
 a *,
@@ -23,13 +23,13 @@ select,
 option,
 .btn {
     cursor: url(https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/cursor/orz-pointer.png),
-        pointer !important;
+        pointer;
 }
 input[type="text"],
 input[type="password"],
 input[type="email"],
 textarea {
-    @apply !cursor-text;
+    @apply cursor-text;
 }
 
 /* Some Styles */
