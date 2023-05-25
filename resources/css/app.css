@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Cursor */
+*,
+.orz-cursor {
+    cursor: url(https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/cursor/orz-cursor.png),
+        default !important;
+}
+a,
+a *,
+.orz-pointer,
+.orz-pointer *,
+input[type="submit"],
+input[type="button"],
+input[type="image"],
+input[type="checkbox"],
+input[type="radio"],
+button,
+button *,
+select,
+option,
+.btn {
+    cursor: url(https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/cursor/orz-pointer.png),
+        pointer !important;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+    @apply !cursor-text;
+}
+
+/* Some Styles */
 .container {
     @apply max-w-5xl;
 }
