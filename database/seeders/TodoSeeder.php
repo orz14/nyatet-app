@@ -37,18 +37,13 @@ class TodoSeeder extends Seeder
             'created_at' => '2023-05-04 00:40:00',
         ]);
 
-        Todo::create([
-            'user_id' => 1,
-            'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
-            'content' => Crypt::encryptString('Mendapatkan semua yang diinginkan'),
-            'date' => date('Y-m-d'),
-        ]);
-
-        Todo::create([
-            'user_id' => 1,
-            'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
-            'content' => Crypt::encryptString('Memiliki banyak teman'),
-            'date' => date('Y-m-d'),
-        ]);
+        for ($i = 0; $i < 20; $i++) {
+            Todo::create([
+                'user_id' => 1,
+                'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
+                'content' => Crypt::encryptString(fake()->sentence()),
+                'date' => date('Y-m-d'),
+            ]);
+        }
     }
 }

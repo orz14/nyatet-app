@@ -51,6 +51,11 @@
     @apply !border-red-400;
 }
 
+.input-err {
+    @apply !text-red-700 !border-red-700 focus:!ring-red-600/20 focus:!border-red-500;
+}
+
+/* CKEditor */
 .ckeditor a {
     @apply underline;
 }
@@ -59,8 +64,26 @@
     @apply list-[square] pl-5;
 }
 
-.input-err {
-    @apply !text-red-700 !border-red-700 focus:!ring-red-600/20 focus:!border-red-500;
+.ckeditor ol {
+    @apply list-decimal pl-5;
+}
+
+.ckeditor h2,
+.ckeditor h3,
+.ckeditor h4 {
+    @apply block ml-0 mr-0 font-bold;
+}
+
+.ckeditor h2 {
+    @apply text-2xl my-3;
+}
+
+.ckeditor h3 {
+    @apply text-xl my-4;
+}
+
+.ckeditor h4 {
+    @apply text-lg my-5;
 }
 
 /* Scrollbar */
@@ -75,4 +98,44 @@
 }
 ::-webkit-scrollbar-thumb:hover {
     @apply bg-teal-500;
+}
+
+/* Go Up and Down */
+.scrollToTop {
+    @apply hidden list-none text-[0] fixed bottom-[49%] right-0 cursor-pointer z-[99];
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+.scrollToTop a {
+    @apply relative overflow-hidden inline-block bg-white text-slate-600 text-sm m-auto py-3 px-[14px] lg:py-[14px] lg:px-4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.scrollToTop a:hover {
+    @apply text-teal-400;
+}
+.scrollToTop li:nth-child(1) {
+    @apply animate-slideInTop;
+}
+.scrollToTop li:nth-child(2) {
+    @apply animate-slideInDown;
+}
+@keyframes slideInTop {
+    from {
+        transform: translate3d(0, -100%, 0);
+        visibility: visible;
+        -webkit-backface-visibility: hidden;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes slideInDown {
+    from {
+        transform: translate3d(0, 100%, 0);
+        visibility: visible;
+        -webkit-backface-visibility: hidden;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+    }
 }

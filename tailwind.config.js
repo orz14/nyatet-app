@@ -19,6 +19,10 @@ module.exports = {
             fontFamily: {
                 sans: ["Quicksand", ...defaultTheme.fontFamily.sans],
             },
+            animation: {
+                slideInTop: "slideInTop 0.5s",
+                slideInDown: "slideInDown 0.5s",
+            },
         },
     },
 

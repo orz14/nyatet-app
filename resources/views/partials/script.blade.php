@@ -102,10 +102,16 @@
 <script>
     ClassicEditor
     .create(document.querySelector('#editor'),{
-        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'undo', 'redo'],
+        removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
     })
     .catch(error => {
         console.error( error );
     });
 </script>
 @endisset
+
+<script>
+    // Go Up and Down
+    jQuery(document).ready(function(){var o=220,r=600;jQuery(window).scroll(function(){jQuery(this).scrollTop() > o?jQuery(".scrollToTop").fadeIn(r):jQuery(".scrollToTop").fadeOut(r)})});
+    $(function(){$("a[href*=#]:not([href=#])").click(function(){if(location.pathname.replace(/^\//,"")==this.pathname.replace(/^\//,"")&&location.hostname==this.hostname){var t=$(this.hash);if(t=t.length?t:$("[name="+this.hash.slice(1)+"]"),t.length)return $("html,body").animate({scrollTop:t.offset().top},600),!1}})});
+</script>

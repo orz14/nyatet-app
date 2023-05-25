@@ -98,7 +98,7 @@ class NoteController extends Controller
             try {
                 $note->update($validatedData);
 
-                return to_route('note.index')->with('status', 'Catatan Berhasil Diedit.');
+                return to_route('note.index')->with('status', 'Catatan Berhasil Disimpan.');
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
 
@@ -116,7 +116,7 @@ class NoteController extends Controller
                 try {
                     $note->update(['password' => Hash::make($request->password)]);
 
-                    return back()->with('status', 'Password Berhasil Disimpan.');
+                    return back()->with('status', 'Catatan Berhasil Dikunci.');
                 } catch (\Exception $e) {
                     Log::error($e->getMessage());
 
