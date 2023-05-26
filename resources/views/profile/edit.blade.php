@@ -1,8 +1,6 @@
 @extends('layouts.app')
 @section('hero')
-<h1 class="text-2xl font-normal sm:text-3xl md:text-4xl lg:font-light lg:text-6xl">
-    {{ __('Profil') }}
-</h1>
+<x-hero-title>{{ __('Profil') }}</x-hero-title>
 @endsection
 
 @section('content')

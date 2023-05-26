@@ -1,8 +1,6 @@
 @extends('layouts.app')
 @section('hero')
-<h1 class="text-2xl font-normal sm:text-3xl md:text-4xl lg:font-light lg:text-6xl">
-    {{ __('History List') }}
-</h1>
+<x-hero-title>{{ __('History List') }}</x-hero-title>
 
 {{-- Session Status --}}
 <x-session-status />
