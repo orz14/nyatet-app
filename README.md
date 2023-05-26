@@ -17,11 +17,15 @@
 -   Note (bisa dikunci)
 -   Enkripsi Laravel menggunakan OpenSSL untuk menyediakan enkripsi AES-256 dan AES-128
 
-## Cara penggunaan
+## Cara Penggunaan
 
 ```bash
-# update php package using composer
-composer update
+# clone repository
+git clone https://github.com/orz14/nyatet-app.git
+cd nyatet-app/
+
+# install php package using composer
+composer install
 
 # copy .env and modify it
 cp .env.example .env
@@ -32,7 +36,7 @@ php artisan key:generate
 # run migration & seeders
 php artisan migrate --seed
 
-# update package, using yarn or npm
+# install package, using yarn or npm
 # using yarn
 yarn
 yarn dev
