@@ -79,7 +79,7 @@ class TodoController extends Controller
     public function history()
     {
         $today = date('Y-m-d');
-        $datas = Todo::whereUserId(auth()->user()->id)->where('date', '!=', $today)->latest()->paginate(20);
+        $datas = Todo::whereUserId(auth()->user()->id)->where('date', '!=', $today)->latest()->paginate(10);
 
         return view('todo.history', [
             'title' => 'History List',

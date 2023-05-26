@@ -11,7 +11,7 @@
 @section('content')
 @if ($datas->count())
 @foreach ($datas as $data)
-<div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md border-l-8 border-teal-400/50 card hover:border-teal-400 hover:shadow-lg @if($data->is_done) todo-hijau @else todo-merah @endif">
+<div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md card hover:shadow-lg @if($data->is_done) todo-hijau @else todo-merah @endif">
     <div class="px-3 py-2 leading-none card-body">
         <div class="flex items-center justify-between">
             <div class="pr-2">
