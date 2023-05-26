@@ -22,28 +22,29 @@
 ```bash
 # update php package using composer
 composer update
+
 # copy .env and modify it
 cp .env.example .env
+
 # generate key
 php artisan key:generate
-# run migration
-php artisan migrate
 
-# run seed
-php artisan db:seed
+# run migration & seeders
+php artisan migrate --seed
 
 # update package, using yarn or npm
 # using yarn
 yarn
 yarn dev
 
-# using npm 
+# using npm
 npm install
 npm run dev
 
 # serve
-php artisan serve --host=0.0.0.0 --port=8000
+php artisan serve
 ```
+
 ## Contoh Enkripsi
 
 <img src="https://cdn.jsdelivr.net/gh/orz14/orzcode@main/img/contoh-enkripsi.png" alt="Contoh Enkripsi">
