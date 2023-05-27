@@ -14,16 +14,16 @@
 <meta name="geo.country" content="id">
 <meta name="geo.placename" content="Indonesia">
 <meta name="rating" content="general">
-<meta name="author" content="ORZCODE">
-<link rel="publisher" href="https://orzproject.my.id/">
-<link rel="author" href="https://orzproject.my.id/">
-<link rel="me" href="https://orzproject.my.id/">
+<meta name="author" content="{{ config('developer.author') }}">
+<link rel="publisher" href="{{ config('developer.url') }}">
+<link rel="author" href="{{ config('developer.url') }}">
+<link rel="me" href="{{ config('developer.url') }}">
 <meta property="og:site_name" content="{{ config('app.name') }}">
 <meta property="og:locale" content="id_ID">
 <meta property="og:locale:alternate" content="en_US">
 <meta property="og:locale:alternate" content="en_GB">
-<meta property="article:author" content="https://orzproject.my.id/">
-<meta property="article:publisher" content="https://orzproject.my.id/">
+<meta property="article:author" content="{{ config('developer.url') }}">
+<meta property="article:publisher" content="{{ config('developer.url') }}">
 <meta name="google-site-verification" content="dxkAHdf8jg1-2rmTH-QGkIMSYY7s0EwcEffohbUQCt8" />
 <meta name="msvalidate.01" content="26E64DF8D8B14C5AF83FBD804474B8C4" />
 

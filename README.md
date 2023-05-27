@@ -19,24 +19,40 @@
 
 ## Cara Penggunaan
 
+-   Clone Repository
+
 ```bash
-# clone repository
 git clone https://github.com/orz14/nyatet-app.git
 cd nyatet-app/
+```
 
-# install php package using composer
+-   Install Vendor Using Composer
+
+```bash
 composer install
+```
 
-# copy .env and modify it
+-   Copy .env and Modify It
+
+```bash
 cp .env.example .env
+```
 
-# generate key
+-   Generate Key
+
+```bash
 php artisan key:generate
+```
 
-# run migration & seeders
+-   Run Migration & Seeders
+
+```bash
 php artisan migrate --seed
+```
 
-# install package, using yarn or npm
+-   Install Node Modules Using Yarn or NPM
+
+```bash
 # using yarn
 yarn
 yarn dev
@@ -44,8 +60,11 @@ yarn dev
 # using npm
 npm install
 npm run dev
+```
 
-# serve
+-   Serve
+
+```bash
 php artisan serve
 ```
 

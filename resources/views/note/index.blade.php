@@ -20,13 +20,13 @@
             </div>
             <div class="text-right">
                 @if (!isset($data->password))
-                <x-todo-button x-data x-on:click="event.preventDefault();modal_delete_open('{{ route('note.destroy', $data->slug) }}')" class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
+                <x-todo-button x-data x-on:click="modal_delete_open('{{ route('note.destroy', $data->slug) }}')" class="text-red-600 bg-red-100 hover:bg-red-200" icon="trash-2" />
                 @endif
                 
                 @isset($data->password)
-                <x-todo-button x-data x-on:click="event.preventDefault();modal_unlock_open('{{ route('note.unlock', $data->slug) }}')" class="text-amber-800 bg-amber-300 hover:bg-amber-400" icon="lock" />
+                <x-todo-button x-data x-on:click="modal_unlock_open('{{ route('note.unlock', $data->slug) }}')" class="text-amber-800 bg-amber-300 hover:bg-amber-400" icon="lock" />
                 @else
-                <x-todo-button x-data x-on:click="event.preventDefault();modal_lock_open('{{ route('note.lock', $data->slug) }}')" class="text-amber-600 bg-amber-100 hover:bg-amber-200" icon="unlock" />
+                <x-todo-button x-data x-on:click="modal_lock_open('{{ route('note.lock', $data->slug) }}')" class="text-amber-600 bg-amber-100 hover:bg-amber-200" icon="unlock" />
                 @endisset
             </div>
         </a>

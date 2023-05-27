@@ -33,6 +33,10 @@ textarea {
 }
 
 /* Some Styles */
+.btn {
+    @apply !normal-case;
+}
+
 .container {
     @apply max-w-5xl;
 }

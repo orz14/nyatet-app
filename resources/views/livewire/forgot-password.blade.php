@@ -9,7 +9,7 @@
         </x-auth-button>
         
         <div class="w-full max-w-sm mx-auto mb-5 -mt-3 sm:mt-0">
-            <a href="{{ route('login') }}" class="text-white border-none bg-slate-400 hover:bg-slate-500 btn btn-block">Kembali</a>
+            <a href="{{ route('login') }}" class="text-white border-none bg-slate-400 hover:bg-slate-500 btn btn-block">{{ __('Kembali') }}</a>
         </div>
     </div>
 </form>
