@@ -13,6 +13,7 @@
 ## Fitur
 
 -   Login & Register
+-   Sign In with GitHub & Google
 -   Reset Password (dikirim ke email)
 -   Todo List
 -   Note (bisa dikunci)
