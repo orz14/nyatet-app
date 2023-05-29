@@ -31,14 +31,14 @@
             @endif
         </div>
         
-        <x-auth-button>{{ __('Login') }}</x-auth-button>
+        <x-auth-button>{{ __('Masuk') }}</x-auth-button>
     </form>
     
-    @if(env('ENABLE_SOCIAL_LOGIN'))
-    <div class="w-full max-w-sm mx-auto divider before:bg-slate-300/70 after:bg-slate-300/70 text-slate-500">OR</div>
-    <x-auth-button-github>{{ __('Sign In with GitHub') }}</x-auth-button-github>
+    @if (env('ENABLE_SOCIAL_LOGIN'))
+    <div class="w-full max-w-sm mx-auto divider before:bg-slate-300/70 after:bg-slate-300/70 text-slate-500">atau</div>
+    <x-auth-button-github>{{ __('Masuk dengan GitHub') }}</x-auth-button-github>
     
-    <x-auth-button-google>{{ __('Sign In with Google') }}</x-auth-button-google>
+    <x-auth-button-google>{{ __('Masuk dengan Google') }}</x-auth-button-google>
     @endif
     
     <div class="mb-1 text-sm text-center text-slate-500">
