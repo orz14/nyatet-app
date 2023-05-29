@@ -8,30 +8,28 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+    Route::prefix('login')->controller(AuthenticatedSessionController::class)->group(function () {
+        Route::get('/', 'create')->name('login');
+        Route::post('/', 'store');
+        Route::get('/{provider}', 'redirectToProvider')->name('login.provider');
+        Route::get('/callback/{provider}', 'handleProviderCallback')->name('login.provider.callback');
+    });
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::prefix('register')->controller(RegisteredUserController::class)->group(function () {
+        Route::get('/', 'create')->name('register');
+        Route::post('/', 'store');
+    });
 
+    Route::name('password.')->group(function () {
+        Route::prefix('forgot-password')->controller(PasswordResetLinkController::class)->group(function () {
+            Route::get('/', 'create')->name('request');
+            Route::post('/', 'store')->name('email');
+        });
 
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-        ->name('password.request');
-
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->name('password.email');
-
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-        ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.store');
-
-
-    Route::prefix('login')->group(function () {
-        Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-        Route::post('/', [AuthenticatedSessionController::class, 'store']);
-        Route::get('/{provider}', [AuthenticatedSessionController::class,'redirectToProvider'])->name('login.provider');
-        Route::get('/callback/{provider}', [AuthenticatedSessionController::class,'handleProviderCallback'])->name('login.provider.callback');
+        Route::prefix('reset-password')->controller(NewPasswordController::class)->group(function () {
+            Route::get('/{token}', 'create')->name('reset');
+            Route::post('/', 'store')->name('store');
+        });
     });
 });
 

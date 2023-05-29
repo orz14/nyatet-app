@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -56,7 +55,6 @@ class AuthenticatedSessionController extends Controller
     /**
      * Redirect the user to the provider authentication page.
      *
-     * @param $provider
      * @return \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function redirectToProvider($provider)
@@ -67,7 +65,6 @@ class AuthenticatedSessionController extends Controller
     /**
      * Get user info from provider
      *
-     * @param $provider
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function handleProviderCallback($provider)
@@ -77,53 +74,56 @@ class AuthenticatedSessionController extends Controller
 
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
-//        return redirect($this->redirectTo);
-        return redirect(RouteServiceProvider::HOME)->with('reload', true);
+
+        return redirect()->intended(RouteServiceProvider::HOME)->with('reload', true);
     }
 
     /**
      * If a user has registered before using social auth, return the user
      * else, create a new user object.
      *
-     * @param  $user Socialite user object
+     * @param    $user Socialite user object
      * @param $provider Social auth provider
      * @return  User
      */
     public function findOrCreateUser($user, $provider)
     {
 
-        $field = strtolower($provider)."_id";
+        $field = strtolower($provider).'_id';
         $authUser = User::where($field, $user->id)->first();
         if ($authUser) {
             return $authUser;
         }
+
         // find user with same email
-        if($user->email != null)
-        {
-            $usermail = User::where('email',$user->email)->first();
-            if($usermail)
-            {
-               // update provider id
-                $usermail[$field]=$user->id;
+        if ($user->email != null) {
+            $usermail = User::where('email', $user->email)->first();
+            if ($usermail) {
+                // update provider id
+                $usermail[$field] = $user->id;
                 $usermail->save();
+
                 return $usermail;
-            }else{
-                // TODO : password logic must be change, for now use random
-                $user =User::create([
-                    'name'     => $user->name,
-                    'username' => $user->email,
-                    'email'    => $user->email,
-                    'password' =>Hash::make(Str::random(15)),
+            } else {
+                $user = User::create([
+                    'name' => $user->name,
+                    'username' => 'user-'.$this->genRandom(10),
+                    'email' => $user->email,
+                    'password' => Hash::make($this->genRandom(20)),
                     'provider' => $provider,
                     'provider_id' => $user->id,
-                    'role_id'=>2
+                    'role_id' => 2,
                 ]);
+
                 event(new Registered($user));
+
                 return $user;
             }
         }
+    }
 
-
-
+    public function genRandom($limit)
+    {
+        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
     }
 }
