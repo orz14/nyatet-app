@@ -4,6 +4,7 @@
 
 -   Laravel 10
 -   Laravel Turbo
+-   Socialite Plugin
 -   Alpine JS
 -   Tailwind CSS
 -   Daisy UI
