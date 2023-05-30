@@ -14,7 +14,7 @@
 <meta name="geo.country" content="id">
 <meta name="geo.placename" content="Indonesia">
 <meta name="rating" content="general">
-<meta name="author" content="{{ config('developer.author') }}">
+<meta name="author" content="{{ config('developer.name') }}">
 <link rel="publisher" href="{{ config('developer.url') }}">
 <link rel="author" href="{{ config('developer.url') }}">
 <link rel="me" href="{{ config('developer.url') }}">
