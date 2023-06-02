@@ -116,7 +116,9 @@ textarea {
 .ckeditor h3 {
     @apply text-xl my-4;
 }
-
+.ck-editor__editable_inline {
+    min-height: 15em;
+}
 .ckeditor h4 {
     @apply text-lg my-5;
 }
