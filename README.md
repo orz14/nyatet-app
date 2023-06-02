@@ -8,12 +8,11 @@
 -   Alpine JS
 -   Tailwind CSS
 -   Daisy UI
--   Feather Icons
 
 ## Fitur
 
 -   Login & Register
--   Sign In with GitHub & Google
+-   Login with GitHub / Google
 -   Reset Password (dikirim ke email)
 -   Todo List
 -   Note (bisa dikunci)
@@ -28,16 +27,16 @@ git clone https://github.com/orz14/nyatet-app.git
 cd nyatet-app/
 ```
 
--   Install Vendor Using Composer
-
-```bash
-composer install
-```
-
 -   Copy .env and Modify It
 
 ```bash
 cp .env.example .env
+```
+
+-   Install Vendor Using Composer
+
+```bash
+composer install
 ```
 
 -   Generate Key

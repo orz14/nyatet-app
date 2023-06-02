@@ -69,7 +69,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function handleProviderCallback($provider)
     {
-
         $user = Socialite::driver($provider)->user();
 
         $authUser = $this->findOrCreateUser($user, $provider);
@@ -88,30 +87,33 @@ class AuthenticatedSessionController extends Controller
      */
     public function findOrCreateUser($user, $provider)
     {
-
         $field = strtolower($provider).'_id';
-        $authUser = User::where($field, $user->id)->first();
+        $authUser = User::where($field, $user->getId())->first();
         if ($authUser) {
+            $authUser['avatar'] = $user->getAvatar() ?? null;
+            $authUser->save();
+
             return $authUser;
         }
 
         // find user with same email
-        if ($user->email != null) {
-            $usermail = User::where('email', $user->email)->first();
+        if ($user->getEmail() != null) {
+            $usermail = User::where('email', $user->getEmail())->first();
             if ($usermail) {
                 // update provider id
-                $usermail[$field] = $user->id;
+                $usermail[$field] = $user->getId();
+                $usermail['avatar'] = $user->getAvatar() ?? null;
                 $usermail->save();
 
                 return $usermail;
             } else {
                 $user = User::create([
-                    'name' => $user->name,
+                    'name' => $user->getName() ?? 'User',
                     'username' => 'user-'.$this->genRandom(10),
-                    'email' => $user->email,
+                    'email' => $user->getEmail(),
                     'password' => Hash::make($this->genRandom(20)),
-                    'provider' => $provider,
-                    'provider_id' => $user->id,
+                    $field => $user->getId(),
+                    'avatar' => $user->getAvatar() ?? null,
                     'role_id' => 2,
                 ]);
 

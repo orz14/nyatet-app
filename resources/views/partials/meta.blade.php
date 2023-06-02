@@ -54,11 +54,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/feather-icons"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 <!-- Prefetch -->
-<link rel="dns-prefetch" href="//ogp.me" /><link rel="dns-prefetch" href="//www.w3.org" /><link rel="dns-prefetch" href="//cdn.jsdelivr.net" /><link rel="dns-prefetch" href="//fonts.googleapis.com" /><link rel="dns-prefetch" href="//fonts.gstatic.com" /><link rel="dns-prefetch" href="//unpkg.com" /><link rel="dns-prefetch" href="//code.jquery.com" /><link rel="dns-prefetch" href="//cdn.ckeditor.com" /><link rel="dns-prefetch" href="//orzproject.my.id" />
+<link rel="dns-prefetch" href="//ogp.me" /><link rel="dns-prefetch" href="//www.w3.org" /><link rel="dns-prefetch" href="//cdn.jsdelivr.net" /><link rel="dns-prefetch" href="//fonts.googleapis.com" /><link rel="dns-prefetch" href="//fonts.gstatic.com" /><link rel="dns-prefetch" href="//code.jquery.com" /><link rel="dns-prefetch" href="//cdn.ckeditor.com" /><link rel="dns-prefetch" href="//orzproject.my.id" />
 
 @if(session()->has('reload'))
 <meta content='0;url={{ url()->current() }}' http-equiv='refresh'/>

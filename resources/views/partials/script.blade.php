@@ -1,7 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-@include('partials.scripts.feather')
-
 @include('partials.scripts.alpine-init')
 
 @include('partials.scripts.modal')
