@@ -21,9 +21,4 @@ class Todo extends Model
     {
         return Crypt::decryptString($data);
     }
-
-    public function childs()
-    {
-        return $this->hasMany(Todo::class, 'date', 'date');
-    }
 }

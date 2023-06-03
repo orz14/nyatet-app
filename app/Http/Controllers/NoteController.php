@@ -42,9 +42,9 @@ class NoteController extends Controller
         $validatedData = $request->validate($rules);
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['slug'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10);
-        $validatedData['note'] = Crypt::encryptString($request->note);
+        $validatedData['note'] = Crypt::encryptString($validatedData['note']);
         if ($request->title) {
-            $validatedData['title'] = Crypt::encryptString($request->title);
+            $validatedData['title'] = Crypt::encryptString($validatedData['title']);
         } else {
             $validatedData['title'] = null;
         }
@@ -88,9 +88,9 @@ class NoteController extends Controller
             }
 
             $validatedData = $request->validate($rules);
-            $validatedData['note'] = Crypt::encryptString($request->note);
+            $validatedData['note'] = Crypt::encryptString($validatedData['note']);
             if ($request->title) {
-                $validatedData['title'] = Crypt::encryptString($request->title);
+                $validatedData['title'] = Crypt::encryptString($validatedData['title']);
             } else {
                 $validatedData['title'] = null;
             }

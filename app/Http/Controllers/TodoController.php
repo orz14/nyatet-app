@@ -77,12 +77,13 @@ class TodoController extends Controller
 
     public function history()
     {
-
-        $datas = Todo::with('childs')->whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->paginate(20);
+        $todos = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->paginate(20);
+        $datas = $todos->groupBy('date');
 
         return view('todo.history', [
             'title' => 'History List',
             'datas' => $datas,
+            'paginate' => $todos,
             'modalDelete' => true,
         ]);
     }
