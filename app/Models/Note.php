@@ -19,8 +19,6 @@ class Note extends Model
 
     public function decrypt($data)
     {
-        $decrypted = Crypt::decryptString($data);
-
-        return $decrypted;
+        return Crypt::decryptString($data);
     }
 }

@@ -12,7 +12,7 @@ class TodoController extends Controller
 {
     public function index()
     {
-        $datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today());
+        $datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
 
         return view('todo.index', [
             'title' => 'Todo List',
@@ -78,7 +78,7 @@ class TodoController extends Controller
     public function history()
     {
 
-        $datas = Todo::with('childs')->whereUserId(auth()->user()->id)->whereDate('created_at','!=' ,Carbon::today())->orderBy('date')->paginate(20);
+        $datas = Todo::with('childs')->whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->paginate(20);
 
         return view('todo.history', [
             'title' => 'History List',

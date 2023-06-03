@@ -13,7 +13,7 @@
 
         @foreach ($datas as $data)
 
-            <p class="font-bold text-2xl pb-2 subpixel-antialiased antialiased tracking-wide leading-8 underline">{{\Carbon\Carbon::parse($data->date)->translatedFormat('l, d F Y')}}</p>
+            <p class="pb-2 text-2xl antialiased font-bold leading-8 tracking-wide underline">{{\Carbon\Carbon::parse($data->date)->translatedFormat('l, d F Y')}}</p>
             @if(!empty($data->childs))
                 @foreach($data->childs as $item)
                     <div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md card hover:shadow-lg @if($item->is_done) todo-hijau @else todo-merah @endif">

@@ -10,7 +10,7 @@ class Todo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'slug', 'content', 'is_done'];
+    protected $fillable = ['user_id', 'slug', 'content', 'is_done', 'date'];
 
     public function getRouteKeyName()
     {
@@ -19,12 +19,11 @@ class Todo extends Model
 
     public function decrypt($data)
     {
-        $decrypted = Crypt::decryptString($data);
-
-        return $decrypted;
-    }
-    public function childs() {
-        return $this->hasMany(Todo::Class,'date','date');
+        return Crypt::decryptString($data);
     }
 
+    public function childs()
+    {
+        return $this->hasMany(Todo::class, 'date', 'date');
+    }
 }
