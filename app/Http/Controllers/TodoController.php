@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Todo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
@@ -11,8 +12,7 @@ class TodoController extends Controller
 {
     public function index()
     {
-        $today = date('Y-m-d');
-        $datas = Todo::whereUserId(auth()->user()->id)->where('date', $today)->get();
+        $datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today());
 
         return view('todo.index', [
             'title' => 'Todo List',
@@ -28,9 +28,8 @@ class TodoController extends Controller
         ]);
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['slug'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10);
-        $validatedData['content'] = Crypt::encryptString($request->content);
+        $validatedData['content'] = Crypt::encryptString($validatedData['content']);
         $validatedData['date'] = date('Y-m-d');
-
         try {
             Todo::create($validatedData);
 
@@ -78,8 +77,8 @@ class TodoController extends Controller
 
     public function history()
     {
-        $today = date('Y-m-d');
-        $datas = Todo::whereUserId(auth()->user()->id)->where('date', '!=', $today)->latest()->paginate(10);
+
+        $datas = Todo::with('childs')->whereUserId(auth()->user()->id)->whereDate('created_at','!=' ,Carbon::today())->orderBy('date')->paginate(20);
 
         return view('todo.history', [
             'title' => 'History List',
