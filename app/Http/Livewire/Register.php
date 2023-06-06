@@ -23,7 +23,7 @@ class Register extends Component
 
     protected $rules = [
         'name' => ['required', 'string', 'max:255'],
-        'username' => ['required', 'string', 'max:20', 'unique:users'],
+        'username' => ['required', 'string', 'min:5', 'max:20', 'unique:users'],
         'email' => ['required', 'string', 'email', 'indisposable', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:8'],
         'password_confirmation' => ['required', 'same:password'],

@@ -13,7 +13,7 @@
 
         @foreach ($datas as $data)
 
-            <div class="py-5 divider after:rounded-full after:h-1 after:bg-teal-800 before:hidden">
+            <div class="py-5 divider after:rounded-full after:h-1 after:bg-teal-800/60 before:hidden">
                 <h2 class="px-3 py-1 text-base font-bold text-teal-900 bg-teal-400 border-teal-800 rounded-lg md:text-lg border-x-8">{{ \Carbon\Carbon::parse($data[0]->date)->translatedFormat('l, d F Y') }}</h2>
             </div>
 

@@ -31,6 +31,10 @@ Route::middleware('guest')->group(function () {
             Route::post('/', 'store')->name('store');
         });
     });
+
+    Route::get('redirect/{link}', function ($link) {
+        return redirect()->route($link)->with('reload', true);
+    })->name('redirect');
 });
 
 Route::middleware('auth')->group(function () {

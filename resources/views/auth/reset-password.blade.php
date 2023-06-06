@@ -17,7 +17,7 @@
         {{-- Email Address --}}
         <x-hidden name="email" value="{{ old('email', $request->email) }}" />
 
-        @livewire('reset-password')
+        <livewire:reset-password />
 
         <x-auth-button class="mt-3">{{ __('Reset Password') }}</x-auth-button>
     </form>
