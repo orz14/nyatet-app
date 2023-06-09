@@ -62,4 +62,32 @@ class ArtisanCallController extends Controller
             return to_route('todo.index')->with('err', '[500] Server Error');
         }
     }
+
+    public function migrate()
+    {
+        try {
+            Artisan::call('migrate');
+            Log::info('Creating Migration Table Successfully.');
+
+            return to_route('todo.index')->with('status', 'Creating Migration Table Successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return to_route('todo.index')->with('err', '[500] Server Error');
+        }
+    }
+
+    public function rollback()
+    {
+        try {
+            Artisan::call('migrate:rollback');
+            Log::info('Rolling Back Migrations Successfully.');
+
+            return to_route('todo.index')->with('status', 'Rolling Back Migrations Successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return to_route('todo.index')->with('err', '[500] Server Error');
+        }
+    }
 }

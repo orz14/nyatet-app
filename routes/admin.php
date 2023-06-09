@@ -8,4 +8,6 @@ Route::middleware(['auth', 'admin'])->controller(ArtisanCallController::class)->
     Route::get('down', 'webDown');
     Route::get('up', 'webUp');
     Route::get('optimize', 'optimize');
+    Route::get('migrate', 'migrate');
+    Route::get('rollback', 'rollback');
 });
