@@ -5,6 +5,7 @@
 -   Laravel 10
 -   Laravel Turbo
 -   Socialite Plugin
+-   Livewire
 -   Alpine JS
 -   Tailwind CSS
 -   Daisy UI
@@ -79,4 +80,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ---
 
-<p align="center">Created with 💚 by <a href="https://orzproject.my.id" target="_blank">ORZCODE</a></p>
+<p align="center" style="font-size:14px">Created with 💚 by <a href="https://orzproject.my.id" target="_blank">ORZCODE</a></p>
