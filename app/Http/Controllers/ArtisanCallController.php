@@ -24,10 +24,10 @@ class ArtisanCallController extends Controller
     public function webDown()
     {
         try {
-            Artisan::call('down --refresh=60 --secret="orzcode-uhLGp6jO3Q3L2ZFwQdl4dpIdtsXnQHbn5tjCpufAmKzFUFm9PI"');
+            Artisan::call('down --refresh=60 --secret='.env('MAINTENANCE_SECRET_TOKEN', 'orzcode'));
             Log::info('Application is now in maintenance mode.');
 
-            return redirect('/orzcode-uhLGp6jO3Q3L2ZFwQdl4dpIdtsXnQHbn5tjCpufAmKzFUFm9PI');
+            return redirect('/'.env('MAINTENANCE_SECRET_TOKEN', 'orzcode'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
