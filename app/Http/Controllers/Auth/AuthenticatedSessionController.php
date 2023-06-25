@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME)->with('reload', true);
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
@@ -74,7 +74,7 @@ class AuthenticatedSessionController extends Controller
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
 
-        return redirect()->intended(RouteServiceProvider::HOME)->with('reload', true);
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
