@@ -56,7 +56,7 @@
                 <div class="mt-5 sm:mt-0">
                     <x-modal-title>{{ __('Atur Password Catatan') }}</x-modal-title>
                     <div class="my-2">
-                        <x-form-input type="password" name="password" ph="Masukkan Password" required />
+                        <x-form-input type="password" name="passwordLock" ph="Masukkan Password" required />
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                 <div class="mt-5 sm:mt-0">
                     <x-modal-title>{{ __('Buka Password Catatan') }}</x-modal-title>
                     <div class="my-2">
-                        <x-form-input type="password" name="password" ph="Masukkan Password" required />
+                        <x-form-input type="password" name="passwordUnlock" ph="Masukkan Password" required />
                     </div>
                 </div>
             </div>

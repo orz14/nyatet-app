@@ -112,9 +112,9 @@ class NoteController extends Controller
     public function lock(Request $request, Note $note)
     {
         if ($note->user_id == auth()->user()->id) {
-            if ($request->password) {
+            if ($request->passwordLock) {
                 try {
-                    $note->update(['password' => Hash::make($request->password)]);
+                    $note->update(['password' => Hash::make($request->passwordLock)]);
 
                     return back()->with('status', 'Catatan Berhasil Dikunci.');
                 } catch (\Exception $e) {
@@ -131,8 +131,8 @@ class NoteController extends Controller
     public function unlock(Request $request, Note $note)
     {
         if ($note->user_id == auth()->user()->id) {
-            if ($request->password) {
-                if (Hash::check($request->password, $note->password)) {
+            if ($request->passwordUnlock) {
+                if (Hash::check($request->passwordUnlock, $note->password)) {
                     try {
                         $note->update(['password' => null]);
 
