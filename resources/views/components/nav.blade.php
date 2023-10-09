@@ -27,6 +27,9 @@
                     </li>
                     @endcan
                     <li class="orz-pointer">
+                        <a href="https://github.com/orz14/nyatet-app" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" target="_blank">{{ __('Source Code') }}</a>
+                    </li>
+                    <li class="orz-pointer">
                         <a href="{{ route('profile.edit') }}" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60">{{ __('Profil') }}</a>
                     </li>
                     <li class="orz-pointer">
