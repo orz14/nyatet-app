@@ -1,8 +1,9 @@
 <nav class="nav">
     <div class="container">
         <div class="brand">
-            <x-icon class="w-auto h-8 pointer-events-none select-none sm:hidden" />
-            <x-logo class="hidden w-auto h-8 pointer-events-none select-none sm:block" />
+            <a href="{{ config('app.url') }}">
+                <x-logo class="w-auto h-7 pointer-events-none select-none sm:h-8" />
+            </a>
         </div>
         
         <div class="menutet">
