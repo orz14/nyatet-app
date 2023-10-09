@@ -26,6 +26,7 @@
 <meta property="article:publisher" content="{{ config('developer.url') }}">
 <meta name="google-site-verification" content="dxkAHdf8jg1-2rmTH-QGkIMSYY7s0EwcEffohbUQCt8" />
 <meta name="msvalidate.01" content="26E64DF8D8B14C5AF83FBD804474B8C4" />
+<meta name="search engines" content="Aeiwi, Alexa, AllTheWeb, AltaVista, AOL Netfind, Anzwers, Canada, DirectHit, EuroSeek, Excite, Overture, Go, Google, HotBot, InfoMak, Kanoodle, Lycos, MasterSite, National Directory, Northern Light, SearchIt, SimpleSearch, WebsMostLinked, WebTop, What-U-Seek, AOL, Yahoo, WebCrawler, Infoseek, Excite, Magellan, LookSmart, CNET, Googlebot" />
 
 <!-- Primary Meta Tags -->
 <title>{{ isset($title) ? $title . __(' · ') : '' }}{{ config('app.name') }}</title>
@@ -38,14 +39,14 @@
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:title" content="{{ isset($title) ? $title . __(' · ') : '' }}{{ config('app.name') }}">
 <meta property="og:description" content="{{ config('app.description') }}">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/meta-nyatet-app.webp">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="{{ url()->current() }}">
 <meta property="twitter:title" content="{{ isset($title) ? $title . __(' · ') : '' }}{{ config('app.name') }}">
 <meta property="twitter:description" content="{{ config('app.description') }}">
-<meta property="twitter:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/icon-nyatet-app.webp">
+<meta property="twitter:image" content="https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/logo/meta-nyatet-app.webp">
 
 <!-- Style -->
 <meta name="theme-color" content="#14b8a6">
