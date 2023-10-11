@@ -21,8 +21,6 @@
     });
     
     function modal_delete_open(delete_url) {
-        event.preventDefault();
-
         $("#modal-delete-dialog").removeClass("invisible");
         $("#modal-delete-dialog").addClass("visible");
         
