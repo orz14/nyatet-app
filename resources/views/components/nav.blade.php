@@ -1,14 +1,14 @@
 <nav class="nav">
     <div class="container">
         <div class="brand">
-            <a href="{{ config('app.url') }}">
-                <x-logo class="w-auto h-7 pointer-events-none select-none sm:h-8" />
+            <a href="{{ config('app.url') }}" wire:navigate.hover>
+                <x-logo class="w-auto pointer-events-none select-none h-7 sm:h-8" />
             </a>
         </div>
         
         <div class="menutet">
-            <a href="{{ route('todo.index') }}" class="menu-item {{ Request::is('todo*') ? 'menu-item-active' : '' }}">{{ __('Todo List') }}</a>
-            <a href="{{ route('note.index') }}" class="menu-item {{ Request::is('note*') ? 'menu-item-active' : '' }}">{{ __('Note') }}</a>
+            <a href="{{ route('todo.index') }}" class="menu-item {{ Request::is('todo*') ? 'menu-item-active' : '' }}" wire:navigate.hover>{{ __('Todo List') }}</a>
+            <a href="{{ route('note.index') }}" class="menu-item {{ Request::is('note*') ? 'menu-item-active' : '' }}" wire:navigate.hover>{{ __('Note') }}</a>
         </div>
         
         <div class="ctas">
@@ -30,7 +30,7 @@
                         <a href="https://github.com/orz14/nyatet-app" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" target="_blank">{{ __('Source Code') }}</a>
                     </li>
                     <li class="orz-pointer">
-                        <a href="{{ route('profile.edit') }}" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60">{{ __('Profil') }}</a>
+                        <a href="{{ route('profile.edit') }}" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" wire:navigate.hover>{{ __('Profil') }}</a>
                     </li>
                     <li class="orz-pointer">
                         <button x-data x-on:click="$store.modal.logout = true" type="button" id="button-logout-open" class="hover:bg-red-100/80 active:text-black active:bg-red-100/80">{{ __('Logout') }}</button>

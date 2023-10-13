@@ -8,7 +8,7 @@
         <livewire:todo-form />
     </div>
     
-    <a href="{{ route('todo.history') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600">{{ __('History List') }}</a>
+    <a href="{{ route('todo.history') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600" wire:navigate.hover>{{ __('History List') }}</a>
 @endsection
 
 @section('content')

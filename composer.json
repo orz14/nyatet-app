@@ -11,7 +11,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^2.12",
+        "livewire/livewire": "^3.0",
         "opcodesio/log-viewer": "^2.4",
         "propaganistas/laravel-disposable-email": "^2.2"
     },

@@ -1,4 +1,4 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" data-navigate-once></script>
 
 @include('partials.scripts.alpine-init')
 
@@ -8,7 +8,7 @@
 
 @include('partials.scripts.ckeditor')
 
-<script>
+<script data-navigate-track>
     // Session Status
     $('#status').delay(4000).fadeOut(300);
     

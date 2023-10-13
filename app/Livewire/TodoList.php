@@ -1,23 +1,28 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Todo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-class HistoryTodoList extends Component
+class TodoList extends Component
 {
+    public $datas = [];
+
+    protected $listeners = ['todoAdded'];
+
     public function render()
     {
-        $todos = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->paginate(20);
-        $datas = $todos->groupBy('date');
+        $this->datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
 
-        return view('livewire.history-todo-list', [
-            'datas' => $datas,
-            'paginate' => $todos,
-        ]);
+        return view('livewire.todo-list');
+    }
+
+    public function todoAdded()
+    {
+        $this->datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
     }
 
     public function update($slug)
@@ -30,10 +35,10 @@ class HistoryTodoList extends Component
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
 
-                $this->emit('todoError');
+                $this->dispatch('todoError');
             }
         } else {
-            $this->emit('todoNotMine');
+            $this->dispatch('todoNotMine');
         }
     }
 
@@ -47,10 +52,10 @@ class HistoryTodoList extends Component
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
 
-                $this->emit('todoError');
+                $this->dispatch('todoError');
             }
         } else {
-            $this->emit('todoNotMine');
+            $this->dispatch('todoNotMine');
         }
     }
 }

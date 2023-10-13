@@ -16,7 +16,7 @@
             
             <div class="flex gap-2 sm:justify-end">
                 <div class="max-[639px]:w-full">
-                    <a href="{{ route('note.index') }}" class="text-white border-none bg-slate-400 btn max-[639px]:btn-block hover:bg-slate-500">
+                    <a href="{{ route('note.index') }}" class="text-white border-none bg-slate-400 btn max-[639px]:btn-block hover:bg-slate-500" wire:navigate.hover>
                         {{ __('Kembali') }}
                     </a>
                 </div>

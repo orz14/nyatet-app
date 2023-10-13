@@ -1,4 +1,4 @@
-<script>
+<script data-navigate-track>
     $(document).ready(function() {
         // Modal Logout
         $("#button-logout-open").click(function() {
@@ -13,7 +13,7 @@
 </script>
 
 @isset($modalDelete)
-<script>
+<script data-navigate-track>
     // Modal Delete
     $("#button-delete-close").click(function() {
         $("#modal-delete-dialog").removeClass("visible");
@@ -21,6 +21,8 @@
     });
     
     function modal_delete_open(delete_url) {
+        event.preventDefault();
+        
         $("#modal-delete-dialog").removeClass("invisible");
         $("#modal-delete-dialog").addClass("visible");
         
@@ -34,7 +36,7 @@
 @endisset
 
 @isset($modalLock)
-<script>
+<script data-navigate-track>
     // Modal Lock
     $("#button-lock-close").click(function() {
         $("#modal-lock-dialog").removeClass("visible");

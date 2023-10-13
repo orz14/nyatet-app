@@ -5,7 +5,7 @@
 {{-- Session Status --}}
 <x-session-status />
 
-<a href="{{ route('note.create') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600 mt-7">{{ __('Tambahkan Catatan') }}</a>
+<a href="{{ route('note.create') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600 mt-7" wire:navigate.hover>{{ __('Tambahkan Catatan') }}</a>
 @endsection
 
 @section('content')

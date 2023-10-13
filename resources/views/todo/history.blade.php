@@ -4,7 +4,7 @@
 
     <livewire:session-status />
 
-    <a href="{{ route('todo.index') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600 mt-7">{{ __('Tulis List') }}</a>
+    <a href="{{ route('todo.index') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600 mt-7" wire:navigate.hover>{{ __('Tulis List') }}</a>
 @endsection
 
 @section('content')

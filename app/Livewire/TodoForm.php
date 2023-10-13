@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Todo;
 use Illuminate\Support\Facades\Crypt;
@@ -32,11 +32,11 @@ class TodoForm extends Component
             Todo::create($validatedData);
 
             $this->content = '';
-            $this->emit('todoAdded');
+            $this->dispatch('todoAdded');
         } catch (\Throwable $err) {
             Log::error($err->getMessage());
 
-            $this->emit('todoError');
+            $this->dispatch('todoError');
         }
     }
 }

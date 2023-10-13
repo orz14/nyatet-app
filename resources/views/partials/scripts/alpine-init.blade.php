@@ -1,4 +1,4 @@
-<script>
+<script data-navigate-track>
     document.addEventListener('alpine:init', () => {
         Alpine.store('modal', {
             logout: false,

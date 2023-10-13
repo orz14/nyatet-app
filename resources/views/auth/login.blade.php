@@ -27,7 +27,7 @@
             
             {{-- Lupa Password --}}
             @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30">{{ __('Lupa Password?') }}</a>
+            <a href="{{ route('password.request') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30" wire:navigate.hover>{{ __('Lupa Password?') }}</a>
             @endif
         </div>
         
@@ -42,7 +42,7 @@
     @endif
     
     <div class="mb-1 text-sm text-center text-slate-500">
-        {{ __('Belum memiliki akun?') }} <a href="{{ route('register') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30">{{ __('Daftar') }}</a>
+        {{ __('Belum memiliki akun?') }} <a href="{{ route('register') }}" class="text-teal-700 underline transition hover:text-teal-500 decoration-2 decoration-teal-500/30" wire:navigate.hover>{{ __('Daftar') }}</a>
     </div>
 </div>
 @endsection
