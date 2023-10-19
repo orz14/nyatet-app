@@ -6,9 +6,7 @@ use Livewire\Component;
 
 class ResetPassword extends Component
 {
-    public $password;
-
-    public $password_confirmation;
+    public $password, $password_confirmation;
 
     public function render()
     {

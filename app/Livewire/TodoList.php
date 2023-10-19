@@ -5,13 +5,12 @@ namespace App\Livewire;
 use App\Models\Todo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class TodoList extends Component
 {
     public $datas = [];
-
-    protected $listeners = ['todoAdded'];
 
     public function render()
     {
@@ -20,6 +19,7 @@ class TodoList extends Component
         return view('livewire.todo-list');
     }
 
+    #[On('todoAdded')]
     public function todoAdded()
     {
         $this->datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
