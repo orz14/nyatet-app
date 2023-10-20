@@ -45,6 +45,27 @@
 </x-modal>
 @endisset
 
+@isset($modalDeleteAccount)
+{{-- Modal Delete Account --}}
+<x-modal modal="$store.modal.delaccount" dialog="modal-delete-acc-dialog">
+    <div class="px-5 bg-white sm:p-7 sm:pb-0">
+        <div>
+            <div class="mt-5 sm:mt-0">
+                <x-modal-title>{{ __('Konfirmasi') }}</x-modal-title>
+                <div class="my-2">
+                    <p class="text-sm text-slate-700">{{ __('Yakin ingin menghapus akun ?') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
+        <livewire:profile-destroy />
+        
+        <x-modal-button x-on:click="$store.modal.delaccount = false" type="button" id="button-delete-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
+    </div>
+</x-modal>
+@endisset
+
 @isset($modalLock)
 {{-- Modal Lock --}}
 <x-modal modal="$store.modal.lock" dialog="modal-lock-dialog">

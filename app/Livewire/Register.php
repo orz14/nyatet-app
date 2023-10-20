@@ -6,7 +6,15 @@ use Livewire\Component;
 
 class Register extends Component
 {
-    public $name, $username, $email, $password, $password_confirmation;
+    public $name;
+
+    public $username;
+
+    public $email;
+
+    public $password;
+
+    public $password_confirmation;
 
     public function render()
     {

@@ -8,5 +8,7 @@
     .catch(error => {
         console.error( error );
     });
+
+    $(document).ready(() => console.clear());
 </script>
 @endisset

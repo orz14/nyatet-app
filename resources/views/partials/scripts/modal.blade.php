@@ -35,6 +35,25 @@
 </script>
 @endisset
 
+@isset($modalDeleteAccount)
+<script data-navigate-track>
+    // Modal Delete Account
+    $("#button-delete-close").click(function() {
+        $("#modal-delete-acc-dialog").removeClass("visible");
+        $("#modal-delete-acc-dialog").addClass("invisible");
+    });
+    
+    function modal_delete_acc_open() {
+        $("#modal-delete-acc-dialog").removeClass("invisible");
+        $("#modal-delete-acc-dialog").addClass("visible");
+        
+        Alpine.store('modal', {
+            delaccount: true,
+        });
+    }
+</script>
+@endisset
+
 @isset($modalLock)
 <script data-navigate-track>
     // Modal Lock

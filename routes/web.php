@@ -22,9 +22,6 @@ Route::middleware('auth')->group(function () {
     // Todo
     Route::prefix('todo')->controller(TodoController::class)->name('todo.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::post('/', 'store')->name('store');
-        Route::patch('{todo}', 'update')->name('update');
-        Route::delete('{todo}', 'destroy')->name('destroy');
         Route::get('history', 'history')->name('history');
     });
 
@@ -43,8 +40,6 @@ Route::middleware('auth')->group(function () {
     // Profile
     Route::prefix('profile')->controller(ProfileController::class)->name('profile.')->group(function () {
         Route::get('/', 'edit')->name('edit');
-        Route::patch('/', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
     });
 });
 

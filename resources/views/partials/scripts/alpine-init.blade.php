@@ -3,6 +3,7 @@
         Alpine.store('modal', {
             logout: false,
             delete: false,
+            delaccount: false,
             lock: false,
             unlock: false,
         });
