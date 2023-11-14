@@ -34,11 +34,7 @@
         </div>
     </div>
     <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
-        <form method="POST" id="delete_link">
-            @csrf
-            @method('DELETE')
-            <x-modal-button type="submit" class="text-white bg-red-500 hover:bg-red-600">{{ __('Hapus') }}</x-modal-button>
-        </form>
+        <livewire:note-destroy />
         
         <x-modal-button x-on:click="$store.modal.delete = false" type="button" id="button-delete-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
     </div>

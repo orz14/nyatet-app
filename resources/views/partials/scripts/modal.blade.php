@@ -20,7 +20,7 @@
         $("#modal-delete-dialog").addClass("invisible");
     });
     
-    function modal_delete_open(delete_url) {
+    function modal_delete_open(param) {
         event.preventDefault();
         
         $("#modal-delete-dialog").removeClass("invisible");
@@ -30,7 +30,7 @@
             delete: true,
         });
         
-        $("#delete_link").attr("action", delete_url);
+        $("#delete_link").attr("wire:submit", param);
     }
 </script>
 @endisset

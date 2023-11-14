@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('{note}', 'update')->name('update');
         Route::patch('{note}/lock', 'lock')->name('lock');
         Route::patch('{note}/unlock', 'unlock')->name('unlock');
-        Route::delete('{note}', 'destroy')->name('destroy');
+        // Route::delete('{note}', 'destroy')->name('destroy');
     });
 
     // Profile
