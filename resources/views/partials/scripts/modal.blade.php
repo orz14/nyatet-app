@@ -62,9 +62,7 @@
         $("#modal-lock-dialog").addClass("invisible");
     });
     
-    function modal_lock_open(data_url) {
-        event.preventDefault();
-
+    function modal_lock_open(param) {
         $("#modal-lock-dialog").removeClass("invisible");
         $("#modal-lock-dialog").addClass("visible");
         
@@ -72,7 +70,7 @@
             lock: true,
         });
         
-        $("#data_link").attr("action", data_url);
+        $("#data_link").attr("wire:submit", param);
     }
     
     // Modal Unlock
@@ -81,9 +79,7 @@
         $("#modal-unlock-dialog").addClass("invisible");
     });
     
-    function modal_unlock_open(data_url) {
-        event.preventDefault();
-        
+    function modal_unlock_open(data_url) {        
         $("#modal-unlock-dialog").removeClass("invisible");
         $("#modal-unlock-dialog").addClass("visible");
         

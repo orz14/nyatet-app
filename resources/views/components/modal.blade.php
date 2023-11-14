@@ -1,3 +1,5 @@
+@props(['modal', 'dialog'])
+
 <div x-data x-show="{{ $modal }}" x-transition:enter="ease-out duration-300" x-transition:leave="ease-in duration-200" id="{{ $dialog }}" class="relative z-10 invisible" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div x-show="{{ $modal }}" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-teal-900/80"></div>
     <div class="fixed inset-0 z-10 overflow-y-auto">
