@@ -21,8 +21,6 @@
     });
     
     function modal_delete_open(param) {
-        event.preventDefault();
-        
         $("#modal-delete-dialog").removeClass("invisible");
         $("#modal-delete-dialog").addClass("visible");
         
@@ -79,7 +77,7 @@
         $("#modal-unlock-dialog").addClass("invisible");
     });
     
-    function modal_unlock_open(data_url) {        
+    function modal_unlock_open(param) {        
         $("#modal-unlock-dialog").removeClass("invisible");
         $("#modal-unlock-dialog").addClass("visible");
         
@@ -87,7 +85,7 @@
             unlock: true,
         });
         
-        $("#data_link_2").attr("action", data_url);
+        $("#data_link_2").attr("wire:submit", param);
     }
 </script>
 @endisset
