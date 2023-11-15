@@ -11,10 +11,7 @@
         </div>
     </div>
     <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <x-modal-button type="submit" class="text-white bg-red-500 hover:bg-red-600">{{ __('Logout') }}</x-modal-button>
-        </form>
+        <livewire:logout />
         
         <x-modal-button x-on:click="$store.modal.logout = false" type="button" id="button-logout-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
     </div>
