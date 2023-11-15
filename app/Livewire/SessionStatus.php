@@ -12,14 +12,14 @@ class SessionStatus extends Component
         return view('livewire.session-status');
     }
 
-    #[On('todoError')]
-    public function todoError()
+    #[On('nyatetError')]
+    public function nyatetError()
     {
         session()->flash('err', '[500] Server Error');
     }
 
-    #[On('todoNotMine')]
-    public function todoNotMine()
+    #[On('nyatetNotMine')]
+    public function nyatetNotMine()
     {
         session()->flash('err', 'Anda Tidak Memiliki Akses.');
     }

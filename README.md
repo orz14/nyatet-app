@@ -8,6 +8,7 @@
 -   Alpine JS
 -   Tailwind CSS
 -   Daisy UI
+-   Heroicons
 
 ## Fitur
 

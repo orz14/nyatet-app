@@ -18,16 +18,21 @@ class NoteLock extends Component
     public function lock($slug)
     {
         $note = Note::whereSlug($slug)->first();
-        if ($this->passwordLock) {
-            try {
-                $note->update(['password' => Hash::make($this->passwordLock)]);
 
-                return $this->redirect('/note', navigate: true);
-            } catch (\Throwable $err) {
-                Log::error($err->getMessage());
-
-                return $this->redirect('/note', navigate: true);
+        if ($note->user_id === auth()->user()->id) {
+            if ($this->passwordLock) {
+                try {
+                    $note->update(['password' => Hash::make($this->passwordLock)]);
+    
+                    return $this->redirect('/note', navigate: true);
+                } catch (\Throwable $err) {
+                    Log::error($err->getMessage());
+    
+                    $this->dispatch('nyatetError');
+                }
             }
+        } else {
+            $this->dispatch('nyatetNotMine');
         }
     }
 }

@@ -83,7 +83,7 @@ textarea {
 }
 
 .note-locked {
-    @apply !border-red-400;
+    @apply !border-red-400/70 hover:!border-red-400;
 }
 
 .input-err {

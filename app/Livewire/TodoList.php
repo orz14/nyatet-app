@@ -35,10 +35,10 @@ class TodoList extends Component
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
 
-                $this->dispatch('todoError');
+                $this->dispatch('nyatetError');
             }
         } else {
-            $this->dispatch('todoNotMine');
+            $this->dispatch('nyatetNotMine');
         }
     }
 
@@ -52,10 +52,10 @@ class TodoList extends Component
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
 
-                $this->dispatch('todoError');
+                $this->dispatch('nyatetError');
             }
         } else {
-            $this->dispatch('todoNotMine');
+            $this->dispatch('nyatetNotMine');
         }
     }
 }

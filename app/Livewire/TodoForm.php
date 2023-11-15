@@ -36,7 +36,7 @@ class TodoForm extends Component
         } catch (\Throwable $err) {
             Log::error($err->getMessage());
 
-            $this->dispatch('todoError');
+            $this->dispatch('nyatetError');
         }
     }
 }
