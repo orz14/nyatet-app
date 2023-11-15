@@ -10,6 +10,7 @@ use Livewire\Component;
 class NoteUnlock extends Component
 {
     public $passwordUnlock;
+
     public function render()
     {
         return view('livewire.note-unlock');

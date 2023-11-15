@@ -10,6 +10,7 @@ use Livewire\Component;
 class NoteLock extends Component
 {
     public $passwordLock;
+
     public function render()
     {
         return view('livewire.note-lock');
@@ -23,11 +24,11 @@ class NoteLock extends Component
             if ($this->passwordLock) {
                 try {
                     $note->update(['password' => Hash::make($this->passwordLock)]);
-    
+
                     return $this->redirect('/note', navigate: true);
                 } catch (\Throwable $err) {
                     Log::error($err->getMessage());
-    
+
                     $this->dispatch('nyatetError');
                 }
             }
