@@ -24,7 +24,7 @@ class HistoryTodoList extends Component
     {
         $todo = Todo::whereSlug($slug)->first();
 
-        if ($todo->user_id === auth()->user()->id) {
+        if ($todo->user_id == auth()->user()->id) {
             try {
                 $todo->update(['is_done' => true]);
 

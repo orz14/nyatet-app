@@ -23,10 +23,10 @@
                 {{ __('Simpan Password') }}
             </button>
             
-            @if (session('notif') === 'password-updated')
+            @if (session('notif') == 'password-updated')
             <p id="status" class="mt-2 text-sm text-emerald-600 sm:mt-0">{{ __('Berhasil Disimpan.') }}</p>
             @endif
-            @if (session('notif') === 'password-not-updated')
+            @if (session('notif') == 'password-not-updated')
             <p id="status" class="mt-2 text-sm text-red-600 sm:mt-0">{{ __('Gagal Disimpan.') }}</p>
             @endif
         </div>

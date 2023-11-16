@@ -18,7 +18,7 @@ class DataDestroy extends Component
     {
         $note = Note::whereSlug($slug)->first();
 
-        if ($note->user_id === auth()->user()->id) {
+        if ($note->user_id == auth()->user()->id) {
             try {
                 $note->delete();
 
@@ -39,7 +39,7 @@ class DataDestroy extends Component
     {
         $todo = Todo::whereSlug($slug)->first();
 
-        if ($todo->user_id === auth()->user()->id) {
+        if ($todo->user_id == auth()->user()->id) {
             try {
                 $todo->delete();
 

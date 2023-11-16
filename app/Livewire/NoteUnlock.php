@@ -20,7 +20,7 @@ class NoteUnlock extends Component
     {
         $note = Note::whereSlug($slug)->first();
 
-        if ($note->user_id === auth()->user()->id) {
+        if ($note->user_id == auth()->user()->id) {
             if ($this->passwordUnlock) {
                 if (Hash::check($this->passwordUnlock, $note->password)) {
                     try {

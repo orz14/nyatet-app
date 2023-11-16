@@ -23,10 +23,10 @@
                 {{ __('Simpan Profil') }}
             </button>
             
-            @if (session('notif') === 'profile-updated')
+            @if (session('notif') == 'profile-updated')
             <p id="status" class="mt-2 text-sm text-emerald-600 sm:mt-0">{{ __('Berhasil Disimpan.') }}</p>
             @endif
-            @if (session('notif') === 'profile-not-updated')
+            @if (session('notif') == 'profile-not-updated')
             <p id="status" class="mt-2 text-sm text-red-600 sm:mt-0">{{ __('Gagal Disimpan.') }}</p>
             @endif
         </div>

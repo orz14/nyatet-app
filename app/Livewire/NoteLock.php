@@ -20,7 +20,7 @@ class NoteLock extends Component
     {
         $note = Note::whereSlug($slug)->first();
 
-        if ($note->user_id === auth()->user()->id) {
+        if ($note->user_id == auth()->user()->id) {
             if ($this->passwordLock) {
                 try {
                     $note->update(['password' => Hash::make($this->passwordLock)]);
