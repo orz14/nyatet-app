@@ -13,7 +13,7 @@
         
         <div class="ctas">
             <div class="dropdown dropdown-bottom dropdown-end">
-                <label tabindex="0" class="w-12 h-12 p-1 m-0 overflow-hidden text-base font-bold text-black normal-case bg-teal-100 border-none rounded-full orz-pointer btn hover:bg-teal-100/50">
+                <label tabindex="0" class="w-12 h-12 p-1 m-0 overflow-hidden text-base font-bold text-black normal-case bg-teal-100 border-none rounded-full btn hover:bg-teal-100/50">
                     @if (auth()->user()->avatar)
                     <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="object-cover rounded-full">
                     @else
@@ -22,7 +22,7 @@
                 </label>
                 <ul tabindex="0" class="p-2 bg-white shadow dropdown-content menu rounded-box w-52">
                     @can('admin')
-                    <li class="orz-pointer">
+                    <li>
                         <a href="{{ config('app.url') }}/log" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" target="_blank">
                             <span class="flex items-center gap-x-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
@@ -33,7 +33,7 @@
                         </a>
                     </li>
                     @endcan
-                    <li class="orz-pointer">
+                    <li>
                         <a href="https://github.com/orz14/nyatet-app" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" target="_blank">
                             <span class="flex items-center gap-x-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4 md:w-5 md:h-5">
@@ -43,7 +43,7 @@
                             </span>
                         </a>
                     </li>
-                    <li class="orz-pointer">
+                    <li>
                         <a href="{{ route('profile.edit') }}" class="hover:bg-teal-100/60 active:text-black active:bg-teal-100/60" wire:navigate.hover>
                             <span class="flex items-center gap-x-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
@@ -53,7 +53,7 @@
                             </span>
                         </a>
                     </li>
-                    <li class="orz-pointer">
+                    <li>
                         <button x-data x-on:click="$store.modal.logout = true" type="button" id="button-logout-open" class="hover:bg-red-100/80 active:text-black active:bg-red-100/80">
                             <span class="flex items-center gap-x-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">

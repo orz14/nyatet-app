@@ -3,28 +3,6 @@
 @tailwind utilities;
 
 /* Cursor */
-*,
-.orz-cursor {
-    cursor: url(https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/cursor/orz-cursor.png),
-        default;
-}
-a,
-a *,
-.orz-pointer,
-.orz-pointer *,
-input[type="submit"],
-input[type="button"],
-input[type="image"],
-input[type="checkbox"],
-input[type="radio"],
-button,
-button *,
-select,
-option,
-.btn {
-    cursor: url(https://cdn.jsdelivr.net/gh/orz14/nyatet-app@main/public/img/cursor/orz-pointer.png),
-        pointer;
-}
 input[type="text"],
 input[type="password"],
 input[type="email"],

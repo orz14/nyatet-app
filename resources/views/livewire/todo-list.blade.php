@@ -9,14 +9,14 @@
                 </div>
                 <div class="text-right">
                     <div class="dropdown dropdown-bottom dropdown-end">
-                        <label tabindex="0" class="px-2 py-1.5 inline-block transition-all duration-300 ease-in-out my-1 orz-pointer rounded-lg outline-teal-500/50">
+                        <label tabindex="0" class="px-2 py-1.5 inline-block transition-all duration-300 ease-in-out my-1 rounded-lg outline-teal-500/50">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                             </svg>
                         </label>
                         <ul tabindex="0" class="p-2 rounded-lg shadow w-max bg-teal-100/90 dropdown-content menu">
                             @if(!$data->is_done)
-                            <li class="orz-pointer">
+                            <li>
                                 <button wire:click="update('{{ $data->slug }}')" type="button" class="hover:bg-white active:text-black active:bg-white">
                                     <span class="flex items-center gap-x-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
@@ -28,7 +28,7 @@
                             </li>
                             @endif
     
-                            <li class="orz-pointer">
+                            <li>
                                 <button x-data x-on:click="modal_delete_open(`todoDestroy('{{ $data->slug }}')`)" type="button" class="hover:bg-white active:text-black active:bg-white">
                                     <span class="flex items-center gap-x-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
