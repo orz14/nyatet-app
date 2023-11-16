@@ -8,6 +8,7 @@ class TodoController extends Controller
     {
         return view('todo.index', [
             'title' => 'Todo List',
+            'modalDelete' => true,
         ]);
     }
 
@@ -15,6 +16,7 @@ class TodoController extends Controller
     {
         return view('todo.history', [
             'title' => 'History List',
+            'modalDelete' => true,
         ]);
     }
 }

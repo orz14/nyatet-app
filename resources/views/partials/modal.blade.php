@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="px-4 py-4 sm:flex sm:flex-row-reverse">
-        <livewire:note-destroy />
+        <livewire:data-destroy />
         
         <x-modal-button x-on:click="$store.modal.delete = false" type="button" id="button-delete-close" class="text-black bg-transparent hover:bg-transparent">{{ __('Batal') }}</x-modal-button>
     </div>

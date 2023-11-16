@@ -32,9 +32,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/', 'store')->name('store');
         Route::get('{note}/edit', 'edit')->name('edit');
         Route::patch('{note}', 'update')->name('update');
-        // Route::patch('{note}/lock', 'lock')->name('lock');
-        // Route::patch('{note}/unlock', 'unlock')->name('unlock');
-        // Route::delete('{note}', 'destroy')->name('destroy');
     });
 
     // Profile

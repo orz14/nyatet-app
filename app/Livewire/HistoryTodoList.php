@@ -27,23 +27,8 @@ class HistoryTodoList extends Component
         if ($todo->user_id === auth()->user()->id) {
             try {
                 $todo->update(['is_done' => true]);
-            } catch (\Throwable $err) {
-                Log::error($err->getMessage());
 
-                $this->dispatch('nyatetError');
-            }
-        } else {
-            $this->dispatch('nyatetNotMine');
-        }
-    }
-
-    public function destroy($slug)
-    {
-        $todo = Todo::whereSlug($slug)->first();
-
-        if ($todo->user_id === auth()->user()->id) {
-            try {
-                $todo->delete();
+                return $this->redirect(url()->previous(), navigate: true);
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
 

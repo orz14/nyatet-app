@@ -18,18 +18,43 @@
                 @foreach($data as $item)
                     <div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md card hover:shadow-lg @if($item->is_done) todo-hijau @else todo-merah @endif">
                         <div class="px-3 py-2 leading-none card-body">
-                            <div class="flex items-center justify-between">
-                                <div class="pr-2">{{ $item->decrypt($item->content) }}</div>
+                            <div class="flex items-center justify-between gap-x-2">
+                                <div class="w-full py-1">
+                                    {{ $item->decrypt($item->content) }}
+                                </div>
                                 <div class="text-right">
-                                    <x-todo-button wire:click="destroy('{{ $item->slug }}')" class="text-red-600 bg-red-100 hover:bg-red-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-6 md:w-6" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" d="M10.31 2.25h3.38c.217 0 .406 0 .584.028a2.25 2.25 0 0 1 1.64 1.183c.084.16.143.339.212.544l.111.335a1.25 1.25 0 0 0 1.263.91h3a.75.75 0 0 1 0 1.5h-17a.75.75 0 0 1 0-1.5h3.09a1.25 1.25 0 0 0 1.173-.91l.112-.335c.068-.205.127-.384.21-.544a2.25 2.25 0 0 1 1.641-1.183c.178-.028.367-.028.583-.028Zm-1.302 3a2.757 2.757 0 0 0 .175-.428l.1-.3c.091-.273.112-.328.133-.368a.75.75 0 0 1 .547-.395a3.2 3.2 0 0 1 .392-.009h3.29c.288 0 .348.002.392.01a.75.75 0 0 1 .547.394c.021.04.042.095.133.369l.1.3l.039.112c.039.11.085.214.136.315H9.008Z" clip-rule="evenodd"/><path d="M5.915 8.45a.75.75 0 1 0-1.497.1l.464 6.952c.085 1.282.154 2.318.316 3.132c.169.845.455 1.551 1.047 2.104c.591.554 1.315.793 2.17.904c.822.108 1.86.108 3.146.108h.879c1.285 0 2.324 0 3.146-.108c.854-.111 1.578-.35 2.17-.904c.591-.553.877-1.26 1.046-2.104c.162-.813.23-1.85.316-3.132l.464-6.952a.75.75 0 0 0-1.497-.1l-.46 6.9c-.09 1.347-.154 2.285-.294 2.99c-.137.685-.327 1.047-.6 1.303c-.274.256-.648.422-1.34.512c-.713.093-1.653.095-3.004.095h-.774c-1.35 0-2.29-.002-3.004-.095c-.692-.09-1.066-.256-1.34-.512c-.273-.256-.463-.618-.6-1.302c-.14-.706-.204-1.644-.294-2.992l-.46-6.899Z"/><path d="M9.425 10.254a.75.75 0 0 1 .821.671l.5 5a.75.75 0 0 1-1.492.15l-.5-5a.75.75 0 0 1 .671-.821Zm5.15 0a.75.75 0 0 1 .671.82l-.5 5a.75.75 0 0 1-1.492-.149l.5-5a.75.75 0 0 1 .82-.671Z"/></g></svg>
-                                    </x-todo-button>
-
-                                    @if(!$item->is_done)
-                                        <x-todo-button wire:click="update('{{ $item->slug }}')" class="text-green-600 bg-green-100 hover:bg-green-200">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-6 md:w-6" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19L21 7l-1.41-1.41L9 16.17z"/></svg>
-                                        </x-todo-button>
-                                    @endif
+                                    <div class="dropdown dropdown-bottom dropdown-end">
+                                        <label tabindex="0" class="px-2 py-1.5 inline-block transition-all duration-300 ease-in-out my-1 orz-pointer rounded-lg outline-teal-500/50">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                                            </svg>
+                                        </label>
+                                        <ul tabindex="0" class="p-2 rounded-lg shadow w-max bg-teal-100/90 dropdown-content menu">
+                                            @if(!$item->is_done)
+                                            <li class="orz-pointer">
+                                                <button wire:click="update('{{ $item->slug }}')" type="button" class="hover:bg-white active:text-black active:bg-white">
+                                                    <span class="flex items-center gap-x-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75" />
+                                                        </svg>
+                                                        {{ __('Selesai') }}
+                                                    </span>
+                                                </button>
+                                            </li>
+                                            @endif
+                    
+                                            <li class="orz-pointer">
+                                                <button x-data x-on:click="modal_delete_open(`todoDestroy('{{ $item->slug }}')`)" type="button" class="hover:bg-white active:text-black active:bg-white">
+                                                    <span class="flex items-center gap-x-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                        </svg>
+                                                        {{ __('Hapus') }}
+                                                    </span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

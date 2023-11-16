@@ -41,21 +41,4 @@ class TodoList extends Component
             $this->dispatch('nyatetNotMine');
         }
     }
-
-    public function destroy($slug)
-    {
-        $todo = Todo::whereSlug($slug)->first();
-
-        if ($todo->user_id === auth()->user()->id) {
-            try {
-                $todo->delete();
-            } catch (\Throwable $err) {
-                Log::error($err->getMessage());
-
-                $this->dispatch('nyatetError');
-            }
-        } else {
-            $this->dispatch('nyatetNotMine');
-        }
-    }
 }
