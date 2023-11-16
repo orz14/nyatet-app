@@ -13,29 +13,15 @@ class TodoSeeder extends Seeder
      */
     public function run(): void
     {
-        Todo::create([
-            'user_id' => 1,
-            'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
-            'content' => Crypt::encryptString('Ingin menguasai dunia'),
-            'date' => '2023-04-04',
-            'created_at' => '2023-04-04 00:36:25',
-        ]);
-
-        Todo::create([
-            'user_id' => 1,
-            'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
-            'content' => Crypt::encryptString('Ingin memiliki dia'),
-            'date' => '2023-04-04',
-            'created_at' => '2023-04-04 00:40:00',
-        ]);
-
-        Todo::create([
-            'user_id' => 1,
-            'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
-            'content' => Crypt::encryptString('Lebih baik dari hari kemarin'),
-            'date' => '2023-05-04',
-            'created_at' => '2023-05-04 00:40:00',
-        ]);
+        for ($i = 0; $i < 30; $i++) {
+            Todo::create([
+                'user_id' => 1,
+                'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
+                'content' => Crypt::encryptString(fake()->sentence()),
+                'date' => '2023-04-04',
+                'created_at' => '2023-04-04 00:36:25',
+            ]);
+        }
 
         for ($i = 0; $i < 20; $i++) {
             Todo::create([
