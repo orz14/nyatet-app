@@ -26,8 +26,8 @@
             </div>
             <div class="text-right">
                 <div class="dropdown dropdown-bottom dropdown-end">
-                    <label tabindex="0" class="px-2 py-1.5 inline-block transition-all duration-300 ease-in-out my-1 rounded-lg outline-teal-500/50">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <label tabindex="0" class="px-2 py-1.5 inline-block transition-all duration-300 ease-in-out my-1 rounded-lg outline-teal-500/50 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-black hover:text-gray-600">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                         </svg>
                     </label>
