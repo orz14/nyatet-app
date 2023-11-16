@@ -28,6 +28,8 @@ class HistoryTodoList extends Component
             try {
                 $todo->update(['is_done' => true]);
 
+                session()->flash('toastStatus', 'List berhasil diperbarui.');
+
                 return $this->redirect(url()->previous(), navigate: true);
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());

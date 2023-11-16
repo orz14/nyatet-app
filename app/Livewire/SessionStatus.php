@@ -15,12 +15,16 @@ class SessionStatus extends Component
     #[On('nyatetError')]
     public function nyatetError()
     {
-        session()->flash('err', '[500] Server Error');
+        session()->flash('toastErr', '[500] Server Error');
+
+        return $this->redirect(url()->previous(), navigate: true);
     }
 
     #[On('nyatetNotMine')]
     public function nyatetNotMine()
     {
-        session()->flash('err', 'Anda Tidak Memiliki Akses.');
+        session()->flash('toastErr', 'Anda Tidak Memiliki Akses.');
+
+        return $this->redirect(url()->previous(), navigate: true);
     }
 }

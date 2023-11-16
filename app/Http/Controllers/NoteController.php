@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class NoteController extends Controller
@@ -32,14 +31,10 @@ class NoteController extends Controller
 
     public function store(Request $request)
     {
-        $rules = [
+        $validatedData = $request->validate([
+            'title' => ['nullable', 'string'],
             'note' => ['required', 'string'],
-        ];
-        if ($request->title) {
-            $rules['title'] = ['string'];
-        }
-
-        $validatedData = $request->validate($rules);
+        ]);
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['slug'] = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10);
         $validatedData['note'] = Crypt::encryptString($validatedData['note']);
@@ -52,11 +47,11 @@ class NoteController extends Controller
         try {
             Note::create($validatedData);
 
-            return to_route('note.index')->with('status', 'Catatan Berhasil Ditambahkan.');
+            return to_route('note.index')->with('toastStatus', 'Catatan Berhasil Ditambahkan.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
-            return to_route('note.index')->with('err', '[500] Server Error');
+            return to_route('note.index')->with('toastErr', '[500] Server Error');
         }
     }
 
@@ -70,24 +65,20 @@ class NoteController extends Controller
                     'ckeditor' => true,
                 ]);
             } else {
-                return to_route('note.index')->with('err', 'Akses Ditolak.');
+                return to_route('note.index')->with('toastErr', 'Akses Ditolak.');
             }
         } else {
-            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
+            return to_route('note.index')->with('toastErr', 'Anda Tidak Memiliki Akses.');
         }
     }
 
     public function update(Request $request, Note $note)
     {
         if ($note->user_id == auth()->user()->id) {
-            $rules = [
+            $validatedData = $request->validate([
+                'title' => ['nullable', 'string'],
                 'note' => ['required', 'string'],
-            ];
-            if ($request->title) {
-                $rules['title'] = ['string'];
-            }
-
-            $validatedData = $request->validate($rules);
+            ]);
             $validatedData['note'] = Crypt::encryptString($validatedData['note']);
             if ($request->title) {
                 $validatedData['title'] = Crypt::encryptString($validatedData['title']);
@@ -98,73 +89,14 @@ class NoteController extends Controller
             try {
                 $note->update($validatedData);
 
-                return to_route('note.index')->with('status', 'Catatan Berhasil Disimpan.');
+                return to_route('note.index')->with('toastStatus', 'Catatan Berhasil Disimpan.');
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
 
-                return to_route('note.index')->with('err', '[500] Server Error');
+                return to_route('note.index')->with('toastErr', '[500] Server Error');
             }
         } else {
-            return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
+            return to_route('note.index')->with('toastErr', 'Anda Tidak Memiliki Akses.');
         }
     }
-
-    // public function lock(Request $request, Note $note)
-    // {
-    //     if ($note->user_id == auth()->user()->id) {
-    //         if ($request->passwordLock) {
-    //             try {
-    //                 $note->update(['password' => Hash::make($request->passwordLock)]);
-
-    //                 return back()->with('status', 'Catatan Berhasil Dikunci.');
-    //             } catch (\Exception $e) {
-    //                 Log::error($e->getMessage());
-
-    //                 return back()->with('err', '[500] Server Error');
-    //             }
-    //         }
-    //     } else {
-    //         return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
-    //     }
-    // }
-
-    // public function unlock(Request $request, Note $note)
-    // {
-    //     if ($note->user_id == auth()->user()->id) {
-    //         if ($request->passwordUnlock) {
-    //             if (Hash::check($request->passwordUnlock, $note->password)) {
-    //                 try {
-    //                     $note->update(['password' => null]);
-
-    //                     return back()->with('status', 'Catatan Berhasil Dibuka.');
-    //                 } catch (\Exception $e) {
-    //                     Log::error($e->getMessage());
-
-    //                     return back()->with('err', '[500] Server Error');
-    //                 }
-    //             } else {
-    //                 return back()->with('err', 'Password Yang Anda Masukkan Salah.');
-    //             }
-    //         }
-    //     } else {
-    //         return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
-    //     }
-    // }
-
-    // public function destroy(Note $note)
-    // {
-    //     if ($note->user_id == auth()->user()->id) {
-    //         try {
-    //             $note->delete();
-
-    //             return back()->with('status', 'Catatan Berhasil Dihapus.');
-    //         } catch (\Exception $e) {
-    //             Log::error($e->getMessage());
-
-    //             return back()->with('err', '[500] Server Error');
-    //         }
-    //     } else {
-    //         return to_route('note.index')->with('err', 'Anda Tidak Memiliki Akses.');
-    //     }
-    // }
 }

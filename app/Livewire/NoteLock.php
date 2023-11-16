@@ -25,6 +25,8 @@ class NoteLock extends Component
                 try {
                     $note->update(['password' => Hash::make($this->passwordLock)]);
 
+                    session()->flash('toastStatus', 'Catatan Berhasil Dikunci.');
+
                     return $this->redirect('/note', navigate: true);
                 } catch (\Throwable $err) {
                     Log::error($err->getMessage());

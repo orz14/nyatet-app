@@ -63,7 +63,7 @@ textarea {
 }
 
 .nav .menu-item-active {
-    @apply opacity-100 font-bold;
+    @apply font-bold opacity-100;
 }
 
 .nav .ctas {
@@ -100,7 +100,7 @@ textarea {
 }
 
 .ckeditor ol {
-    @apply list-decimal pl-5;
+    @apply pl-5 list-decimal;
 }
 
 .ckeditor h2,
@@ -110,11 +110,11 @@ textarea {
 }
 
 .ckeditor h2 {
-    @apply text-2xl my-3;
+    @apply my-3 text-2xl;
 }
 
 .ckeditor h3 {
-    @apply text-xl my-4;
+    @apply my-4 text-xl;
 }
 
 .ck-editor__editable_inline {
@@ -122,12 +122,12 @@ textarea {
 }
 
 .ckeditor h4 {
-    @apply text-lg my-5;
+    @apply my-5 text-lg;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    @apply appearance-none w-2 h-2;
+    @apply w-2 h-2 appearance-none;
 }
 ::-webkit-scrollbar-thumb {
     @apply bg-teal-400;
@@ -176,5 +176,35 @@ textarea {
     }
     to {
         transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Snackbar */
+.notification {
+    @apply fixed top-3 bottom-[unset] left-0 right-0 mx-auto md:top-[unset] md:bottom-3 md:left-[unset] md:right-2 md:mx-0 w-max rounded-lg bg-teal-400/70 text-black translate-y-[30px] opacity-0 invisible z-[120];
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    animation: fade-in 5s linear;
+}
+.notification_body {
+    @apply flex flex-row items-center p-4 text-sm gap-x-2 md:text-base;
+}
+.notification_progress {
+    @apply absolute left-1 bottom-1 w-[calc(100%-8px)] h-[3px] rounded-[inherit];
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(to right, rgb(45 212 191 / 0.7), #fff);
+    animation: progress 4.5s 0.3s linear;
+}
+@keyframes fade-in {
+    5% {
+        @apply visible translate-y-0 opacity-100;
+    }
+    95% {
+        @apply translate-y-0 opacity-100;
+    }
+}
+@keyframes progress {
+    to {
+        transform: scaleX(1);
     }
 }

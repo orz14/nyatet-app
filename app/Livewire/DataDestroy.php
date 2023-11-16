@@ -22,6 +22,8 @@ class DataDestroy extends Component
             try {
                 $note->delete();
 
+                session()->flash('toastStatus', 'Catatan berhasil dihapus.');
+
                 return $this->redirect(url()->previous(), navigate: true);
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
@@ -32,7 +34,7 @@ class DataDestroy extends Component
             $this->dispatch('nyatetNotMine');
         }
     }
-    
+
     public function todoDestroy($slug)
     {
         $todo = Todo::whereSlug($slug)->first();
@@ -40,6 +42,8 @@ class DataDestroy extends Component
         if ($todo->user_id === auth()->user()->id) {
             try {
                 $todo->delete();
+
+                session()->flash('toastStatus', 'List Berhasil Dihapus.');
 
                 return $this->redirect(url()->previous(), navigate: true);
             } catch (\Throwable $err) {
