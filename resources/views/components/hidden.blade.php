@@ -1,1 +1,1 @@
-<input {{ $attributes->merge(['type' => 'hidden']) }}>
+<input {!! $attributes->merge(['type' => 'hidden']) !!}>

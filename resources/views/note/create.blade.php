@@ -9,10 +9,10 @@
         <form method="POST" action="{{ route('note.store') }}" autocomplete="off">
             @csrf
             {{-- Title --}}
-            <x-form-input type="text" name="title" ph="Masukkan Judul Catatan" value="{{ old('title') }}" autofocus>{{ __('Title') }}</x-form-input>
+            <x-form-input :name="__('title')" :ph="__('Masukkan Judul Catatan')" :value="old('title')" autofocus>{{ __('Title') }}</x-form-input>
             
             {{-- Note --}}
-            <x-ckeditor name="note" ph="Masukkan Catatan" value="{!! old('note') !!}">{{ __('Note') }}</x-ckeditor>
+            <x-ckeditor :name="__('note')" :ph="__('Masukkan Catatan')" :value="old('note')">{{ __('Note') }}</x-ckeditor>
             
             <div class="flex gap-2 sm:justify-end">
                 <div class="max-[639px]:w-full">

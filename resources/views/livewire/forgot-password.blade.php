@@ -1,7 +1,7 @@
 <form method="POST" action="{{ route('password.email') }}" autocomplete="off">
     @csrf
     {{-- Email Address --}}
-    <x-form-auth type="email" name="email" wire:model.live="email" ph="Masukkan Email" value="{{ old('email') }}" required autofocus>{{ __('Email') }}</x-form-auth>
+    <x-form-auth :type="__('email')" :name="__('email')" wire:model.live="email" :ph="__('Masukkan Email')" :value="old('email')" required autofocus>{{ __('Email') }}</x-form-auth>
     
     <div class="w-full max-w-sm mx-auto mt-5 sm:flex sm:flex-row-reverse sm:gap-2">
         <x-auth-button>

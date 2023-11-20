@@ -4,7 +4,7 @@
             <div class="mt-5 sm:mt-0">
                 <x-modal-title>{{ __('Buka Password Catatan') }}</x-modal-title>
                 <div class="my-2">
-                    <x-form-input type="password" name="passwordUnlock" ph="Masukkan Password" wire:model="passwordUnlock" required />
+                    <x-form-input :type="__('password')" :name="__('passwordUnlock')" :ph="__('Masukkan Password')" wire:model="passwordUnlock" required />
                 </div>
             </div>
         </div>

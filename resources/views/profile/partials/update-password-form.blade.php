@@ -10,13 +10,13 @@
     
     <form wire:submit="savePassword" autocomplete="off">
         {{-- Password Saat Ini --}}
-        <x-form-input type="password" name="current_password" wire:model="current_password" ph="Masukkan Password Saat Ini" required>{{ __('Password Saat Ini') }}</x-form-input>
+        <x-form-input :type="__('password')" :name="__('current_password')" wire:model="current_password" :ph="__('Masukkan Password Saat Ini')" required>{{ __('Password Saat Ini') }}</x-form-input>
         
         {{-- Password Baru --}}
-        <x-form-input type="password" name="password" wire:model="password" ph="Masukkan Password Baru" required>{{ __('Password Baru') }}</x-form-input>
+        <x-form-input :type="__('password')" :name="__('password')" wire:model="password" :ph="__('Masukkan Password Baru')" required>{{ __('Password Baru') }}</x-form-input>
         
         {{-- Konfirmasi Password Baru --}}
-        <x-form-input type="password" name="password_confirmation" wire:model="password_confirmation" ph="Konfirmasi Password Baru" required>{{ __('Konfirmasi Password Baru') }}</x-form-input>
+        <x-form-input :type="__('password')" :name="__('password_confirmation')" wire:model="password_confirmation" :ph="__('Konfirmasi Password Baru')" required>{{ __('Konfirmasi Password Baru') }}</x-form-input>
         
         <div class="block pt-2 text-center sm:flex sm:items-center sm:gap-4 sm:text-left">
             <button type="submit" class="text-white bg-teal-500 border-none btn max-[639px]:btn-block hover:bg-teal-600">

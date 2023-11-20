@@ -11,10 +11,10 @@
     <form method="POST" action="{{ route('login') }}" autocomplete="off">
         @csrf
         {{-- Username --}}
-        <x-form-auth type="text" name="username" ph="Masukkan Username" value="{{ old('username') }}" required autofocus>{{ __('Username') }}</x-form-auth>
+        <x-form-auth :name="__('username')" :ph="__('Masukkan Username')" :value="old('username')" required autofocus>{{ __('Username') }}</x-form-auth>
         
         {{-- Password --}}
-        <x-form-auth type="password" name="password" ph="Masukkan Password" required>{{ __('Password') }}</x-form-auth>
+        <x-form-auth :type="__('password')" :name="__('password')" :ph="__('Masukkan Password')" required>{{ __('Password') }}</x-form-auth>
         
         <div class="flex items-center justify-between w-full max-w-sm mx-auto mt-4 mb-5 text-sm">
             {{-- Remember Me --}}
