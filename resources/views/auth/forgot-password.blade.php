@@ -10,7 +10,7 @@
     </div>
     
     {{-- Session Status --}}
-    <x-auth-session-status :status="session('status')" />
+    <x-auth-session-status />
     
     <livewire:forgot-password />
 </div>

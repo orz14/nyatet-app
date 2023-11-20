@@ -6,7 +6,7 @@
     </div>
     
     {{-- Session Status --}}
-    <x-auth-session-status :status="session('status')" />
+    <x-auth-session-status />
     
     <form method="POST" action="{{ route('login') }}" autocomplete="off">
         @csrf
