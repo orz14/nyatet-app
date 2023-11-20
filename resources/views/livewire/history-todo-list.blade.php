@@ -17,7 +17,7 @@
             @if(!empty($data))
                 @foreach($data as $item)
                     <div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md card hover:shadow-lg @if($item->is_done) todo-hijau @else todo-merah @endif">
-                        <div class="px-3 py-2 leading-none card-body">
+                        <div class="py-2 pl-5 pr-3 leading-none card-body">
                             <div class="flex items-center justify-between gap-x-2">
                                 <div class="w-full py-1">
                                     {{ $item->decrypt($item->content) }}
