@@ -5,9 +5,8 @@
         <x-logo class="h-auto mx-auto pointer-events-none select-none w-36" />
     </div>
 
-    <div class="text-center">
-        <x-error name="email" />
-    </div>
+    {{-- Session Status --}}
+    <x-auth-session-status :status="session('status')" />
 
     <form method="POST" action="{{ route('password.store') }}" autocomplete="off">
         @csrf
