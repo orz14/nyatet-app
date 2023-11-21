@@ -1,2 +1,15 @@
+# Menyatakan lokasi sitemap
+Sitemap: https://nyatet.orzproject.my.id/sitemap.xml
+
+# Membolehkan semua robot pencari mengakses seluruh situs
 User-agent: *
 Disallow:
+
+# Menyembunyikan halaman admin
+Disallow: /log/
+
+# Menyembunyikan file dan direktori yang tidak perlu diindeks
+Disallow: /vendor/
+Disallow: /storage/
+Disallow: /config/
+Disallow: /database/

@@ -11,6 +11,10 @@ textarea {
 }
 
 /* Some Styles */
+::selection {
+    @apply bg-teal-900/70 text-white;
+}
+
 .btn {
     @apply !normal-case;
 }

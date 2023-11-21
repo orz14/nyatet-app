@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'edit')->name('edit');
     });
 });
+
+// Sitemap
+Route::get('/sitemap.xml', SitemapController::class);
 
 require __DIR__.'/admin.php';
 
