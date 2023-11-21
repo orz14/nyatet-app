@@ -56,12 +56,10 @@ php artisan migrate --seed
 
 ```bash
 # using yarn
-yarn
-yarn dev
+yarn && yarn build
 
 # using npm
-npm install
-npm run dev
+npm install && npm run build
 ```
 
 -   Serve
