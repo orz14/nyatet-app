@@ -31,7 +31,7 @@
             @endif
         </div>
         
-        <x-auth-button>
+        <x-auth-button :label="__('Masuk')">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1 md:w-5 md:h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
             </svg>
@@ -41,9 +41,9 @@
     
     @if (env('ENABLE_SOCIAL_LOGIN'))
     <div class="w-full max-w-sm mx-auto divider before:bg-slate-300/70 after:bg-slate-300/70 text-slate-500">atau</div>
-    <x-auth-button-github>{{ __('Masuk dengan GitHub') }}</x-auth-button-github>
+    <x-auth-button-github :label="__('Masuk dengan GitHub')" />
     
-    <x-auth-button-google>{{ __('Masuk dengan Google') }}</x-auth-button-google>
+    <x-auth-button-google :label="__('Masuk dengan Google')" />
     @endif
     
     <div class="mb-1 text-sm text-center text-slate-500">

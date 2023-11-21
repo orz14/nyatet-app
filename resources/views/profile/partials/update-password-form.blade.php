@@ -19,7 +19,7 @@
         <x-form-input :type="__('password')" :name="__('password_confirmation')" wire:model="password_confirmation" :ph="__('Konfirmasi Password Baru')" required>{{ __('Konfirmasi Password Baru') }}</x-form-input>
         
         <div class="block pt-2 text-center sm:flex sm:items-center sm:gap-4 sm:text-left">
-            <button type="submit" class="text-white bg-teal-500 border-none btn max-[639px]:btn-block hover:bg-teal-600">
+            <button type="submit" class="text-white bg-teal-500 border-none btn max-[639px]:btn-block hover:bg-teal-600" role="button" aria-label="Simpan Password">
                 {{ __('Simpan Password') }}
             </button>
             

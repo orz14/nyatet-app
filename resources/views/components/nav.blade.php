@@ -15,7 +15,7 @@
             <div class="dropdown dropdown-bottom dropdown-end">
                 <label tabindex="0" class="w-12 h-12 p-1 m-0 overflow-hidden text-base font-bold text-black normal-case bg-teal-100 border-none rounded-full btn hover:bg-teal-100/50">
                     @if (auth()->user()->avatar)
-                    <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="object-cover rounded-full">
+                    <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" width="200" height="200" class="object-cover rounded-full">
                     @else
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><path fill="#0f766e" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                     @endif
