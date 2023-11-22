@@ -18,11 +18,18 @@
 <div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md border-l-8 border-teal-400/50 card hover:border-teal-400 hover:shadow-lg @isset($data->password) note-locked @endisset">
     <div class="px-3 py-0 leading-none card-body">
         <div class="flex items-center justify-between gap-x-2">
-            <div class="w-full py-3">
-                <a @isset($data->password) x-data x-on:click="modal_unlock_open(`unlock('{{ $data->slug }}')`)" @else href="{{ route('note.edit', $data->slug) }}" wire:navigate.hover @endisset class="cursor-pointer">
-                    <div class="font-bold">{{ isset($data->title) ? $data->decrypt($data->title) : 'Tanpa Judul' }}</div>
-                    <div class="text-xs font-bold">{{ \Carbon\Carbon::parse($data->updated_at)->translatedFormat('l, d F Y H:i') }}</div>
-                </a>
+            <div class="w-full py-3 cursor-pointer">
+                @isset($data->password)
+                    <div x-data x-on:click="modal_unlock_open(`unlock('{{ $data->slug }}')`)">
+                        <div class="font-bold">{{ isset($data->title) ? $data->decrypt($data->title) : 'Tanpa Judul' }}</div>
+                        <div class="text-xs font-bold">{{ \Carbon\Carbon::parse($data->updated_at)->translatedFormat('l, d F Y H:i') }}</div>
+                    </div>
+                @else
+                    <a wire:navigate.hover href="{{ route('note.edit', $data->slug) }}">
+                        <div class="font-bold">{{ isset($data->title) ? $data->decrypt($data->title) : 'Tanpa Judul' }}</div>
+                        <div class="text-xs font-bold">{{ \Carbon\Carbon::parse($data->updated_at)->translatedFormat('l, d F Y H:i') }}</div>
+                    </a>
+                @endisset
             </div>
             <div class="text-right">
                 <div class="dropdown dropdown-bottom dropdown-end">
