@@ -14,20 +14,17 @@ class DataDestroy extends Component
         return view('livewire.data-destroy');
     }
 
-    public function noteDestroy($slug)
+    public function destroyItem($data, $msg)
     {
-        $note = Note::whereSlug($slug)->first();
-
-        if ($note->user_id == auth()->user()->id) {
+        if ($data->user_id == auth()->user()->id) {
             try {
-                $note->delete();
+                $data->delete();
 
-                session()->flash('toastStatus', 'Catatan berhasil dihapus.');
+                session()->flash('toastStatus', $msg);
 
                 return $this->redirect(url()->previous(), navigate: true);
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
-
                 $this->dispatch('nyatetError');
             }
         } else {
@@ -35,24 +32,15 @@ class DataDestroy extends Component
         }
     }
 
+    public function noteDestroy($slug)
+    {
+        $data = Note::whereSlug($slug)->first();
+        $this->destroyItem($data, 'Catatan berhasil dihapus.');
+    }
+
     public function todoDestroy($slug)
     {
-        $todo = Todo::whereSlug($slug)->first();
-
-        if ($todo->user_id == auth()->user()->id) {
-            try {
-                $todo->delete();
-
-                session()->flash('toastStatus', 'List Berhasil Dihapus.');
-
-                return $this->redirect(url()->previous(), navigate: true);
-            } catch (\Throwable $err) {
-                Log::error($err->getMessage());
-
-                $this->dispatch('nyatetError');
-            }
-        } else {
-            $this->dispatch('nyatetNotMine');
-        }
+        $data = Todo::whereSlug($slug)->first();
+        $this->destroyItem($data, 'List Berhasil Dihapus.');
     }
 }

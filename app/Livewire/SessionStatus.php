@@ -12,19 +12,22 @@ class SessionStatus extends Component
         return view('livewire.session-status');
     }
 
+    public function sessionStatus($msg)
+    {
+        session()->flash('toastErr', $msg);
+
+        return $this->redirect(url()->previous(), navigate: true);
+    }
+
     #[On('nyatetError')]
     public function nyatetError()
     {
-        session()->flash('toastErr', '[500] Server Error');
-
-        return $this->redirect(url()->previous(), navigate: true);
+        return $this->sessionStatus('[500] Server Error');
     }
 
     #[On('nyatetNotMine')]
     public function nyatetNotMine()
     {
-        session()->flash('toastErr', 'Anda Tidak Memiliki Akses.');
-
-        return $this->redirect(url()->previous(), navigate: true);
+        return $this->sessionStatus('Anda Tidak Memiliki Akses.');
     }
 }
