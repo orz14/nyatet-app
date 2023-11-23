@@ -1,7 +1,7 @@
 <div>
     @if ($datas->count())
     @foreach ($datas as $data)
-    <div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md border-l-8 border-teal-400/50 hover:border-teal-400 hover:shadow-lg card @if($data->is_done) todo-hijau @endif">
+    <div wire:key="{{ $data->id }}" class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md border-l-8 border-teal-400/50 hover:border-teal-400 hover:shadow-lg card @if($data->is_done) todo-hijau @endif">
         <div class="px-3 py-2 leading-none card-body">
             <div class="flex items-center justify-between gap-x-2">
                 <div class="w-full py-1">
