@@ -20,7 +20,7 @@ class DataDestroy extends Component
             try {
                 $data->delete();
 
-                session()->flash('toastStatus', $msg);
+                flash(__($msg));
 
                 return $this->redirect(url()->previous(), navigate: true);
             } catch (\Throwable $err) {

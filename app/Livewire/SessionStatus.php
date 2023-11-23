@@ -14,7 +14,7 @@ class SessionStatus extends Component
 
     public function sessionStatus($msg)
     {
-        session()->flash('toastErr', $msg);
+        flash(__($msg), 'err');
 
         return $this->redirect(url()->previous(), navigate: true);
     }

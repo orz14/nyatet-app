@@ -47,11 +47,15 @@ class NoteController extends Controller
         try {
             Note::create($validatedData);
 
-            return to_route('note.index')->with('toastStatus', 'Catatan Berhasil Ditambahkan.');
+            flash('Catatan Berhasil Ditambahkan.');
+
+            return to_route('note.index');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
-            return to_route('note.index')->with('toastErr', '[500] Server Error');
+            flash('[500] Server Error', 'err');
+
+            return to_route('note.index');
         }
     }
 
@@ -65,10 +69,14 @@ class NoteController extends Controller
                     'ckeditor' => true,
                 ]);
             } else {
-                return to_route('note.index')->with('toastErr', 'Akses Ditolak.');
+                flash('Akses Ditolak.', 'err');
+
+                return to_route('note.index');
             }
         } else {
-            return to_route('note.index')->with('toastErr', 'Anda Tidak Memiliki Akses.');
+            flash('Anda Tidak Memiliki Akses.', 'err');
+
+            return to_route('note.index');
         }
     }
 
@@ -89,14 +97,20 @@ class NoteController extends Controller
             try {
                 $note->update($validatedData);
 
-                return to_route('note.index')->with('toastStatus', 'Catatan Berhasil Disimpan.');
+                flash('Catatan Berhasil Disimpan.');
+
+                return to_route('note.index');
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
 
-                return to_route('note.index')->with('toastErr', '[500] Server Error');
+                flash('[500] Server Error', 'err');
+
+                return to_route('note.index');
             }
         } else {
-            return to_route('note.index')->with('toastErr', 'Anda Tidak Memiliki Akses.');
+            flash('Anda Tidak Memiliki Akses.', 'err');
+
+            return to_route('note.index');
         }
     }
 }

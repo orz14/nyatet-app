@@ -26,7 +26,7 @@ class NoteUnlock extends Component
                     try {
                         $note->update(['password' => null]);
 
-                        session()->flash('toastStatus', 'Catatan Berhasil Dibuka.');
+                        flash('Catatan Berhasil Dibuka.');
 
                         return $this->redirect('/note', navigate: true);
                     } catch (\Throwable $err) {
@@ -35,7 +35,7 @@ class NoteUnlock extends Component
                         $this->dispatch('nyatetError');
                     }
                 } else {
-                    session()->flash('toastErr', 'Password Yang Anda Masukkan Salah.');
+                    flash('Password Yang Anda Masukkan Salah.', 'err');
 
                     return $this->redirect(url()->previous(), navigate: true);
                 }
