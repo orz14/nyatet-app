@@ -28,7 +28,7 @@ class Unlock extends Component
 
                         flash('Catatan Berhasil Dibuka.');
 
-                        return $this->redirect('/note', navigate: true);
+                        return $this->redirectRoute('note.index', navigate: true);
                     } catch (\Throwable $err) {
                         Log::error($err->getMessage());
 

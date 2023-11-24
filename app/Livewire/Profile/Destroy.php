@@ -21,6 +21,6 @@ class Destroy extends Component
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return $this->redirect('/login', navigate: true);
+        return $this->redirectRoute('login', navigate: true);
     }
 }

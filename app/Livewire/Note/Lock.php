@@ -27,7 +27,7 @@ class Lock extends Component
 
                     flash('Catatan Berhasil Dikunci.');
 
-                    return $this->redirect('/note', navigate: true);
+                    return $this->redirectRoute('note.index', navigate: true);
                 } catch (\Throwable $err) {
                     Log::error($err->getMessage());
 
