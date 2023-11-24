@@ -11,11 +11,8 @@ class NoteController extends Controller
 {
     public function index()
     {
-        $datas = Note::whereUserId(auth()->user()->id)->orderBy('updated_at', 'desc')->paginate(10);
-
         return view('note.index', [
             'title' => 'Note',
-            'datas' => $datas,
             'modalDelete' => true,
             'modalLock' => true,
         ]);

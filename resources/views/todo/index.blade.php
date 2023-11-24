@@ -17,5 +17,5 @@
 @endsection
 
 @section('content')
-    <livewire:todo.index />
+    <livewire:todo.index :lazy="true" />
 @endsection

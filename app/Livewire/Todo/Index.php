@@ -10,13 +10,13 @@ use Livewire\Component;
 
 class Index extends Component
 {
-    public $datas = [];
-
     public function render()
     {
-        $this->datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+        $datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
 
-        return view('livewire.todo.index');
+        return view('livewire.todo.index', [
+            'datas' => $datas,
+        ]);
     }
 
     #[On('todoAdded')]
@@ -39,5 +39,10 @@ class Index extends Component
         } else {
             $this->dispatch('nyatetNotMine');
         }
+    }
+
+    public function placeholder(array $params = [])
+    {
+        return view('livewire.placeholder', $params);
     }
 }

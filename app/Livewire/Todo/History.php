@@ -14,7 +14,7 @@ class History extends Component
 
     public function render()
     {
-        $todos = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->paginate(20);
+        $todos = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->simplePaginate(20);
         $datas = $todos->groupBy('date');
 
         return view('livewire.todo.history', [
@@ -42,5 +42,10 @@ class History extends Component
         } else {
             $this->dispatch('nyatetNotMine');
         }
+    }
+
+    public function placeholder(array $params = [])
+    {
+        return view('livewire.placeholder', $params);
     }
 }
