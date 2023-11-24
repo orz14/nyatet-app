@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Note;
 
 use App\Models\Note;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-class NoteUnlock extends Component
+class Unlock extends Component
 {
     public $passwordUnlock;
 
     public function render()
     {
-        return view('livewire.note-unlock');
+        return view('livewire.note.unlock');
     }
 
     public function unlock($slug)

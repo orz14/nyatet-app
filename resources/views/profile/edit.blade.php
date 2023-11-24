@@ -6,7 +6,7 @@
 @section('content')
 <div class="mb-4 bg-white rounded-lg shadow-md card">
     <div class="card-body">
-        <livewire:profile />
+        <livewire:profile.index />
     </div>
 </div>
 @endsection

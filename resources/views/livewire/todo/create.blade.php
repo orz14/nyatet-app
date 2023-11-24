@@ -1,4 +1,4 @@
-<form wire:submit="saveTodo" autocomplete="off">
+<form wire:submit="store" autocomplete="off">
     <div class="form-control">
         <div class="justify-center input-group">
             <input type="text" name="content" wire:model="content" placeholder="Tulis Disini …" class="w-full truncate transition-all duration-300 ease-in-out text-slate-700 bg-teal-400/50 input placeholder:text-slate-500 focus:outline-none focus:ring focus:ring-teal-600/20 focus:border-teal-500" value="{{ old('content') }}" />

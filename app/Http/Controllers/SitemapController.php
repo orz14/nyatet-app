@@ -18,8 +18,10 @@ class SitemapController extends Controller
             ['url' => url('/profile')],
         ];
         $date = Carbon::now();
+        $freq = 'daily';
+        $priority = '0.8';
 
-        return response()->view('sitemap.index', compact('datas', 'date'))
+        return response()->view('sitemap.index', compact('datas', 'date', 'freq', 'priority'))
             ->header('Content-Type', 'text/xml');
     }
 }

@@ -16,7 +16,7 @@
         {{-- Email Address --}}
         <x-hidden name="email" value="{{ old('email', $request->email) }}" />
 
-        <livewire:reset-password />
+        <livewire:auth.reset-password />
 
         <x-auth-button class="mt-3" :label="__('Reset Password')">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1 md:w-5 md:h-5">

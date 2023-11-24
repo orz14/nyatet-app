@@ -1,21 +1,23 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Profile;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class Logout extends Component
+class Destroy extends Component
 {
     public function render()
     {
-        return view('livewire.logout');
+        return view('livewire.profile.destroy');
     }
 
-    public function destroy(Request $request)
+    public function destroyProfile(Request $request)
     {
-        Auth::guard('web')->logout();
+        $user = $request->user();
+        Auth::logout();
+        $user->delete();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

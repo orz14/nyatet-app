@@ -4,8 +4,8 @@
         <url>
             <loc>{{ $data['url'] }}</loc>
             <lastmod>{{ $date->tz('Asia/Jakarta')->toAtomString() }}</lastmod>
-            <changefreq>daily</changefreq>
-            <priority>0.8</priority>
+            <changefreq>{{ $freq }}</changefreq>
+            <priority>{{ $priority }}</priority>
         </url>
     @endforeach
 </urlset>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Todo;
 
 use App\Models\Todo;
 use Carbon\Carbon;
@@ -8,16 +8,20 @@ use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class TodoList extends Component
+class Index extends Component
 {
     public $datas = [];
 
-    #[On('todoAdded')]
     public function render()
     {
         $this->datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
 
-        return view('livewire.todo-list');
+        return view('livewire.todo.index');
+    }
+
+    #[On('todoAdded')]
+    public function updateTodo()
+    {
     }
 
     public function update($slug)

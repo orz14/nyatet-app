@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Todo;
 
 use App\Models\Todo;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-class TodoForm extends Component
+class Create extends Component
 {
     public $content;
 
@@ -17,10 +17,10 @@ class TodoForm extends Component
 
     public function render()
     {
-        return view('livewire.todo-form');
+        return view('livewire.todo.create');
     }
 
-    public function saveTodo()
+    public function store()
     {
         $validatedData = $this->validate($this->rules, ['content.required' => 'Tidak Boleh Kosong.']);
         $validatedData['user_id'] = auth()->user()->id;
