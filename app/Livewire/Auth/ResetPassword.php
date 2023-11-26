@@ -2,23 +2,21 @@
 
 namespace App\Livewire\Auth;
 
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class ResetPassword extends Component
 {
-    public $password;
+    #[Rule(['required', 'string', 'min:8'])]
+    public $password = '';
 
-    public $password_confirmation;
+    #[Rule(['required', 'same:password'])]
+    public $password_confirmation = '';
 
     public function render()
     {
         return view('livewire.auth.reset-password');
     }
-
-    protected $rules = [
-        'password' => ['required', 'string', 'min:8'],
-        'password_confirmation' => ['required', 'same:password'],
-    ];
 
     public function updated($propertyName)
     {

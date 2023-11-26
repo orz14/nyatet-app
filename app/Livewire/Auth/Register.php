@@ -2,32 +2,30 @@
 
 namespace App\Livewire\Auth;
 
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class Register extends Component
 {
-    public $name;
+    #[Rule(['required', 'string', 'max:255'])]
+    public $name = '';
 
-    public $username;
+    #[Rule(['required', 'string', 'min:5', 'max:20', 'unique:users'])]
+    public $username = '';
 
-    public $email;
+    #[Rule(['required', 'string', 'email', 'indisposable', 'max:255', 'unique:users'])]
+    public $email = '';
 
-    public $password;
+    #[Rule(['required', 'string', 'min:8'])]
+    public $password = '';
 
-    public $password_confirmation;
+    #[Rule(['required', 'same:password'])]
+    public $password_confirmation = '';
 
     public function render()
     {
         return view('livewire.auth.register');
     }
-
-    protected $rules = [
-        'name' => ['required', 'string', 'max:255'],
-        'username' => ['required', 'string', 'min:5', 'max:20', 'unique:users'],
-        'email' => ['required', 'string', 'email', 'indisposable', 'max:255', 'unique:users'],
-        'password' => ['required', 'string', 'min:8'],
-        'password_confirmation' => ['required', 'same:password'],
-    ];
 
     public function updated($propertyName)
     {

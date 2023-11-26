@@ -5,11 +5,13 @@ namespace App\Livewire\Note;
 use App\Models\Note;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class Unlock extends Component
 {
-    public $passwordUnlock;
+    #[Rule(['required'])]
+    public $passwordUnlock = '';
 
     public function render()
     {
@@ -18,6 +20,7 @@ class Unlock extends Component
 
     public function unlock($slug)
     {
+        $this->validate();
         $note = Note::whereSlug($slug)->first();
 
         if ($note->user_id == auth()->user()->id) {

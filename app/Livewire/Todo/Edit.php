@@ -5,15 +5,13 @@ namespace App\Livewire\Todo;
 use App\Models\Todo;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class Edit extends Component
 {
-    public $editValue;
-
-    protected $rules = [
-        'editValue' => ['required', 'string'],
-    ];
+    #[Rule(['required', 'string'])]
+    public $editValue = '';
 
     public function render()
     {
@@ -22,7 +20,7 @@ class Edit extends Component
 
     public function update($slug)
     {
-        $validatedData = $this->validate($this->rules);
+        $this->validate();
         $validatedData['content'] = Crypt::encryptString($this->editValue);
         $todo = Todo::whereSlug($slug)->first();
 
