@@ -5,7 +5,7 @@
                 <div class="mt-5 sm:mt-0">
                     <x-modal-title :label="__('Edit Todo')" />
                     <div class="my-2">
-                        <x-form-input :name="__('edit_value')" :ph="__('Masukkan Perubahan')" />
+                        <x-form-input :name="__('edit_value')" :ph="__('Masukkan Perubahan')" required />
                     </div>
                 </div>
             </div>
