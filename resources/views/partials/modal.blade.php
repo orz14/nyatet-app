@@ -70,3 +70,10 @@
     <livewire:note.unlock />
 </x-modal>
 @endisset
+
+@isset($modalEdit)
+{{-- Modal Edit --}}
+<x-modal modal="$store.modal.edit" dialog="modal-edit-dialog">
+    <livewire:todo.edit />
+</x-modal>
+@endisset

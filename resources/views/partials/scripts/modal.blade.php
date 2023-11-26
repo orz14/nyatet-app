@@ -89,3 +89,25 @@
     }
 </script>
 @endisset
+
+@isset($modalEdit)
+<script data-navigate-track>
+    // Modal Edit
+    $("#button-edit-close").click(function() {
+        $("#modal-edit-dialog").removeClass("visible");
+        $("#modal-edit-dialog").addClass("invisible");
+    });
+    
+    function modal_edit_open(action, value) {
+        $("#modal-edit-dialog").removeClass("invisible");
+        $("#modal-edit-dialog").addClass("visible");
+        
+        Alpine.store('modal', {
+            edit: true,
+        });
+        
+        $("#edit_action").attr("wire:submit", action);
+        $("#edit_value").val(value);
+    }
+</script>
+@endisset
