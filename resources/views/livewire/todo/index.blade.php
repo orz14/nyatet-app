@@ -1,7 +1,7 @@
 <div>
     @if ($datas->count())
     @foreach ($datas as $data)
-    <div class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md border-l-8 border-teal-400/50 hover:border-teal-400 hover:shadow-lg card @if($data->is_done) todo-hijau @endif">
+    <div wire:key="{{ $data->id }}" class="mb-4 transition-all duration-300 ease-in-out bg-white rounded-lg shadow-md border-l-8 border-teal-400/50 hover:border-teal-400 hover:shadow-lg card @if($data->is_done) todo-hijau @endif">
         <div class="px-3 py-2 leading-none card-body">
             <div class="flex items-center justify-between gap-x-2">
                 <div class="w-full py-1">
@@ -26,8 +26,19 @@
                                     </span>
                                 </button>
                             </li>
+                            
+                            <li>
+                                <button x-data x-on:click="modal_edit_open(`update('{{ $data->slug }}')`, '{{ $data->decrypt($data->content) }}')" type="button" class="hover:bg-white active:text-black active:bg-white">
+                                    <span class="flex items-center gap-x-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                        </svg>
+                                        {{ __('Edit') }}
+                                    </span>
+                                </button>
+                            </li>
                             @endif
-    
+
                             <li>
                                 <button x-data x-on:click="modal_delete_open(`todoDestroy('{{ $data->slug }}')`)" type="button" class="hover:bg-white active:text-black active:bg-white">
                                     <span class="flex items-center gap-x-2">

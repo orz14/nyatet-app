@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Profile;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
-class Profile extends Component
+class Index extends Component
 {
     public $name;
 
@@ -31,7 +31,7 @@ class Profile extends Component
         $this->username = auth()->user()->username;
         $this->email = auth()->user()->email;
 
-        return view('livewire.profile');
+        return view('livewire.profile.index');
     }
 
     public function saveProfileInfo(Request $request)

@@ -12,6 +12,6 @@
     {{-- Session Status --}}
     <x-auth-session-status />
     
-    <livewire:forgot-password />
+    <livewire:auth.forgot-password />
 </div>
 @endsection

@@ -6,6 +6,7 @@
             delaccount: false,
             lock: false,
             unlock: false,
+            edit: false,
         });
     });
 </script>

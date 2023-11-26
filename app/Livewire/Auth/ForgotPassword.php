@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Auth;
 
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class ForgotPassword extends Component
 {
-    public $email;
-
-    protected $rules = [
-        'email' => ['required', 'string', 'email', 'indisposable'],
-    ];
+    #[Rule(['required', 'string', 'email', 'indisposable'])]
+    public $email = '';
 
     public function render()
     {
-        return view('livewire.forgot-password');
+        return view('livewire.auth.forgot-password');
     }
 
     public function updated($propertyName)

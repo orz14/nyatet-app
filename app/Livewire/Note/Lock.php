@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Note;
 
 use App\Models\Note;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
-class NoteLock extends Component
+class Lock extends Component
 {
-    public $passwordLock;
+    #[Rule(['required'])]
+    public $passwordLock = '';
 
     public function render()
     {
-        return view('livewire.note-lock');
+        return view('livewire.note.lock');
     }
 
     public function lock($slug)
     {
+        $this->validate();
         $note = Note::whereSlug($slug)->first();
 
         if ($note->user_id == auth()->user()->id) {
@@ -25,9 +28,9 @@ class NoteLock extends Component
                 try {
                     $note->update(['password' => Hash::make($this->passwordLock)]);
 
-                    session()->flash('toastStatus', 'Catatan Berhasil Dikunci.');
+                    flash('Catatan Berhasil Dikunci.');
 
-                    return $this->redirect('/note', navigate: true);
+                    return $this->redirectRoute('note.index', navigate: true);
                 } catch (\Throwable $err) {
                     Log::error($err->getMessage());
 

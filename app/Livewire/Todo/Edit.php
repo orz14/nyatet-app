@@ -1,32 +1,36 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Todo;
 
 use App\Models\Todo;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\On;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
-class TodoList extends Component
+class Edit extends Component
 {
-    public $datas = [];
+    #[Rule(['required', 'string'])]
+    public $editValue = '';
 
-    #[On('todoAdded')]
     public function render()
     {
-        $this->datas = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
-
-        return view('livewire.todo-list');
+        return view('livewire.todo.edit');
     }
 
     public function update($slug)
     {
+        $this->validate();
+        $validatedData['content'] = Crypt::encryptString($this->editValue);
         $todo = Todo::whereSlug($slug)->first();
 
         if ($todo->user_id == auth()->user()->id) {
             try {
-                $todo->update(['is_done' => true]);
+                $todo->update($validatedData);
+
+                flash('Todo Berhasil Diperbarui.');
+
+                return $this->redirectRoute('todo.index', navigate: true);
             } catch (\Throwable $err) {
                 Log::error($err->getMessage());
 

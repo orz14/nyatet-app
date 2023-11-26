@@ -12,7 +12,7 @@ textarea {
 
 /* Some Styles */
 ::selection {
-    @apply bg-teal-900/70 text-white;
+    @apply text-white bg-teal-900/70;
 }
 
 .btn {
@@ -188,5 +188,24 @@ textarea {
 @keyframes progress {
     to {
         transform: scaleX(1);
+    }
+}
+
+/* Loader */
+.loader {
+    @apply w-[30px] aspect-square rounded-full;
+    background: radial-gradient(farthest-side, #14b8a6 94%, #0000) top/4px 4px
+            no-repeat,
+        conic-gradient(#0000 30%, #14b8a6);
+    -webkit-mask: radial-gradient(
+        farthest-side,
+        #0000 calc(100% - 4px),
+        #000 0
+    );
+    animation: l13 500ms infinite linear;
+}
+@keyframes l13 {
+    100% {
+        transform: rotate(1turn);
     }
 }

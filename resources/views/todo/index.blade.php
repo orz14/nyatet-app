@@ -5,7 +5,7 @@
     <livewire:session-status />
     
     <div class="text-xl font-medium my-7">
-        <livewire:todo-form />
+        <livewire:todo.create />
     </div>
     
     <a href="{{ route('todo.history') }}" class="text-white bg-teal-500 border-none btn hover:bg-teal-600" role="button" aria-label="History List" wire:navigate.hover>
@@ -17,5 +17,5 @@
 @endsection
 
 @section('content')
-    <livewire:todo-list />
+    <livewire:todo.index :lazy="true" />
 @endsection

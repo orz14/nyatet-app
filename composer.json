@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "opcodesio/log-viewer": "^2.4",
-        "propaganistas/laravel-disposable-email": "^2.2"
+        "propaganistas/laravel-disposable-email": "^2.2",
+        "spatie/laravel-flash": "^1.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

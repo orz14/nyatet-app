@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Note;
 
 use App\Models\Note;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
-class NoteUnlock extends Component
+class Unlock extends Component
 {
-    public $passwordUnlock;
+    #[Rule(['required'])]
+    public $passwordUnlock = '';
 
     public function render()
     {
-        return view('livewire.note-unlock');
+        return view('livewire.note.unlock');
     }
 
     public function unlock($slug)
     {
+        $this->validate();
         $note = Note::whereSlug($slug)->first();
 
         if ($note->user_id == auth()->user()->id) {
@@ -26,16 +29,16 @@ class NoteUnlock extends Component
                     try {
                         $note->update(['password' => null]);
 
-                        session()->flash('toastStatus', 'Catatan Berhasil Dibuka.');
+                        flash('Catatan Berhasil Dibuka.');
 
-                        return $this->redirect('/note', navigate: true);
+                        return $this->redirectRoute('note.index', navigate: true);
                     } catch (\Throwable $err) {
                         Log::error($err->getMessage());
 
                         $this->dispatch('nyatetError');
                     }
                 } else {
-                    session()->flash('toastErr', 'Password Yang Anda Masukkan Salah.');
+                    flash('Password Yang Anda Masukkan Salah.', 'err');
 
                     return $this->redirect(url()->previous(), navigate: true);
                 }

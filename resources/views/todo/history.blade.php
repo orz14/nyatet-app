@@ -13,5 +13,5 @@
 @endsection
 
 @section('content')
-    <livewire:history-todo-list />
+    <livewire:todo.history :lazy="true" />
 @endsection

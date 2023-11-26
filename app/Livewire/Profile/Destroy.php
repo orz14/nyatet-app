@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Profile;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class ProfileDestroy extends Component
+class Destroy extends Component
 {
     public function render()
     {
-        return view('livewire.profile-destroy');
+        return view('livewire.profile.destroy');
     }
 
     public function destroyProfile(Request $request)
@@ -21,6 +21,6 @@ class ProfileDestroy extends Component
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return $this->redirect('/login', navigate: true);
+        return $this->redirectRoute('login', navigate: true);
     }
 }
