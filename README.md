@@ -52,11 +52,11 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
--   Install Node Modules Using Yarn or NPM
+-   Install Node Modules Using PNPM or NPM
 
 ```bash
-# using yarn
-yarn && yarn build
+# using pnpm
+pnpm install && pnpm build
 
 # using npm
 npm install && npm run build
