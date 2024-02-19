@@ -15,7 +15,7 @@ devDependencies:
     specifier: ^10.4.2
     version: 10.4.16(postcss@8.4.31)
   daisyui:
-    specifier: ^2.51.6
+    specifier: ^2.52.0
     version: 2.52.0(autoprefixer@10.4.16)(postcss@8.4.31)
   laravel-vite-plugin:
     specifier: ^0.7.2
