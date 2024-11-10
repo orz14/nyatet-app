@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#" class="bg-teal-50 scroll-smooth">
-    <head>
-        @include('partials.meta')
-        @livewireStyles
-    </head>
-    <body class="min-h-screen antialiased font-semibold text-black bg-teal-50">
-        <x-header />
-        
-        <main class="container -mt-8 text-sm md:text-base">
-            @yield('content')
-        </main>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#"
+    class="bg-teal-50 scroll-smooth">
 
-        <x-footer />
+<head>
+    @include('partials.meta')
+    @livewireStyles
+</head>
 
-        <x-bottom-nav />
+<body class="min-h-screen antialiased font-semibold text-black bg-teal-50">
+    <x-header />
 
-        <x-to-top-down />
+    <main class="container -mt-8 text-sm md:text-base">
+        @yield('content')
+    </main>
 
-        @livewireScripts
-        @include('partials.modal')
-        @include('partials.script')
-    </body>
+    <x-footer />
+
+    <x-bottom-nav />
+
+    <x-to-top-down />
+
+    @livewireScripts
+    @include('partials.modal')
+    @include('partials.script')
+    @include('partials.scripts.refresh-csrf')
+</body>
+
 </html>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "510c575d5217a8c7ab55d390ae60245f",
+    "content-hash": "e08081d0da1a7c4d3639744460febe2e",
     "packages": [
         {
             "name": "brick/math",
@@ -204,73 +204,6 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
-        },
-        {
-            "name": "dipeshsukhia/laravel-html-minify",
-            "version": "v3.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dipeshsukhia/laravel-html-minify.git",
-                "reference": "6c25fe0d95f74a3828ed86ac88f85d78e5cb8a96"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dipeshsukhia/laravel-html-minify/zipball/6c25fe0d95f74a3828ed86ac88f85d78e5cb8a96",
-                "reference": "6c25fe0d95f74a3828ed86ac88f85d78e5cb8a96",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^10.0",
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "orchestra/testbench": "8.0.*",
-                "phpunit/phpunit": "^10.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "DipeshSukhia\\LaravelHtmlMinify\\LaravelHtmlMinifyServiceProvider"
-                    ],
-                    "aliases": {
-                        "LaravelHtmlMinify": "DipeshSukhia\\LaravelHtmlMinify\\LaravelHtmlMinifyFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "DipeshSukhia\\LaravelHtmlMinify\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dipesh Sukhia",
-                    "email": "dipesh.sukhia@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "laravel minify html output",
-            "homepage": "https://github.com/dipeshsukhia/laravel-html-minify",
-            "keywords": [
-                "dipeshsukhia",
-                "laravel-html-minify"
-            ],
-            "support": {
-                "issues": "https://github.com/dipeshsukhia/laravel-html-minify/issues",
-                "source": "https://github.com/dipeshsukhia/laravel-html-minify/tree/v3.3.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/dipeshsukhia",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-09-07T03:26:50+00:00"
         },
         {
             "name": "doctrine/inflector",
