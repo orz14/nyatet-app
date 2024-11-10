@@ -79,35 +79,39 @@ class NoteController extends Controller
 
     public function update(Request $request, Note $note)
     {
-        if ($note->user_id == auth()->user()->id) {
-            $validatedData = $request->validate([
-                'title' => ['nullable', 'string'],
-                'note' => ['required', 'string'],
-            ]);
-            $validatedData['note'] = Crypt::encryptString($validatedData['note']);
-            if ($request->title) {
-                $validatedData['title'] = Crypt::encryptString($validatedData['title']);
+        if ($request->isMethod('GET')) {
+            return to_route('note.edit', $note->slug);
+        } elseif ($request->isMethod('PATCH')) {
+            if ($note->user_id == auth()->user()->id) {
+                $validatedData = $request->validate([
+                    'title' => ['nullable', 'string'],
+                    'note' => ['required', 'string'],
+                ]);
+                $validatedData['note'] = Crypt::encryptString($validatedData['note']);
+                if ($request->title) {
+                    $validatedData['title'] = Crypt::encryptString($validatedData['title']);
+                } else {
+                    $validatedData['title'] = null;
+                }
+
+                try {
+                    $note->update($validatedData);
+
+                    flash('Catatan Berhasil Disimpan.');
+
+                    return to_route('note.index');
+                } catch (\Exception $e) {
+                    Log::error($e->getMessage());
+
+                    flash('[500] Server Error', 'err');
+
+                    return to_route('note.index');
+                }
             } else {
-                $validatedData['title'] = null;
-            }
-
-            try {
-                $note->update($validatedData);
-
-                flash('Catatan Berhasil Disimpan.');
-
-                return to_route('note.index');
-            } catch (\Exception $e) {
-                Log::error($e->getMessage());
-
-                flash('[500] Server Error', 'err');
+                flash('Anda Tidak Memiliki Akses.', 'err');
 
                 return to_route('note.index');
             }
-        } else {
-            flash('Anda Tidak Memiliki Akses.', 'err');
-
-            return to_route('note.index');
         }
     }
 }

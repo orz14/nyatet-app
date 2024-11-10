@@ -10,6 +10,35 @@
 
 <script data-navigate-track>
     // Go Up and Down
-    jQuery(document).ready(function(){var o=1,r=600;jQuery(window).scroll(function(){jQuery(this).scrollTop() > o?jQuery(".scrollToTop").fadeIn(r):jQuery(".scrollToTop").fadeOut(r)})});
-    $(function(){$('a[href*="#"]:not([href="#"])').click(function(){if(location.pathname.replace(/^\//,"")==this.pathname.replace(/^\//,"")&&location.hostname==this.hostname){var t=$(this.hash);if(t=t.length?t:$("[name="+this.hash.slice(1)+"]"),t.length)return $("html,body").animate({scrollTop:t.offset().top},50),!1}})});
+    jQuery(document).ready(function() {
+        var o = 1,
+            r = 600;
+        jQuery(window).scroll(function() {
+            jQuery(this).scrollTop() > o ? jQuery(".scrollToTop").fadeIn(r) : jQuery(".scrollToTop")
+                .fadeOut(r)
+        })
+    });
+    $(function() {
+        $('a[href*="#"]:not([href="#"])').click(function() {
+            if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location
+                .hostname == this.hostname) {
+                var t = $(this.hash);
+                if (t = t.length ? t : $("[name=" + this.hash.slice(1) + "]"), t.length) return $(
+                    "html,body").animate({
+                    scrollTop: t.offset().top
+                }, 50), !1
+            }
+        })
+    });
+
+    function refreshCsrfToken() {
+        fetch("{{ route('refresh-csrf') }}")
+            .then(response => response.json())
+            .then(data => {
+                $("meta[name='csrf-token']").attr("content", data.csrf_token);
+                $("input[name='_token']").val(data.csrf_token);
+            });
+    }
+
+    setInterval(refreshCsrfToken, 6000000);
 </script>
