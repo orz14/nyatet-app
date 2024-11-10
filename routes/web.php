@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CSRFTokenController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SitemapController;
@@ -44,6 +45,9 @@ Route::middleware('auth')->group(function () {
 // Sitemap
 Route::get('/sitemap.xml', SitemapController::class);
 
-require __DIR__.'/admin.php';
+// Refresh CSRF Token
+Route::get('/refresh-csrf', CSRFTokenController::class)->name('refresh-csrf');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/admin.php';
+
+require __DIR__ . '/auth.php';
