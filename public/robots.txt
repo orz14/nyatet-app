@@ -1,5 +1,5 @@
 # Menyatakan lokasi sitemap
-Sitemap: https://nyatet.orzproject.my.id/sitemap.xml
+Sitemap: https://nyatet.orzverse.com/sitemap.xml
 
 # Membolehkan semua robot pencari mengakses seluruh situs
 User-agent: *
