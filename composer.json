@@ -2,10 +2,18 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel",
+        "livewire",
+        "tailwind",
+        "alpinejs",
+        "daisyui"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "dipeshsukhia/laravel-html-minify": "^3.3",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.8",
         "laravel/sanctum": "^3.2",

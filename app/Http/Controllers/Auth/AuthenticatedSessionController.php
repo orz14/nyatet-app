@@ -66,9 +66,9 @@ class AuthenticatedSessionController extends Controller
      * If a user has registered before using social auth, return the user
      * else, create a new user object.
      *
-     * @param    $user Socialite user object
-     * @param $provider Social auth provider
-     * @return  User
+     * @param  $user  Socialite user object
+     * @param  $provider  Social auth provider
+     * @return User
      */
     public function findOrCreateUser($user, $provider)
     {
