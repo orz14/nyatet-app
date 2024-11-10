@@ -78,4 +78,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ---
 
-<p align="center">Created with 💚 by <a href="https://orzproject.my.id" target="_blank">ORZCODE</a></p>
+<p align="center">Created with 💚 by <a href="https://orzverse.com" target="_blank">ORZCODE</a></p>
