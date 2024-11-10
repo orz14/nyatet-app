@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
         Route::get('add', 'create')->name('create');
         Route::post('/', 'store')->name('store');
         Route::get('{note}/edit', 'edit')->name('edit');
-        Route::patch('{note}', 'update')->name('update');
+        Route::match(['get', 'patch'], '{note}', 'update')->name('update');
     });
 
     // Profile
