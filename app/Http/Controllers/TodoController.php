@@ -75,7 +75,16 @@ class TodoController extends Controller
             'status' => true,
             'statusCode' => 200,
             'todos' => $data,
-            'paginate' => $paginate
+            'paginate' => [
+                'current_page' => $paginate->currentPage(),
+                'per_page' => $paginate->perPage(),
+                'from' => $paginate->firstItem(),
+                'to' => $paginate->lastItem(),
+                'path' => $paginate->path(),
+                'first_page_url' => $paginate->url(1),
+                'next_page_url' => $paginate->nextPageUrl(),
+                'prev_page_url' => $paginate->previousPageUrl()
+            ]
         ], 200);
     }
 
@@ -117,25 +126,42 @@ class TodoController extends Controller
         }
     }
 
-    public function apiChangeStatus(Todo $todo)
+    public function apiChangeStatus($slug)
     {
+        $todo = Todo::whereSlug($slug)->first();
+        if (!$todo) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 404,
+                'message' => 'Todo Tidak Ditemukan.'
+            ], 404);
+        }
+
         if ($todo->user_id == auth()->user()->id) {
-            try {
-                $todo->update(['is_done' => true]);
+            if (!$todo->is_done) {
+                try {
+                    $todo->update(['is_done' => true]);
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Todo Berhasil Diperbarui.'
-                ], 200);
-            } catch (\Exception $err) {
-                Log::error($err->getMessage());
+                    return response()->json([
+                        'status' => true,
+                        'statusCode' => 200,
+                        'message' => 'Todo Berhasil Diperbarui.'
+                    ], 200);
+                } catch (\Exception $err) {
+                    Log::error($err->getMessage());
 
+                    return response()->json([
+                        'status' => false,
+                        'statusCode' => 500,
+                        'message' => '[500] Server Error'
+                    ], 500);
+                }
+            } else {
                 return response()->json([
                     'status' => false,
-                    'statusCode' => 500,
-                    'message' => '[500] Server Error'
-                ], 500);
+                    'statusCode' => 400,
+                    'message' => 'Todo Sudah Diselesaikan.'
+                ], 400);
             }
         }
 
@@ -146,8 +172,17 @@ class TodoController extends Controller
         ], 403);
     }
 
-    public function apiEdit(Todo $todo)
+    public function apiEdit($slug)
     {
+        $todo = Todo::whereSlug($slug)->first();
+        if (!$todo) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 404,
+                'message' => 'Todo Tidak Ditemukan.'
+            ], 404);
+        }
+
         if ($todo->user_id == auth()->user()->id) {
             $todo->content = $todo->decrypt($todo->content);
 
@@ -165,8 +200,17 @@ class TodoController extends Controller
         ], 403);
     }
 
-    public function apiUpdate(Request $request, Todo $todo)
+    public function apiUpdate(Request $request, $slug)
     {
+        $todo = Todo::whereSlug($slug)->first();
+        if (!$todo) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 404,
+                'message' => 'Todo Tidak Ditemukan.'
+            ], 404);
+        }
+
         $validator = Validator::make($request->all(), [
             'todo' => ['required', 'string']
         ]);
@@ -208,8 +252,17 @@ class TodoController extends Controller
         ], 403);
     }
 
-    public function apiDestroy(Todo $todo)
+    public function apiDestroy($slug)
     {
+        $todo = Todo::whereSlug($slug)->first();
+        if (!$todo) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 404,
+                'message' => 'Todo Tidak Ditemukan.'
+            ], 404);
+        }
+
         if ($todo->user_id == auth()->user()->id) {
             try {
                 $todo->delete();

@@ -12,6 +12,8 @@ class Todo extends Model
 
     protected $fillable = ['user_id', 'slug', 'content', 'is_done', 'date'];
 
+    protected $hidden = ['id', 'user_id'];
+
     public function getRouteKeyName()
     {
         return 'slug';
