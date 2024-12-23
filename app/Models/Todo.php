@@ -17,6 +17,11 @@ class Todo extends Model
         return 'slug';
     }
 
+    public function encrypt($data)
+    {
+        return Crypt::encryptString($data);
+    }
+
     public function decrypt($data)
     {
         return Crypt::decryptString($data);

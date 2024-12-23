@@ -21,9 +21,10 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'    => false,
-                'message'   => $validator->errors()
-            ], $validator->errors()->all()[0]->code);
+                'status' => false,
+                'statusCode' => 400,
+                'message' => $validator->errors()
+            ], 400);
         }
 
         $user = User::where('username', $request->username)->first();
@@ -31,12 +32,14 @@ class AuthController extends Controller
         if (!$user || !Auth::attempt($request->only('username', 'password')) || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
+                'statusCode' => 401,
                 'message' => 'These credentials do not match our records.'
             ], 401);
         }
 
         return response()->json([
             'status' => true,
+            'statusCode' => 200,
             'message' => 'Login successfully.',
             'data' => $user,
             'token_type' => 'Bearer',
@@ -48,6 +51,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => true,
+            'statusCode' => 200,
             'data' => $request->user()
         ], 200);
     }
@@ -58,6 +62,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status'    => true,
+            'statusCode' => 200,
             'message'   => 'Logout successfully.',
         ], 200);
     }

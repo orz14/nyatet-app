@@ -29,8 +29,9 @@ class AppServiceProvider extends ServiceProvider
             info("Attempted to lazy load [{$relation}] on model [{$class}].");
         });
 
-        config(['app.locale' => 'id']);
-        Carbon::setLocale('id');
+        config(['app.locale' => env('LOCALE', 'id')]);
+        Carbon::setLocale(env('LOCALE', 'id'));
+        date_default_timezone_set(env('APP_TIMEZONE', 'Asia/Jakarta'));
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
