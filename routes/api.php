@@ -1,21 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\NoteController;
-use App\Http\Controllers\TodoController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\NoteController;
+use App\Http\Controllers\Api\TodoController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 // Auth
 Route::prefix('/auth')->group(function () {
@@ -31,21 +19,21 @@ Route::prefix('/auth')->group(function () {
 });
 
 Route::prefix('/todo')->middleware('auth:sanctum')->group(function () {
-    Route::get('/', [TodoController::class, 'apiIndex']);
-    Route::get('/history', [TodoController::class, 'apiHistory']);
-    Route::post('/', [TodoController::class, 'apiCreate']);
-    Route::patch('/{slug}/status', [TodoController::class, 'apiChangeStatus']);
-    Route::get('/{slug}', [TodoController::class, 'apiEdit']);
-    Route::patch('/{slug}', [TodoController::class, 'apiUpdate']);
-    Route::delete('/{slug}', [TodoController::class, 'apiDestroy']);
+    Route::get('/', [TodoController::class, 'getAllTodo']);
+    Route::get('/history', [TodoController::class, 'getAllHistoryTodo']);
+    Route::post('/', [TodoController::class, 'store']);
+    Route::patch('/{slug}/status', [TodoController::class, 'changeStatus']);
+    Route::get('/{slug}', [TodoController::class, 'getTodo']);
+    Route::patch('/{slug}', [TodoController::class, 'update']);
+    Route::delete('/{slug}', [TodoController::class, 'destroy']);
 });
 
 Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
-    Route::get('/', [NoteController::class, 'apiIndex']);
-    Route::post('/', [NoteController::class, 'apiCreate']);
-    Route::get('/{slug}', [NoteController::class, 'apiEdit']);
-    Route::patch('/{slug}', [NoteController::class, 'apiUpdate']);
-    Route::delete('/{slug}', [NoteController::class, 'apiDestroy']);
-    Route::patch('/{slug}/lock', [NoteController::class, 'apiLock']);
-    Route::patch('/{slug}/unlock', [NoteController::class, 'apiUnlock']);
+    Route::get('/', [NoteController::class, 'getAllNote']);
+    Route::post('/', [NoteController::class, 'store']);
+    Route::get('/{slug}', [NoteController::class, 'getNote']);
+    Route::patch('/{slug}', [NoteController::class, 'update']);
+    Route::delete('/{slug}', [NoteController::class, 'destroy']);
+    Route::patch('/{slug}/lock', [NoteController::class, 'lock']);
+    Route::patch('/{slug}/unlock', [NoteController::class, 'unlock']);
 });
