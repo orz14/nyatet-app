@@ -12,9 +12,16 @@ class Note extends Model
 
     protected $fillable = ['user_id', 'slug', 'title', 'note', 'password'];
 
+    protected $hidden = ['id', 'user_id', 'password'];
+
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function encrypt($data)
+    {
+        return Crypt::encryptString($data);
     }
 
     public function decrypt($data)

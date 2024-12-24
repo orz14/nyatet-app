@@ -12,9 +12,16 @@ class Todo extends Model
 
     protected $fillable = ['user_id', 'slug', 'content', 'is_done', 'date'];
 
+    protected $hidden = ['id', 'user_id'];
+
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function encrypt($data)
+    {
+        return Crypt::encryptString($data);
     }
 
     public function decrypt($data)
