@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password as FacadesPassword;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -24,9 +26,9 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         $user = User::where('username', $request->username)->first();
@@ -49,6 +51,96 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'min:5', 'max:20', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', 'unique:'.User::class],
+            'password' => ['required', Password::defaults(), 'confirmed']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 422,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role_id' => 2
+            ]);
+
+            event(new Registered($user));
+
+            return response()->json([
+                'status' => true,
+                'statusCode' => 201,
+                'message' => 'Register successfully.',
+                'data' => $user,
+                'token_type' => 'Bearer',
+                'token' => $user->createToken(Str::uuid()->toString())->plainTextToken
+            ], 201);
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'statusCode' => 500,
+                'message' => '[500] Server Error'
+            ], 500);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'email', 'indisposable']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 422,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $status = FacadesPassword::sendResetLink(
+                $request->only('email')
+            );
+
+            if ($status == FacadesPassword::RESET_LINK_SENT) {
+                return response()->json([
+                    'status' => true,
+                    'statusCode' => 200,
+                    'message' => 'We have emailed your password reset link!'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 400,
+                    'message' => 'The email is not registered.'
+                ], 400);
+            }
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'statusCode' => 500,
+                'message' => '[500] Server Error'
+            ], 500);
+        }
+    }
+
     public function currentUser(Request $request)
     {
         return response()->json([
@@ -69,9 +161,9 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         try {
@@ -104,9 +196,9 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         if (Hash::check($request->current_password, $user->password)) {

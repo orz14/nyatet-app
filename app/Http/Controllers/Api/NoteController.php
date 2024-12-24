@@ -56,9 +56,9 @@ class NoteController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         try {
@@ -141,9 +141,9 @@ class NoteController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -248,9 +248,9 @@ class NoteController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -306,9 +306,9 @@ class NoteController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         if ($note->user_id == auth()->user()->id) {

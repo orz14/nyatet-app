@@ -81,9 +81,9 @@ class TodoController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         try {
@@ -202,9 +202,9 @@ class TodoController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'statusCode' => 400,
+                'statusCode' => 422,
                 'message' => $validator->errors()
-            ], 400);
+            ], 422);
         }
 
         if ($todo->user_id == auth()->user()->id) {
