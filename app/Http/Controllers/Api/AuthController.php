@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +21,8 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'string'],
-            'password' => ['required', 'string']
+            'password' => ['required', 'string'],
+            'remember' => ['nullable', 'boolean']
         ]);
 
         if ($validator->fails()) {
@@ -41,13 +43,15 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
+
         return response()->json([
             'status' => true,
             'statusCode' => 200,
             'message' => 'Login successfully.',
             'data' => $user,
             'token_type' => 'Bearer',
-            'token' => $user->createToken(Str::uuid()->toString())->plainTextToken
+            'token' => $user->createToken(Str::uuid()->toString(), ["*"], $expiresAt)->plainTextToken
         ], 200);
     }
 
@@ -55,8 +59,8 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'min:5', 'max:20', 'unique:'.User::class],
-            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', 'unique:'.User::class],
+            'username' => ['required', 'string', 'min:5', 'max:20', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', 'unique:' . User::class],
             'password' => ['required', Password::defaults(), 'confirmed']
         ]);
 
@@ -77,6 +81,8 @@ class AuthController extends Controller
                 'role_id' => 2
             ]);
 
+            $expiresAt = Carbon::now()->addDays(7);
+
             event(new Registered($user));
 
             return response()->json([
@@ -85,7 +91,7 @@ class AuthController extends Controller
                 'message' => 'Register successfully.',
                 'data' => $user,
                 'token_type' => 'Bearer',
-                'token' => $user->createToken(Str::uuid()->toString())->plainTextToken
+                'token' => $user->createToken(Str::uuid()->toString(), ["*"], $expiresAt)->plainTextToken
             ], 201);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
