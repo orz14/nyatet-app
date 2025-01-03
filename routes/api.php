@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\TodoController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -39,3 +41,9 @@ Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
     Route::patch('/{slug}/lock', [NoteController::class, 'lock']);
     Route::patch('/{slug}/unlock', [NoteController::class, 'unlock']);
 });
+
+Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
+    Route::delete('/expired/clear', [AdminController::class, 'clearExpiredToken']);
+});
+
+Route::get('/check-connection', [Controller::class, 'checkConnection']);
