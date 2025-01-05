@@ -32,7 +32,3 @@ Route::middleware('guest')->group(function () {
         });
     });
 });
-
-Route::middleware('auth')->group(function () {
-    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-});

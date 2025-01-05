@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 Route::redirect('/', '/login');
 
@@ -34,8 +35,9 @@ Route::middleware('auth')->group(function () {
 // Sitemap
 Route::get('/sitemap.xml', SitemapController::class);
 
-// Refresh CSRF Token
+// Token Management
 Route::get('/refresh-csrf', CSRFTokenController::class)->name('refresh-csrf');
+Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show'])->name('sanctum.csrf-cookie');
 
 require __DIR__ . '/admin.php';
 

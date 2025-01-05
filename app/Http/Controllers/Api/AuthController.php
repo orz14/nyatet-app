@@ -43,8 +43,8 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
-        $expiresAt = $request->remember ? null : Carbon::now()->addMinutes(2);
+        $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
+        // $expiresAt = $request->remember ? null : Carbon::now()->addMinutes(2);
 
         return response()->json([
             'status' => true,
