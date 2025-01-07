@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
-use App\Models\Sanctum\PersonalAccessToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -166,55 +165,6 @@ class AuthController extends Controller
                 'message' => '[500] Server Error'
             ], 500);
         }
-    }
-
-    public function getLoginLog()
-    {
-        $data = LoginLog::with('token')->whereUserId(auth()->user()->id)->get();
-
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'logs' => $data
-        ], 200);
-    }
-
-    public function logoutToken($token_name)
-    {
-        $token = PersonalAccessToken::whereName($token_name)->first();
-        if (!$token) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Token Tidak Ditemukan.'
-            ], 404);
-        }
-
-        if ($token->tokenable_id == auth()->user()->id) {
-            try {
-                $token->delete();
-
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Berhasil Logout.'
-                ], 200);
-            } catch (\Exception $err) {
-                Log::error($err->getMessage());
-
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 500,
-                    'message' => '[500] Server Error'
-                ], 500);
-            }
-        }
-
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
     }
 
     public function currentUser(Request $request)
