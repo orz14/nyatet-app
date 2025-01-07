@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\TodoController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
