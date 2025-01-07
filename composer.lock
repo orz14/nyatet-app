@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e08081d0da1a7c4d3639744460febe2e",
+    "content-hash": "11cf38957338ce37e8bb5377e2327e40",
     "packages": [
         {
             "name": "brick/math",
@@ -2702,6 +2702,50 @@
                 }
             ],
             "time": "2023-09-03T08:22:57+00:00"
+        },
+        {
+            "name": "orz14/object-id",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orz14/object-id.git",
+                "reference": "1fecbe540a74cbf20e341519ba6ac7f7ab2ec8b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orz14/object-id/zipball/1fecbe540a74cbf20e341519ba6ac7f7ab2ec8b8",
+                "reference": "1fecbe540a74cbf20e341519ba6ac7f7ab2ec8b8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ObjectId\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oriz Wahyu N.",
+                    "email": "oriezt.id@gmail.com"
+                }
+            ],
+            "description": "A package to generate Object IDs",
+            "homepage": "https://github.com/orz14/object-id",
+            "support": {
+                "issues": "https://github.com/orz14/object-id/issues",
+                "source": "https://github.com/orz14/object-id/tree/v1.1.2"
+            },
+            "time": "2024-06-16T18:56:30+00:00"
         },
         {
             "name": "phpoption/phpoption",
