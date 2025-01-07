@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
+use App\Models\Sanctum\PersonalAccessToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -44,13 +46,23 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $token = $this->generateToken($request, $user);
+
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 500,
+                'message' => 'Login failed.'
+            ], 500);
+        }
+
         return response()->json([
             'status' => true,
             'statusCode' => 200,
             'message' => 'Login successfully.',
             'data' => $user,
             'token_type' => 'Bearer',
-            'token' => $this->generateToken($request, $user)
+            'token' => $token
         ], 200);
     }
 
@@ -82,13 +94,24 @@ class AuthController extends Controller
 
             event(new Registered($user));
 
+            $token = $this->generateToken($request, $user);
+
+            if (!$token) {
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 500,
+                    'type' => 'login_failed',
+                    'message' => 'Login failed.'
+                ], 500);
+            }
+
             return response()->json([
                 'status' => true,
                 'statusCode' => 201,
                 'message' => 'Register successfully.',
                 'data' => $user,
                 'token_type' => 'Bearer',
-                'token' => $this->generateToken($request, $user)
+                'token' => $token
             ], 201);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
@@ -96,6 +119,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => false,
                 'statusCode' => 500,
+                'type' => 'server_error',
                 'message' => '[500] Server Error'
             ], 500);
         }
@@ -142,6 +166,55 @@ class AuthController extends Controller
                 'message' => '[500] Server Error'
             ], 500);
         }
+    }
+
+    public function getLoginLog()
+    {
+        $data = LoginLog::with('token')->whereUserId(auth()->user()->id)->get();
+
+        return response()->json([
+            'status' => true,
+            'statusCode' => 200,
+            'logs' => $data
+        ], 200);
+    }
+
+    public function logoutToken($token_name)
+    {
+        $token = PersonalAccessToken::whereName($token_name)->first();
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 404,
+                'message' => 'Token Tidak Ditemukan.'
+            ], 404);
+        }
+
+        if ($token->tokenable_id == auth()->user()->id) {
+            try {
+                $token->delete();
+
+                return response()->json([
+                    'status' => true,
+                    'statusCode' => 200,
+                    'message' => 'Berhasil Logout.'
+                ], 200);
+            } catch (\Exception $err) {
+                Log::error($err->getMessage());
+
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 500,
+                    'message' => '[500] Server Error'
+                ], 500);
+            }
+        }
+
+        return response()->json([
+            'status' => false,
+            'statusCode' => 403,
+            'message' => 'Anda Tidak Memiliki Akses.'
+        ], 403);
     }
 
     public function currentUser(Request $request)
@@ -275,26 +348,34 @@ class AuthController extends Controller
         }
     }
 
-    private function generateToken($request, $user): string
+    private function generateToken($request, $user): string|null
     {
-        $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
-        // $expiresAt = $request->remember ? null : Carbon::now()->addMinutes(2);
-        $token_name = exec('openssl rand -hex 16');
-        $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
+        DB::beginTransaction();
+        try {
+            $token_name = exec('openssl rand -hex 16');
+            $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
+            // $expiresAt = $request->remember ? null : Carbon::now()->addMinutes(2);
+            $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
 
-        $ip = $request->ip() ?? null;
-        $ip_info = Http::get("https://ipinfo.io/$ip/json")->object();
+            $ip = $request->ip() ?? null;
+            $ip_info = Http::get("https://ipinfo.io/$ip/json")->object();
 
-        LoginLog::create([
-            'user_id' => $user->id,
-            'token_name' => $token_name,
-            'ip_address' => $ip_info->ip ?? null,
-            'user_agent' => $request->header('User-Agent') ?? null,
-            'city' => $ip_info->city ?? null,
-            'region' => $ip_info->region ?? null,
-            'country' => $ip_info->country ?? null
-        ]);
+            LoginLog::create([
+                'user_id' => $user->id,
+                'token_name' => $token_name,
+                'ip_address' => $ip_info->ip ?? null,
+                'user_agent' => $request->userAgent() ?? null,
+                'city' => $ip_info->city ?? null,
+                'region' => $ip_info->region ?? null,
+                'country' => $ip_info->country ?? null
+            ]);
 
-        return (string) $token;
+            DB::commit();
+            return (string) $token;
+        } catch (\Exception $err) {
+            DB::rollBack();
+            Log::error($err->getMessage());
+            return null;
+        }
     }
 }

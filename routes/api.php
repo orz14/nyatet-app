@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\TodoController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -14,6 +15,9 @@ Route::prefix('/auth')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/login-log', [AuthController::class, 'getLoginLog']);
+        Route::delete('/logout-token/{token_name}', [AuthController::class, 'logoutToken']);
+
         Route::get('/current-user', [AuthController::class, 'currentUser']);
         Route::patch('/current-user/profile', [AuthController::class, 'updateProfile']);
         Route::patch('/current-user/password', [AuthController::class, 'updatePassword']);
@@ -22,6 +26,7 @@ Route::prefix('/auth')->group(function () {
     });
 });
 
+// Todo
 Route::prefix('/todo')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [TodoController::class, 'getAllTodo']);
     Route::get('/history', [TodoController::class, 'getAllHistoryTodo']);
@@ -32,6 +37,7 @@ Route::prefix('/todo')->middleware('auth:sanctum')->group(function () {
     Route::delete('/{slug}', [TodoController::class, 'destroy']);
 });
 
+// Note
 Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [NoteController::class, 'getAllNote']);
     Route::post('/', [NoteController::class, 'store']);
@@ -42,8 +48,11 @@ Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
     Route::patch('/{slug}/unlock', [NoteController::class, 'unlock']);
 });
 
+// Other
 Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
     Route::delete('/expired/clear', [AdminController::class, 'clearExpiredToken']);
 });
 
 Route::get('/check-connection', [Controller::class, 'checkConnection']);
+
+Route::post('/log', LogController::class);
