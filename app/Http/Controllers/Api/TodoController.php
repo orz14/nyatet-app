@@ -75,7 +75,7 @@ class TodoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'content' => ['required']
+            'content' => ['required', 'string', 'max:200']
         ]);
 
         if ($validator->fails()) {
@@ -196,7 +196,7 @@ class TodoController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'todo' => ['required', 'string']
+            'todo' => ['required', 'string', 'max:200']
         ]);
 
         if ($validator->fails()) {

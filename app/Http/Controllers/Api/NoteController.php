@@ -49,7 +49,7 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => ['nullable', 'string'],
+            'title' => ['nullable', 'string', 'max:200'],
             'note' => ['required', 'string']
         ]);
 
@@ -65,7 +65,7 @@ class NoteController extends Controller
             Note::create([
                 'user_id' => auth()->user()->id,
                 'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
-                'title' => $request->title ? Crypt::encryptString($request->title): null,
+                'title' => $request->title ? Crypt::encryptString($request->title) : null,
                 'note' => Crypt::encryptString($request->note)
             ]);
 
@@ -134,7 +134,7 @@ class NoteController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'title' => ['nullable', 'string'],
+            'title' => ['nullable', 'string', 'max:200'],
             'note' => ['required', 'string']
         ]);
 
