@@ -11,14 +11,6 @@ class LogController extends Controller
 {
     public function getLog(Request $request)
     {
-        if ($request->user()->role_id != 1) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 403,
-                'message' => 'Anda Tidak Memiliki Akses.'
-            ], 403);
-        }
-
         $logFile = storage_path('logs/laravel.log');
 
         if (!File::exists($logFile)) {

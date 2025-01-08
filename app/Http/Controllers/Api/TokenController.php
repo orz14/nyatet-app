@@ -22,14 +22,6 @@ class TokenController extends Controller
 
     public function clearExpiredToken(Request $request)
     {
-        if ($request->user()->role_id != 1) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 403,
-                'message' => 'Unauthorized',
-            ], 403);
-        }
-
         try {
             PersonalAccessToken::where('expires_at', '<=', Carbon::now())->delete();
 

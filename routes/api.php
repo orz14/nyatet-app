@@ -58,7 +58,7 @@ Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
 // Other
 Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
     Route::get('/info', [TokenController::class, 'tokenInfo']);
-    Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken']);
+    Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken'])->middleware('sanctum.admin');
     Route::get('/login-log', [TokenController::class, 'getLoginLog']);
     Route::delete('/logout/{token_name}', [TokenController::class, 'logoutToken']);
 });
