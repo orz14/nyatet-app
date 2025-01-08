@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\TodoController;
 use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,15 @@ Route::prefix('/auth')->group(function () {
         Route::delete('/current-user', [AuthController::class, 'destroyUser']);
         Route::delete('/logout', [AuthController::class, 'logout']);
     });
+});
+
+// User
+Route::prefix('/user')->middleware(['auth:sanctum', 'sanctum.admin'])->group(function () {
+    Route::get('/', [UserController::class, 'getAllUser']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'getUser']);
+    Route::patch('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
 // Todo
