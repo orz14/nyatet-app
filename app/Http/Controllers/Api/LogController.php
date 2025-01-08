@@ -47,15 +47,16 @@ class LogController extends Controller
         $paginatedLogs = array_slice($orderedLogs, ($currentPage - 1) * $perPage, $perPage);
 
         $parsedLogs = [];
-
-        foreach ($paginatedLogs as $log) {
-            if (preg_match('/\[(.*?)\] (\w+)\.(\w+):/', $log, $matches)) {
-                $parsedLogs[] = [
-                    'timestamp' => $matches[1],
-                    'environment' => $matches[2],
-                    'level' => $matches[3],
-                    'message' => substr($log, strpos($log, ': ') + 2)
-                ];
+        if (count($paginatedLogs) > 0) {
+            foreach ($paginatedLogs as $log) {
+                if (preg_match('/\[(.*?)\] (\w+)\.(\w+):/', $log, $matches)) {
+                    $parsedLogs[] = [
+                        'timestamp' => $matches[1],
+                        'environment' => $matches[2],
+                        'level' => $matches[3],
+                        'message' => substr($log, strpos($log, ': ') + 2)
+                    ];
+                }
             }
         }
 
@@ -66,10 +67,12 @@ class LogController extends Controller
             'pagination' => [
                 'current_page' => (int) $currentPage,
                 'per_page' => $perPage,
-                'total_logs' => $totalLogs,
-                'total_pages' => $totalPages,
-                'has_next_page' => $currentPage < $totalPages,
-                'has_previous_page' => $currentPage > 1,
+                'from' => (count($parsedLogs) > 0) ? ($currentPage - 1) * $perPage + 1 : null,
+                'to' => (count($parsedLogs) > 0) ? min($currentPage * $perPage, $totalLogs) : null,
+                'path' => $request->url(),
+                'first_page_url' => $request->url() . '?page=1',
+                'next_page_url' => ($currentPage < $totalPages) ? $request->url() . '?page=' . ($currentPage + 1) : null,
+                'prev_page_url' => ($currentPage > 1) ? $request->url() . '?page=' . ($currentPage - 1) : null
             ],
         ], 200);
     }

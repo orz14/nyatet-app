@@ -65,5 +65,5 @@ Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
 
 Route::get('/check-connection', [Controller::class, 'checkConnection']);
 
-Route::get('/log', [LogController::class, 'getLog'])->middleware('auth:sanctum');
+Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin']);
 Route::post('/log', [LogController::class, 'store']);

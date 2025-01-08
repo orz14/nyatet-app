@@ -20,18 +20,11 @@ class UserController extends Controller
         $paginate = User::orderBy('name', 'asc')->simplePaginate(10);
         $data = $paginate->getCollection();
 
-        if ($data->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 204
-            ], 204);
-        }
-
         return response()->json([
             'status' => true,
             'statusCode' => 200,
             'users' => $data,
-            'paginate' => [
+            'pagination' => [
                 'current_page' => $paginate->currentPage(),
                 'per_page' => $paginate->perPage(),
                 'from' => $paginate->firstItem(),
