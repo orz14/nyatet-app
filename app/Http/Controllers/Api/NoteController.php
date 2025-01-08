@@ -22,18 +22,11 @@ class NoteController extends Controller
             return $item;
         });
 
-        if ($data->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 204
-            ], 204);
-        }
-
         return response()->json([
             'status' => true,
             'statusCode' => 200,
             'notes' => $data,
-            'paginate' => [
+            'pagination' => [
                 'current_page' => $paginate->currentPage(),
                 'per_page' => $paginate->perPage(),
                 'from' => $paginate->firstItem(),

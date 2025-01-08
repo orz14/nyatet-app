@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\TodoController;
+use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
@@ -15,15 +16,21 @@ Route::prefix('/auth')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/login-log', [AuthController::class, 'getLoginLog']);
-        Route::delete('/logout-token/{token_name}', [AuthController::class, 'logoutToken']);
-
         Route::get('/current-user', [AuthController::class, 'currentUser']);
         Route::patch('/current-user/profile', [AuthController::class, 'updateProfile']);
         Route::patch('/current-user/password', [AuthController::class, 'updatePassword']);
         Route::delete('/current-user', [AuthController::class, 'destroyUser']);
         Route::delete('/logout', [AuthController::class, 'logout']);
     });
+});
+
+// User
+Route::prefix('/user')->middleware(['auth:sanctum', 'sanctum.admin'])->group(function () {
+    Route::get('/', [UserController::class, 'getAllUser']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'getUser']);
+    Route::patch('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
 // Todo
@@ -50,9 +57,13 @@ Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
 
 // Other
 Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
-    Route::delete('/expired/clear', [AdminController::class, 'clearExpiredToken']);
+    Route::get('/info', [TokenController::class, 'tokenInfo']);
+    Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken']);
+    Route::get('/login-log', [TokenController::class, 'getLoginLog']);
+    Route::delete('/logout/{token_name}', [TokenController::class, 'logoutToken']);
 });
 
 Route::get('/check-connection', [Controller::class, 'checkConnection']);
 
-Route::post('/log', LogController::class);
+Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin']);
+Route::post('/log', [LogController::class, 'store']);
