@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CSRFTokenController;
+use App\Http\Controllers\MobileAppController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SitemapController;
@@ -29,6 +30,15 @@ Route::middleware('auth')->group(function () {
     // Profile
     Route::prefix('profile')->controller(ProfileController::class)->name('profile.')->group(function () {
         Route::get('/', 'edit')->name('edit');
+    });
+
+    // Mobile App
+    Route::prefix('mobile-app')->name('mobile-app.')->group(function () {
+        Route::get('/', [MobileAppController::class, 'index'])->name('index');
+        Route::middleware('admin-or-mobile-dev')->group(function () {
+            Route::get('/update', [MobileAppController::class, 'edit'])->name('edit');
+            Route::post('/update', [MobileAppController::class, 'update'])->name('update');
+        });
     });
 });
 
