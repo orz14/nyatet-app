@@ -17,7 +17,7 @@ class UserController extends Controller
 {
     public function getAllUser()
     {
-        $paginate = User::orderBy('name', 'asc')->simplePaginate(10);
+        $paginate = User::with(['role'])->orderBy('role_id', 'asc')->orderBy('name', 'asc')->simplePaginate(10);
         $data = $paginate->getCollection();
 
         return response()->json([
@@ -84,7 +84,7 @@ class UserController extends Controller
 
     public function getUser($id)
     {
-        $user = User::find($id);
+        $user = User::with(['role'])->find($id);
         if (!$user) {
             return response()->json([
                 'status' => false,

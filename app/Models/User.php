@@ -33,4 +33,9 @@ class User extends Authenticatable
     protected $casts = [
         //
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
