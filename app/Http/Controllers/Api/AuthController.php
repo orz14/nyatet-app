@@ -264,7 +264,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => true,
                 'statusCode' => 200,
-                'message' => 'User Berhasil Dihapus.'
+                'message' => 'Akun Berhasil Dihapus.'
             ], 200);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
