@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -147,13 +148,63 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => true,
                     'statusCode' => 200,
-                    'message' => 'We have emailed your password reset link!'
+                    'message' => 'Kami telah mengirimkan tautan pengaturan ulang kata sandi Anda melalui email!'
                 ], 200);
             } else {
                 return response()->json([
                     'status' => false,
                     'statusCode' => 400,
-                    'message' => 'The email is not registered.'
+                    'message' => 'Email tidak terdaftar.'
+                ], 400);
+            }
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'statusCode' => 500,
+                'message' => '[500] Server Error'
+            ], 500);
+        }
+    }
+
+    public function newPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => ['required'],
+            'email' => ['required', 'email', 'indisposable'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 422,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $status = FacadesPassword::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user) use ($request) {
+                    $user->forceFill(['password' => Hash::make($request->password)])->save();
+
+                    event(new PasswordReset($user));
+                }
+            );
+
+            if ($status == FacadesPassword::PASSWORD_RESET) {
+                return response()->json([
+                    'status' => true,
+                    'statusCode' => 200,
+                    'message' => 'Password Anda berhasil diubah.'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 400,
+                    'message' => 'Token tidak valid.'
                 ], 400);
             }
         } catch (\Exception $err) {
