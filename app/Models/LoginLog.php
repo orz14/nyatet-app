@@ -14,7 +14,6 @@ class LoginLog extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $guarded = ['id'];
-    protected $hidden = ['token_name', 'ip_address'];
 
     protected static function booted(): void
     {

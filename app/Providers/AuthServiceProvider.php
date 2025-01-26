@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,7 +25,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('admin', fn (User $user) => $user->role_id == 1);
-        Gate::define('user', fn (User $user) => $user->role_id == 2);
+        $roles = DB::table('roles')->get();
+        foreach ($roles as $role) {
+            Gate::define($role->role, fn(User $user) => $user->role_id == $role->id);
+        }
     }
 }

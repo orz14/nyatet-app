@@ -71,34 +71,45 @@ class LogController extends Controller
 
     public function store(Request $request)
     {
-        switch ($request->type) {
-            case 'info':
-                Log::info($request->message);
+        $origin = parse_url($request->headers->get('Origin'), PHP_URL_HOST);
+        $host = explode(',', env('SANCTUM_STATEFUL_DOMAINS'));
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Log has been stored.',
-                ], 200);
-                break;
+        if (in_array($origin, $host)) {
+            switch ($request->type) {
+                case 'info':
+                    Log::info($request->message);
 
-            case 'error':
-                Log::error($request->message);
+                    return response()->json([
+                        'status' => true,
+                        'statusCode' => 200,
+                        'message' => 'Log has been stored.',
+                    ], 200);
+                    break;
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Log has been stored.',
-                ], 200);
-                break;
+                case 'error':
+                    Log::error($request->message);
 
-            default:
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 400,
-                    'message' => 'Invalid type.',
-                ], 400);
-                break;
+                    return response()->json([
+                        'status' => true,
+                        'statusCode' => 200,
+                        'message' => 'Log has been stored.',
+                    ], 200);
+                    break;
+
+                default:
+                    return response()->json([
+                        'status' => false,
+                        'statusCode' => 400,
+                        'message' => 'Invalid type.',
+                    ], 400);
+                    break;
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 403,
+                'message' => 'Anda Tidak Memiliki Akses.'
+            ], 403);
         }
     }
 }

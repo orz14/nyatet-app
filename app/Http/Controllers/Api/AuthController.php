@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Password as FacadesPassword;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -45,7 +47,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $this->generateToken($request, $user);
+        $token = $this->generateToken($request, $user, $request->remember);
 
         if (!$token) {
             return response()->json([
@@ -93,7 +95,7 @@ class AuthController extends Controller
 
             event(new Registered($user));
 
-            $token = $this->generateToken($request, $user);
+            $token = $this->generateToken($request, $user, $request->remember);
 
             if (!$token) {
                 return response()->json([
@@ -147,13 +149,13 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => true,
                     'statusCode' => 200,
-                    'message' => 'We have emailed your password reset link!'
+                    'message' => 'Kami telah mengirimkan tautan pengaturan ulang kata sandi Anda melalui email!'
                 ], 200);
             } else {
                 return response()->json([
                     'status' => false,
                     'statusCode' => 400,
-                    'message' => 'The email is not registered.'
+                    'message' => 'Email tidak terdaftar.'
                 ], 400);
             }
         } catch (\Exception $err) {
@@ -164,6 +166,113 @@ class AuthController extends Controller
                 'statusCode' => 500,
                 'message' => '[500] Server Error'
             ], 500);
+        }
+    }
+
+    public function newPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => ['required'],
+            'email' => ['required', 'email', 'indisposable'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 422,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $status = FacadesPassword::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user) use ($request) {
+                    $user->forceFill(['password' => Hash::make($request->password)])->save();
+
+                    event(new PasswordReset($user));
+                }
+            );
+
+            if ($status == FacadesPassword::PASSWORD_RESET) {
+                return response()->json([
+                    'status' => true,
+                    'statusCode' => 200,
+                    'message' => 'Password Anda berhasil diubah.'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 400,
+                    'message' => 'Token tidak valid.'
+                ], 400);
+            }
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'statusCode' => 500,
+                'message' => '[500] Server Error'
+            ], 500);
+        }
+    }
+
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->stateless()->redirect();
+    }
+
+    public function handleProviderCallback(Request $request, $provider)
+    {
+        $user = Socialite::driver($provider)->stateless()->user();
+
+        $authUser = $this->findOrCreateUser($user, $provider);
+
+        $token = $this->generateToken($request, $authUser, true);
+
+        if (!$token) {
+            return redirect(config('app.frontend_url') . '/auth/callback?status=failed');
+        }
+
+        return redirect(config('app.frontend_url') . '/auth/callback?token=' . $token);
+    }
+
+    public function findOrCreateUser($user, $provider)
+    {
+        $field = strtolower($provider) . '_id';
+        $authUser = User::where($field, $user->getId())->first();
+        if ($authUser) {
+            $authUser->update(['avatar' => $user->getAvatar() ?? null]);
+
+            return $authUser;
+        }
+
+        if ($user->getEmail() != null) {
+            $usermail = User::where('email', $user->getEmail())->first();
+            if ($usermail) {
+                $usermail->update([
+                    $field => $user->getId(),
+                    'avatar' => $user->getAvatar() ?? null
+                ]);
+
+                return $usermail;
+            } else {
+                $user = User::create([
+                    'name' => $user->getName() ?? 'User',
+                    'username' => 'user-' . $this->genRandom(10),
+                    'email' => $user->getEmail(),
+                    'password' => Hash::make($this->genRandom(20)),
+                    $field => $user->getId(),
+                    'avatar' => $user->getAvatar() ?? null,
+                    'role_id' => 2,
+                ]);
+
+                event(new Registered($user));
+
+                return $user;
+            }
         }
     }
 
@@ -264,7 +373,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => true,
                 'statusCode' => 200,
-                'message' => 'User Berhasil Dihapus.'
+                'message' => 'Akun Berhasil Dihapus.'
             ], 200);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
@@ -298,13 +407,13 @@ class AuthController extends Controller
         }
     }
 
-    private function generateToken($request, $user): string|null
+    private function generateToken($request, $user, $remember = false): string|null
     {
         DB::beginTransaction();
         try {
             $token_name = exec('openssl rand -hex 16');
-            $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
-            // $expiresAt = $request->remember ? null : Carbon::now()->addMinutes(2);
+            $expiresAt = $remember ? null : Carbon::now()->addDays(7);
+            // $expiresAt = $remember ? null : Carbon::now()->addMinutes(2);
             $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
 
             $ip = $request->ip() ?? null;
@@ -313,7 +422,7 @@ class AuthController extends Controller
             LoginLog::create([
                 'user_id' => $user->id,
                 'token_name' => $token_name,
-                'ip_address' => $ip_info->ip ?? null,
+                'ip_address' => $ip,
                 'user_agent' => $request->userAgent() ?? null,
                 'city' => $ip_info->city ?? null,
                 'region' => $ip_info->region ?? null,
@@ -327,5 +436,10 @@ class AuthController extends Controller
             Log::error($err->getMessage());
             return null;
         }
+    }
+
+    private function genRandom($limit)
+    {
+        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
     }
 }
