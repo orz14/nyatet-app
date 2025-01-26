@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Password as FacadesPassword;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -46,7 +47,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $this->generateToken($request, $user);
+        $token = $this->generateToken($request, $user, $request->remember);
 
         if (!$token) {
             return response()->json([
@@ -94,7 +95,7 @@ class AuthController extends Controller
 
             event(new Registered($user));
 
-            $token = $this->generateToken($request, $user);
+            $token = $this->generateToken($request, $user, $request->remember);
 
             if (!$token) {
                 return response()->json([
@@ -215,6 +216,75 @@ class AuthController extends Controller
                 'statusCode' => 500,
                 'message' => '[500] Server Error'
             ], 500);
+        }
+    }
+
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->stateless()->redirect();
+    }
+
+    public function handleProviderCallback(Request $request, $provider)
+    {
+        $user = Socialite::driver($provider)->stateless()->user();
+
+        $authUser = $this->findOrCreateUser($user, $provider);
+
+        $token = $this->generateToken($request, $authUser, true);
+
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 500,
+                'type' => 'login_failed',
+                'message' => 'Login failed.'
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => true,
+            'statusCode' => 200,
+            'message' => 'Login successfully.',
+            'data' => $authUser,
+            'token_type' => 'Bearer',
+            'token' => $token
+        ], 200);
+    }
+
+    public function findOrCreateUser($user, $provider)
+    {
+        $field = strtolower($provider) . '_id';
+        $authUser = User::where($field, $user->getId())->first();
+        if ($authUser) {
+            $authUser['avatar'] = $user->getAvatar() ?? null;
+            $authUser->save();
+
+            return $authUser;
+        }
+
+        if ($user->getEmail() != null) {
+            $usermail = User::where('email', $user->getEmail())->first();
+            if ($usermail) {
+                $usermail[$field] = $user->getId();
+                $usermail['avatar'] = $user->getAvatar() ?? null;
+                $usermail->save();
+
+                return $usermail;
+            } else {
+                $user = User::create([
+                    'name' => $user->getName() ?? 'User',
+                    'username' => 'user-' . $this->genRandom(10),
+                    'email' => $user->getEmail(),
+                    'password' => Hash::make($this->genRandom(20)),
+                    $field => $user->getId(),
+                    'avatar' => $user->getAvatar() ?? null,
+                    'role_id' => 2,
+                ]);
+
+                event(new Registered($user));
+
+                return $user;
+            }
         }
     }
 
@@ -349,13 +419,13 @@ class AuthController extends Controller
         }
     }
 
-    private function generateToken($request, $user): string|null
+    private function generateToken($request, $user, $remember = false): string|null
     {
         DB::beginTransaction();
         try {
             $token_name = exec('openssl rand -hex 16');
-            $expiresAt = $request->remember ? null : Carbon::now()->addDays(7);
-            // $expiresAt = $request->remember ? null : Carbon::now()->addMinutes(2);
+            $expiresAt = $remember ? null : Carbon::now()->addDays(7);
+            // $expiresAt = $remember ? null : Carbon::now()->addMinutes(2);
             $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
 
             $ip = $request->ip() ?? null;
@@ -378,5 +448,10 @@ class AuthController extends Controller
             Log::error($err->getMessage());
             return null;
         }
+    }
+
+    private function genRandom($limit)
+    {
+        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
     }
 }
