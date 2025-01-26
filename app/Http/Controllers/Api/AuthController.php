@@ -233,22 +233,10 @@ class AuthController extends Controller
         $token = $this->generateToken($request, $authUser, true);
 
         if (!$token) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'type' => 'login_failed',
-                'message' => 'Login failed.'
-            ], 500);
+            return redirect(config('app.frontend_url') . '/auth/callback?status=failed');
         }
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'message' => 'Login successfully.',
-            'data' => $authUser,
-            'token_type' => 'Bearer',
-            'token' => $token
-        ], 200);
+        return redirect(config('app.frontend_url') . '/auth/callback?token=' . $token);
     }
 
     public function findOrCreateUser($user, $provider)
@@ -256,8 +244,7 @@ class AuthController extends Controller
         $field = strtolower($provider) . '_id';
         $authUser = User::where($field, $user->getId())->first();
         if ($authUser) {
-            $authUser['avatar'] = $user->getAvatar() ?? null;
-            $authUser->save();
+            $authUser->update(['avatar' => $user->getAvatar() ?? null]);
 
             return $authUser;
         }
@@ -265,9 +252,10 @@ class AuthController extends Controller
         if ($user->getEmail() != null) {
             $usermail = User::where('email', $user->getEmail())->first();
             if ($usermail) {
-                $usermail[$field] = $user->getId();
-                $usermail['avatar'] = $user->getAvatar() ?? null;
-                $usermail->save();
+                $usermail->update([
+                    $field => $user->getId(),
+                    'avatar' => $user->getAvatar() ?? null
+                ]);
 
                 return $usermail;
             } else {
@@ -434,7 +422,7 @@ class AuthController extends Controller
             LoginLog::create([
                 'user_id' => $user->id,
                 'token_name' => $token_name,
-                'ip_address' => $ip_info->ip ?? null,
+                'ip_address' => $ip,
                 'user_agent' => $request->userAgent() ?? null,
                 'city' => $ip_info->city ?? null,
                 'region' => $ip_info->region ?? null,

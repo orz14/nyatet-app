@@ -16,8 +16,6 @@ Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
     Route::post('/new-password', [AuthController::class, 'newPassword']);
-    Route::get('/{provider}', [AuthController::class, 'redirectToProvider']);
-    Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/current-user', [AuthController::class, 'currentUser']);
@@ -26,6 +24,9 @@ Route::prefix('/auth')->group(function () {
         Route::delete('/current-user', [AuthController::class, 'destroyUser']);
         Route::delete('/logout', [AuthController::class, 'logout']);
     });
+
+    Route::get('/{provider}', [AuthController::class, 'redirectToProvider']);
+    Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
 });
 
 // User
