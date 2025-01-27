@@ -42,7 +42,6 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SameSiteCookieMiddleware::class,
         ],
     ];
 
@@ -68,5 +67,6 @@ class Kernel extends HttpKernel
         'user' => \App\Http\Middleware\IsUser::class,
         'admin-or-mobile-dev' => \App\Http\Middleware\IsAdminOrMobileDev::class,
         'sanctum.admin' => \App\Http\Middleware\SanctumIsAdmin::class,
+        'handle.csrf' => \App\Http\Middleware\HandleCsrfToken::class,
     ];
 }
