@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CheckConnection;
 use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\TodoController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -80,7 +80,7 @@ Route::prefix('/token')->middleware(['auth:sanctum', 'handle.csrf'])->group(func
 });
 
 // Other
-Route::get('/check-connection', [Controller::class, 'checkConnection']);
+Route::get('/check-connection', CheckConnection::class);
 
 Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin', 'handle.csrf']);
 Route::post('/log', [LogController::class, 'store'])->middleware('handle.csrf');
