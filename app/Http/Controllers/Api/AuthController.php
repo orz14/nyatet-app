@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Generate;
 use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
 use App\Models\User;
@@ -261,9 +262,9 @@ class AuthController extends Controller
             } else {
                 $user = User::create([
                     'name' => $user->getName() ?? 'User',
-                    'username' => 'user-' . $this->genRandom(10),
+                    'username' => 'user-' . Generate::randomString(10),
                     'email' => $user->getEmail(),
-                    'password' => Hash::make($this->genRandom(20)),
+                    'password' => Hash::make(Generate::randomString(20)),
                     $field => $user->getId(),
                     'avatar' => $user->getAvatar() ?? null,
                     'role_id' => 2,
@@ -411,7 +412,7 @@ class AuthController extends Controller
     {
         DB::beginTransaction();
         try {
-            $token_name = exec('openssl rand -hex 16');
+            $token_name = Generate::randomString(32);
             $expiresAt = $remember ? null : Carbon::now()->addDays(7);
             // $expiresAt = $remember ? null : Carbon::now()->addMinutes(2);
             $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
@@ -436,10 +437,5 @@ class AuthController extends Controller
             Log::error($err->getMessage());
             return null;
         }
-    }
-
-    private function genRandom($limit)
-    {
-        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
     }
 }

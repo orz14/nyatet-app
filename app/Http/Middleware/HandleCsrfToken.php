@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\CsrfSession;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleCsrfToken
@@ -28,13 +28,15 @@ class HandleCsrfToken
             ], 419);
         } else {
             $decryptedToken = Crypt::decryptString($csrfToken);
-            if ($decryptedToken != env('STATIC_CSRF')) {
+            $csrf = CsrfSession::where('csrf_token', $decryptedToken)->first();
+            if (!$csrf) {
                 return response()->json([
                     'status' => false,
                     'statusCode' => 419,
                     'message' => 'CSRF token not valid.'
                 ], 419);
             } else {
+                $csrf->update(['usage' => (int)$csrf->usage + 1]);
                 return $response;
             }
         }
