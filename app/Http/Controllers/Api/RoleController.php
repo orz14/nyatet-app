@@ -15,7 +15,7 @@ class RoleController extends Controller
 {
     public function getAllRole()
     {
-        $data = Role::orderBy('id', 'asc')->get();
+        $data = Role::withCount('users')->orderBy('id', 'asc')->get();
 
         return response()->json([
             'status' => true,
