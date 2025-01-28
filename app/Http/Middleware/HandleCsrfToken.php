@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\CsrfSession;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,27 +19,31 @@ class HandleCsrfToken
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
-        $csrfToken = $request->header('X-CSRF-TOKEN');
+        if (in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+            $cache_name = 'csrf_' . str_replace('.', '', $request->ip());
+            $cachedData = Cache::get($cache_name);
+            $csrfToken = $request->header('X-CSRF-TOKEN');
 
-        if (!$csrfToken) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 419,
-                'message' => 'CSRF token mismatch.'
-            ], 419);
-        } else {
+            if (!$cachedData || !$csrfToken) {
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 419,
+                    'message' => 'CSRF token mismatch.'
+                ], 419);
+            }
+
             $decryptedToken = Crypt::decryptString($csrfToken);
-            $csrf = CsrfSession::where('csrf_token', $decryptedToken)->first();
-            if (!$csrf) {
+            if ($decryptedToken != $cachedData['csrf_token']) {
                 return response()->json([
                     'status' => false,
                     'statusCode' => 419,
                     'message' => 'CSRF token not valid.'
                 ], 419);
-            } else {
-                $csrf->update(['usage' => (int)$csrf->usage + 1]);
-                return $response;
             }
+
+            $cachedData['usage'] += 1;
+            Cache::put($cache_name, $cachedData, Carbon::now()->addDays(1));
         }
+        return $response;
     }
 }
