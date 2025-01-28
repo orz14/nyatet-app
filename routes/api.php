@@ -12,14 +12,12 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 Route::prefix('/auth')->group(function () {
-    Route::middleware('handle.csrf')->group(function () {
-        Route::post('/login', [AuthController::class, 'login']);
-        Route::post('/register', [AuthController::class, 'register']);
-        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-        Route::post('/new-password', [AuthController::class, 'newPassword']);
-    });
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/new-password', [AuthController::class, 'newPassword']);
 
-    Route::middleware(['auth:sanctum', 'handle.csrf'])->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
         Route::get('/current-user', [AuthController::class, 'currentUser']);
         Route::patch('/current-user/profile', [AuthController::class, 'updateProfile']);
         Route::patch('/current-user/password', [AuthController::class, 'updatePassword']);
@@ -32,7 +30,7 @@ Route::prefix('/auth')->group(function () {
 });
 
 // User
-Route::prefix('/user')->middleware(['auth:sanctum', 'sanctum.admin', 'handle.csrf'])->group(function () {
+Route::prefix('/user')->middleware(['auth:sanctum', 'sanctum.admin'])->group(function () {
     Route::get('/', [UserController::class, 'getAllUser']);
     Route::post('/', [UserController::class, 'store']);
     Route::get('/{id}', [UserController::class, 'getUser']);
@@ -41,7 +39,7 @@ Route::prefix('/user')->middleware(['auth:sanctum', 'sanctum.admin', 'handle.csr
 });
 
 // Role
-Route::prefix('/role')->middleware(['auth:sanctum', 'sanctum.admin', 'handle.csrf'])->group(function () {
+Route::prefix('/role')->middleware(['auth:sanctum', 'sanctum.admin'])->group(function () {
     Route::get('/', [RoleController::class, 'getAllRole']);
     Route::post('/', [RoleController::class, 'store']);
     Route::get('/{id}', [RoleController::class, 'getRole']);
@@ -50,7 +48,7 @@ Route::prefix('/role')->middleware(['auth:sanctum', 'sanctum.admin', 'handle.csr
 });
 
 // Todo
-Route::prefix('/todo')->middleware(['auth:sanctum', 'handle.csrf'])->group(function () {
+Route::prefix('/todo')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [TodoController::class, 'getAllTodo']);
     Route::get('/history', [TodoController::class, 'getAllHistoryTodo']);
     Route::post('/', [TodoController::class, 'store']);
@@ -61,7 +59,7 @@ Route::prefix('/todo')->middleware(['auth:sanctum', 'handle.csrf'])->group(funct
 });
 
 // Note
-Route::prefix('/note')->middleware(['auth:sanctum', 'handle.csrf'])->group(function () {
+Route::prefix('/note')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [NoteController::class, 'getAllNote']);
     Route::post('/', [NoteController::class, 'store']);
     Route::get('/{slug}', [NoteController::class, 'getNote']);
@@ -72,7 +70,7 @@ Route::prefix('/note')->middleware(['auth:sanctum', 'handle.csrf'])->group(funct
 });
 
 // Token
-Route::prefix('/token')->middleware(['auth:sanctum', 'handle.csrf'])->group(function () {
+Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
     Route::get('/info', [TokenController::class, 'tokenInfo']);
     Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken'])->middleware('sanctum.admin');
     Route::get('/login-log', [TokenController::class, 'getLoginLog']);
@@ -82,5 +80,5 @@ Route::prefix('/token')->middleware(['auth:sanctum', 'handle.csrf'])->group(func
 // Other
 Route::get('/check-connection', CheckConnection::class);
 
-Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin', 'handle.csrf']);
-Route::post('/log', [LogController::class, 'store'])->middleware('handle.csrf');
+Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin']);
+Route::post('/log', [LogController::class, 'store']);
