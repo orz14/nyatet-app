@@ -38,8 +38,18 @@ class RoleController extends Controller
             ], 422);
         }
 
+        $new_role = Str::slug($request->role);
+        $exists = Role::where('role', $new_role)->exists();
+        if ($exists) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 409,
+                'message' => 'Role Sudah Ada.'
+            ], 409);
+        }
+
         try {
-            Role::create(['role' => Str::slug($request->role)]);
+            Role::create(['role' => $new_role]);
 
             return response()->json([
                 'status' => true,
@@ -98,8 +108,18 @@ class RoleController extends Controller
             ], 422);
         }
 
+        $new_role = Str::slug($request->role);
+        $exists = Role::where('role', $new_role)->where('id', '!=', $id)->exists();
+        if ($exists) {
+            return response()->json([
+                'status' => false,
+                'statusCode' => 409,
+                'message' => 'Role Sudah Ada.'
+            ], 409);
+        }
+
         try {
-            $role->update(['role' => Str::slug($request->role)]);
+            $role->update(['role' => $new_role]);
 
             return response()->json([
                 'status' => true,
