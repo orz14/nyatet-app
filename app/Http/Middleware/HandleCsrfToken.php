@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleCsrfToken
@@ -18,7 +19,6 @@ class HandleCsrfToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request);
         if (in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             $cache_name = 'csrf_' . str_replace('.', '', $request->ip());
             $cachedData = Cache::get($cache_name);
@@ -32,18 +32,29 @@ class HandleCsrfToken
                 ], 419);
             }
 
-            $decryptedToken = Crypt::decryptString($csrfToken);
+            try {
+                $decryptedToken = Crypt::decryptString($csrfToken);
+            } catch (\Exception $err) {
+                Log::error($err->getMessage());
+
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 419,
+                    'message' => 'CSRF token invalid.'
+                ], 419);
+            }
+
             if ($decryptedToken != $cachedData['csrf_token']) {
                 return response()->json([
                     'status' => false,
                     'statusCode' => 419,
-                    'message' => 'CSRF token not valid.'
+                    'message' => 'CSRF token invalid.'
                 ], 419);
             }
 
             $cachedData['usage'] += 1;
             Cache::put($cache_name, $cachedData, Carbon::now()->addDays(1));
         }
-        return $response;
+        return $next($request);
     }
 }
