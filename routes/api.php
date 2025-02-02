@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ArtisanCallController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CheckConnection;
 use App\Http\Controllers\Api\LogController;
@@ -75,6 +76,12 @@ Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
     Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken'])->middleware('sanctum.admin');
     Route::get('/login-log', [TokenController::class, 'getLoginLog']);
     Route::delete('/logout/{token_name}', [TokenController::class, 'logoutToken']);
+});
+
+// Artisan Call
+Route::middleware(['auth:sanctum', 'sanctum.admin'])->group(function () {
+    Route::post('/database-backup', [ArtisanCallController::class, 'databaseBackup']);
+    Route::post('/optimize-clear', [ArtisanCallController::class, 'optimizeClear']);
 });
 
 // Other
