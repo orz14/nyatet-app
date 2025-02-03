@@ -13,10 +13,12 @@ class TokenController extends Controller
 {
     public function tokenInfo(Request $request)
     {
+        $data = $request->user()->currentAccessToken();
+
         return response()->json([
             'status' => true,
             'statusCode' => 200,
-            'data' => $request->user()->currentAccessToken()
+            'data' => ['name' => $data->name]
         ], 200);
     }
 
@@ -43,7 +45,17 @@ class TokenController extends Controller
 
     public function getLoginLog(Request $request)
     {
-        $data = LoginLog::with('token')->whereUserId($request->user()->id)->get();
+        $data = LoginLog::with('token')->whereUserId($request->user()->id)->get()->map(function ($item) {
+            return [
+                'token_name' => $item->token_name,
+                'ip_address' => $item->ip_address,
+                'user_agent' => $item->user_agent,
+                'city' => $item->city,
+                'region' => $item->region,
+                'country' => $item->country,
+                'token' => ['last_used_at' => $item->token->last_used_at]
+            ];
+        });
 
         return response()->json([
             'status' => true,
