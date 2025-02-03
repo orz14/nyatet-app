@@ -20,7 +20,7 @@ class HandleCsrfToken
     public function handle(Request $request, Closure $next): Response
     {
         if (in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
-            $cache_name = 'csrf_' . str_replace('.', '', $request->ip());
+            $cache_name = 'csrf_' . str_replace('.', '', $request->header('User-Ip'));
             $cachedData = Cache::get($cache_name);
             $csrfToken = $request->header('X-CSRF-TOKEN');
 
