@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -62,7 +63,18 @@ class AuthController extends Controller
             'status' => true,
             'statusCode' => 200,
             'message' => 'Login successfully.',
-            'data' => $user,
+            'data' => [
+                'id' => Crypt::encryptString($user->id),
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'role_id' => $user->role_id,
+                'github_id' => Crypt::encryptString($user->github_id),
+                'google_id' => Crypt::encryptString($user->google_id),
+                'avatar' => $user->avatar,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at
+            ],
             'token_type' => 'Bearer',
             'token' => $token
         ], 200);
@@ -111,7 +123,15 @@ class AuthController extends Controller
                 'status' => true,
                 'statusCode' => 201,
                 'message' => 'Register successfully.',
-                'data' => $user,
+                'data' => [
+                    'id' => Crypt::encryptString($user->id),
+                    'name' => $user->name,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'role_id' => $user->role_id,
+                    'created_at' => $user->created_at,
+                    'updated_at' => $user->updated_at
+                ],
                 'token_type' => 'Bearer',
                 'token' => $token
             ], 201);
@@ -279,10 +299,23 @@ class AuthController extends Controller
 
     public function currentUser(Request $request)
     {
+        $data = $request->user();
+
         return response()->json([
             'status' => true,
             'statusCode' => 200,
-            'data' => $request->user()
+            'data' => [
+                'id' => Crypt::encryptString($data->id),
+                'name' => $data->name,
+                'username' => $data->username,
+                'email' => $data->email,
+                'role_id' => $data->role_id,
+                'github_id' => Crypt::encryptString($data->github_id),
+                'google_id' => Crypt::encryptString($data->google_id),
+                'avatar' => $data->avatar,
+                'created_at' => $data->created_at,
+                'updated_at' => $data->updated_at
+            ]
         ], 200);
     }
 

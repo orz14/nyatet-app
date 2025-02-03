@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,23 @@ class UserController extends Controller
     public function getAllUser()
     {
         $paginate = User::with(['role'])->orderBy('role_id', 'asc')->orderBy('name', 'asc')->simplePaginate(10);
-        $data = $paginate->getCollection();
+        $data = $paginate->getCollection()->map(function ($item) {
+            return [
+                'id' => $item->encrypt($item->id),
+                'name' => $item->name,
+                'username' => $item->username,
+                'email' => $item->email,
+                'role' => [
+                    'id' => $item->encrypt($item->role->id),
+                    'role' => $item->role->role
+                ],
+                'github_id' => $item->encrypt($item->github_id),
+                'google_id' => $item->encrypt($item->google_id),
+                'avatar' => $item->avatar,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ];
+        });
 
         return response()->json([
             'status' => true,
@@ -84,7 +101,8 @@ class UserController extends Controller
 
     public function getUser($id)
     {
-        $user = User::with(['role'])->find($id);
+        $decrypted_id = Crypt::decryptString($id);
+        $user = User::with(['role'])->find($decrypted_id);
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -96,13 +114,28 @@ class UserController extends Controller
         return response()->json([
             'status' => true,
             'statusCode' => 200,
-            'data' => $user
+            'data' => [
+                'id' => $user->encrypt($user->id),
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'role' => [
+                    'id' => $user->encrypt($user->role->id),
+                    'role' => $user->role->role
+                ],
+                'github_id' => $user->encrypt($user->github_id),
+                'google_id' => $user->encrypt($user->google_id),
+                'avatar' => $user->avatar,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at
+            ]
         ], 200);
     }
 
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $decrypted_id = Crypt::decryptString($id);
+        $user = User::find($decrypted_id);
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -131,7 +164,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
-                'role_id' => $request->role
+                'role_id' => Crypt::decryptString($request->role)
             ]);
 
             return response()->json([
@@ -152,7 +185,8 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::find($id);
+        $decrypted_id = Crypt::decryptString($id);
+        $user = User::find($decrypted_id);
         if (!$user) {
             return response()->json([
                 'status' => false,

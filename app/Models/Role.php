@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Role extends Model
 {
@@ -11,6 +12,11 @@ class Role extends Model
 
     public $timestamps = false;
     protected $fillable = ['role'];
+
+    public function encrypt($data)
+    {
+        return Crypt::encryptString($data);
+    }
 
     public function users()
     {

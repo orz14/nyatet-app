@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,13 @@ class RoleController extends Controller
 {
     public function getAllRole()
     {
-        $data = Role::withCount('users')->orderBy('id', 'asc')->get();
+        $data = Role::withCount('users')->orderBy('id', 'asc')->get()->map(function ($item) {
+            return [
+                'id' => $item->encrypt($item->id),
+                'role' => $item->role,
+                'users_count' => $item->users_count,
+            ];
+        });
 
         return response()->json([
             'status' => true,
@@ -69,7 +76,8 @@ class RoleController extends Controller
 
     public function getRole($id)
     {
-        $role = Role::find($id);
+        $decrypted_id = Crypt::decryptString($id);
+        $role = Role::find($decrypted_id);
         if (!$role) {
             return response()->json([
                 'status' => false,
@@ -81,13 +89,17 @@ class RoleController extends Controller
         return response()->json([
             'status' => true,
             'statusCode' => 200,
-            'data' => $role
+            'data' => [
+                'id' => $role->encrypt($role->id),
+                'role' => $role->role
+            ]
         ], 200);
     }
 
     public function update(Request $request, $id)
     {
-        $role = Role::find($id);
+        $decrypted_id = Crypt::decryptString($id);
+        $role = Role::find($decrypted_id);
         if (!$role) {
             return response()->json([
                 'status' => false,
@@ -109,7 +121,7 @@ class RoleController extends Controller
         }
 
         $new_role = Str::slug($request->role);
-        $exists = Role::where('role', $new_role)->where('id', '!=', $id)->exists();
+        $exists = Role::where('role', $new_role)->where('id', '!=', $decrypted_id)->exists();
         if ($exists) {
             return response()->json([
                 'status' => false,
@@ -139,7 +151,8 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-        $role = Role::find($id);
+        $decrypted_id = Crypt::decryptString($id);
+        $role = Role::find($decrypted_id);
         if (!$role) {
             return response()->json([
                 'status' => false,
@@ -148,7 +161,7 @@ class RoleController extends Controller
             ], 404);
         }
 
-        $exists = User::where('role_id', $id)->exists();
+        $exists = User::where('role_id', $decrypted_id)->exists();
         if ($exists) {
             return response()->json([
                 'status' => false,
