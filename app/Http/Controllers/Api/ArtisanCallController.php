@@ -14,11 +14,20 @@ class ArtisanCallController extends Controller
             Artisan::call('db:backup');
             Log::info('Creating Database Backup Successfully.');
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'Creating Database Backup Successfully.'
-            ], 200);
+            $filename = 'orz-db-backup-' . date('dmy', time()) . '.sql';
+            $filePath = storage_path('app/backup/' . $filename);
+            if (!file_exists($filePath)) {
+                return response()->json([
+                    'status' => false,
+                    'statusCode' => 404,
+                    'message' => 'Backup file not found.'
+                ], 404);
+            }
+
+            return response()
+                ->streamDownload(function () use ($filePath) {
+                    readfile($filePath);
+                }, $filename);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
