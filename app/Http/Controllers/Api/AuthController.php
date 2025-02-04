@@ -450,7 +450,8 @@ class AuthController extends Controller
             // $expiresAt = $remember ? null : Carbon::now()->addMinutes(2);
             $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
 
-            $ip = $request->header('User-Ip') ?? $request->ip() ?? null;
+            $get_ip = $request->header('User-Ip') ?? $request->ip() ?? null;
+            $ip = $get_ip ? str_replace('=', '', $get_ip) : null;
             $ip_info = Http::get("https://ipinfo.io/$ip/json")->object();
 
             LoginLog::create([
