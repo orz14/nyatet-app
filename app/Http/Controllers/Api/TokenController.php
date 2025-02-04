@@ -22,7 +22,7 @@ class TokenController extends Controller
         ], 200);
     }
 
-    public function clearExpiredToken(Request $request)
+    public function clearExpiredToken()
     {
         try {
             PersonalAccessToken::where('expires_at', '<=', Carbon::now())->delete();
