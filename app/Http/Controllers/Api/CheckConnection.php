@@ -15,7 +15,7 @@ class CheckConnection extends Controller
 {
     public function __invoke(Request $request)
     {
-        $get_ip = $request->header('User-Ip');
+        $get_ip = $request->header('User-Ip') ?? $request->ip();
         $cache_name = 'csrf_' . str_replace(['.', '='], '', $get_ip);
         $cachedData = Cache::get($cache_name);
 
