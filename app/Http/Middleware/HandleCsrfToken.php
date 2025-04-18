@@ -19,7 +19,7 @@ class HandleCsrfToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+        if ((env('APP_ENV') != 'local') && in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             $get_ip = $request->header('User-Ip') ?? $request->ip();
             $cache_name = 'csrf_' . str_replace(['.', '='], '', $get_ip);
             $cachedData = Cache::get($cache_name);
