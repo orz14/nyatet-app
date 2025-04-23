@@ -39,4 +39,11 @@ class Response
 
         return response()->json($response, $code);
     }
+
+    public static function streamDownload($filePath, $fileName)
+    {
+        return response()->streamDownload(function () use ($filePath) {
+            readfile($filePath);
+        }, $fileName);
+    }
 }
