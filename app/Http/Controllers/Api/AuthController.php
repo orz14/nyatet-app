@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Generate;
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
 use App\Models\User;
@@ -32,37 +33,22 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         $user = User::where('username', $request->username)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 401,
-                'message' => 'These credentials do not match our records.'
-            ], 401);
+            return Response::error('These credentials do not match our records.', null, 401);
         }
 
         $token = $this->generateToken($request, $user, $request->remember);
 
         if (!$token) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => 'Login failed.'
-            ], 500);
+            return Response::error('Login failed.', null, 500);
         }
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'message' => 'Login successfully.',
+        return Response::success('Login successfully.', [
             'data' => [
                 'id' => Crypt::encryptString($user->id),
                 'name' => $user->name,
@@ -90,11 +76,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -111,18 +93,10 @@ class AuthController extends Controller
             $token = $this->generateToken($request, $user, $request->remember);
 
             if (!$token) {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 500,
-                    'type' => 'login_failed',
-                    'message' => 'Login failed.'
-                ], 500);
+                return Response::error('Login failed.', ['type' => 'login_failed'], 500);
             }
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 201,
-                'message' => 'Register successfully.',
+            return Response::success('Register successfully.', [
                 'data' => [
                     'id' => Crypt::encryptString($user->id),
                     'name' => $user->name,
@@ -138,12 +112,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'type' => 'server_error',
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error', ['type' => 'server_error']);
         }
     }
 
@@ -154,11 +123,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -167,26 +132,14 @@ class AuthController extends Controller
             );
 
             if ($status == FacadesPassword::RESET_LINK_SENT) {
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Kami telah mengirimkan tautan pengaturan ulang kata sandi Anda melalui email!'
-                ], 200);
+                return Response::success('Kami telah mengirimkan tautan pengaturan ulang kata sandi Anda melalui email!');
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 400,
-                    'message' => 'Email tidak terdaftar.'
-                ], 400);
+                return Response::error('Email tidak terdaftar.', null, 400);
             }
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -199,11 +152,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -217,26 +166,14 @@ class AuthController extends Controller
             );
 
             if ($status == FacadesPassword::PASSWORD_RESET) {
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Password Anda berhasil diubah.'
-                ], 200);
+                return Response::success('Password Anda berhasil diubah.');
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 400,
-                    'message' => 'Token tidak valid.'
-                ], 400);
+                return Response::error('Token tidak valid.', null, 400);
             }
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -301,9 +238,7 @@ class AuthController extends Controller
     {
         $data = $request->user();
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'data' => [
                 'id' => Crypt::encryptString($data->id),
                 'name' => $data->name,
@@ -316,7 +251,7 @@ class AuthController extends Controller
                 'created_at' => $data->created_at,
                 'updated_at' => $data->updated_at
             ]
-        ], 200);
+        ]);
     }
 
     public function updateProfile(Request $request)
@@ -328,29 +263,17 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
             $user->update($validator->validated());
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'Berhasil Disimpan.'
-            ], 200);
+            return Response::success('Berhasil Disimpan.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => 'Gagal Disimpan.'
-            ], 500);
+            return Response::error('Gagal Disimpan.');
         }
     }
 
@@ -363,37 +286,21 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         if (Hash::check($request->current_password, $user->password)) {
             try {
                 $user->update(['password' => Hash::make($request->password)]);
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Berhasil Disimpan.'
-                ], 200);
+                return Response::success('Berhasil Disimpan.');
             } catch (\Exception $err) {
                 Log::error($err->getMessage());
 
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 500,
-                    'message' => 'Gagal Disimpan.'
-                ], 500);
+                return Response::error('Gagal Disimpan.');
             }
         } else {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 400,
-                'message' => 'The current password is incorrect.'
-            ], 400);
+            return Response::error('The current password is incorrect.', null, 400);
         }
     }
 
@@ -404,19 +311,11 @@ class AuthController extends Controller
             $user->tokens()->delete();
             $user->delete();
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'Akun Berhasil Dihapus.'
-            ], 200);
+            return Response::success('Akun Berhasil Dihapus.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -425,19 +324,11 @@ class AuthController extends Controller
         try {
             $request->user()->currentAccessToken()->delete();
 
-            return response()->json([
-                'status'    => true,
-                'statusCode' => 200,
-                'message'   => 'Logout successfully.',
-            ], 200);
+            return Response::success('Logout successfully.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
