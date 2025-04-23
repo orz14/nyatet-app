@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Generate;
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class CheckConnection extends Controller
+class CheckConnectionController extends Controller
 {
     public function __invoke(Request $request)
     {
@@ -41,19 +42,11 @@ class CheckConnection extends Controller
         try {
             DB::connection()->getPdo();
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'csrf_token' => Crypt::encryptString($csrf_token)
-            ], 200);
+            return Response::success(null, ['csrf_token' => Crypt::encryptString($csrf_token)]);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => 'Could not connect to the database.'
-            ], 500);
+            return Response::error('Could not connect to the database.');
         }
     }
 }

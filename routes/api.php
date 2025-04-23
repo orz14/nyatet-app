@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\ArtisanCallController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CheckConnection;
+use App\Http\Controllers\Api\CheckConnectionController;
 use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\RoleController;
@@ -85,7 +85,7 @@ Route::middleware(['auth:sanctum', 'sanctum.admin'])->group(function () {
 });
 
 // Other
-Route::get('/check-connection', CheckConnection::class);
+Route::get('/check-connection', CheckConnectionController::class);
 
 Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin']);
 Route::post('/log', [LogController::class, 'store']);
