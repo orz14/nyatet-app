@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
@@ -24,11 +25,7 @@ class RoleController extends Controller
             ];
         });
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'roles' => $data
-        ], 200);
+        return Response::success(null, ['roles' => $data]);
     }
 
     public function store(Request $request)
@@ -38,39 +35,23 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         $new_role = Str::slug($request->role);
         $exists = Role::where('role', $new_role)->exists();
         if ($exists) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 409,
-                'message' => 'Role Sudah Ada.'
-            ], 409);
+            return Response::error('Role Sudah Ada.', null, 409);
         }
 
         try {
             Role::create(['role' => $new_role]);
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 201,
-                'message' => 'Role Berhasil Ditambahkan.'
-            ], 201);
+            return Response::success('Role Berhasil Ditambahkan.', null, 201);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -79,21 +60,15 @@ class RoleController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $role = Role::find($decrypted_id);
         if (!$role) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Role Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Role Tidak Ditemukan.', null, 404);
         }
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'data' => [
                 'id' => $role->encrypt($role->id),
                 'role' => $role->role
             ]
-        ], 200);
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -101,11 +76,7 @@ class RoleController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $role = Role::find($decrypted_id);
         if (!$role) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Role Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Role Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -113,39 +84,23 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         $new_role = Str::slug($request->role);
         $exists = Role::where('role', $new_role)->where('id', '!=', $decrypted_id)->exists();
         if ($exists) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 409,
-                'message' => 'Role Sudah Ada.'
-            ], 409);
+            return Response::error('Role Sudah Ada.', null, 409);
         }
 
         try {
             $role->update(['role' => $new_role]);
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'Role Berhasil Disimpan.'
-            ], 200);
+            return Response::success('Role Berhasil Disimpan.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -154,38 +109,22 @@ class RoleController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $role = Role::find($decrypted_id);
         if (!$role) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Role Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Role Tidak Ditemukan.', null, 404);
         }
 
         $exists = User::where('role_id', $decrypted_id)->exists();
         if ($exists) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 400,
-                'message' => 'Role tidak dapat dihapus.'
-            ], 400);
+            return Response::error('Role tidak dapat dihapus.', null, 400);
         }
 
         try {
             $role->delete();
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'Role berhasil dihapus.'
-            ], 200);
+            return Response::success('Role Berhasil Dihapus.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 }
