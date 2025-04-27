@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Todo;
 use Carbon\Carbon;
@@ -23,11 +24,7 @@ class TodoController extends Controller
                 return $item;
             });
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'todos' => $data
-        ], 200);
+        return Response::success(null, ['todos' => $data]);
     }
 
     public function getAllHistoryTodo()
@@ -41,9 +38,7 @@ class TodoController extends Controller
             });
         });
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'todos' => $data,
             'pagination' => [
                 'current_page' => $paginate->currentPage(),
@@ -55,7 +50,7 @@ class TodoController extends Controller
                 'next_page_url' => $paginate->nextPageUrl(),
                 'prev_page_url' => $paginate->previousPageUrl()
             ]
-        ], 200);
+        ]);
     }
 
     public function store(Request $request)
@@ -65,11 +60,7 @@ class TodoController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -80,19 +71,11 @@ class TodoController extends Controller
                 'date' => date('Y-m-d')
             ]);
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 201,
-                'message' => 'List Berhasil Ditambahkan.'
-            ], 201);
+            return Response::success('List Berhasil Ditambahkan.', null, 201);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -100,11 +83,7 @@ class TodoController extends Controller
     {
         $todo = Todo::whereSlug($slug)->first();
         if (!$todo) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Todo Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
 
         if ($todo->user_id == auth()->user()->id) {
@@ -112,73 +91,41 @@ class TodoController extends Controller
                 try {
                     $todo->update(['is_done' => true]);
 
-                    return response()->json([
-                        'status' => true,
-                        'statusCode' => 200,
-                        'message' => 'Todo Berhasil Diperbarui.'
-                    ], 200);
+                    return Response::success('Todo Berhasil Diperbarui.');
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return response()->json([
-                        'status' => false,
-                        'statusCode' => 500,
-                        'message' => '[500] Server Error'
-                    ], 500);
+                    return Response::error('[500] Server Error');
                 }
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 400,
-                    'message' => 'Todo Sudah Diselesaikan.'
-                ], 400);
+                return Response::error('Todo Sudah Diselesaikan.', null, 400);
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function getTodo($slug)
     {
         $todo = Todo::whereSlug($slug)->first();
         if (!$todo) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Todo Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
 
         if ($todo->user_id == auth()->user()->id) {
             $todo->content = $todo->decrypt($todo->content);
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'data' => $todo
-            ], 200);
+            return Response::success(null, ['data' => $todo]);
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function update(Request $request, $slug)
     {
         $todo = Todo::whereSlug($slug)->first();
         if (!$todo) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Todo Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -186,11 +133,7 @@ class TodoController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         if ($todo->user_id == auth()->user()->id) {
@@ -199,64 +142,36 @@ class TodoController extends Controller
                     'content' => $todo->encrypt($request->todo)
                 ]);
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Todo Berhasil Diperbarui.'
-                ], 200);
+                return Response::success('Todo Berhasil Diperbarui.');
             } catch (\Exception $err) {
                 Log::error($err->getMessage());
 
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 500,
-                    'message' => '[500] Server Error'
-                ], 500);
+                return Response::error('[500] Server Error');
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function destroy($slug)
     {
         $todo = Todo::whereSlug($slug)->first();
         if (!$todo) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Todo Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
 
         if ($todo->user_id == auth()->user()->id) {
             try {
                 $todo->delete();
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'List Berhasil Dihapus.'
-                ], 200);
+                return Response::success('List Berhasil Dihapus.');
             } catch (\Exception $err) {
                 Log::error($err->getMessage());
 
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 500,
-                    'message' => '[500] Server Error'
-                ], 500);
+                return Response::error('[500] Server Error');
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 }
