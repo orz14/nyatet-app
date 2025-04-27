@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -37,9 +38,7 @@ class UserController extends Controller
             ];
         });
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'users' => $data,
             'pagination' => [
                 'current_page' => $paginate->currentPage(),
@@ -51,7 +50,7 @@ class UserController extends Controller
                 'next_page_url' => $paginate->nextPageUrl(),
                 'prev_page_url' => $paginate->previousPageUrl()
             ]
-        ], 200);
+        ]);
     }
 
     public function store(Request $request)
@@ -65,11 +64,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -83,19 +78,11 @@ class UserController extends Controller
 
             event(new Registered($user));
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 201,
-                'message' => 'User Berhasil Ditambahkan.'
-            ], 201);
+            return Response::success('User Berhasil Ditambahkan.', null, 201);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -104,16 +91,10 @@ class UserController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $user = User::with(['role'])->find($decrypted_id);
         if (!$user) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'User Tidak Ditemukan.'
-            ], 404);
+            return Response::error('User Tidak Ditemukan.', null, 404);
         }
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'data' => [
                 'id' => $user->encrypt($user->id),
                 'name' => $user->name,
@@ -129,7 +110,7 @@ class UserController extends Controller
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at
             ]
-        ], 200);
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -137,11 +118,7 @@ class UserController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $user = User::find($decrypted_id);
         if (!$user) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'User Tidak Ditemukan.'
-            ], 404);
+            return Response::error('User Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -152,11 +129,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -167,19 +140,11 @@ class UserController extends Controller
                 'role_id' => Crypt::decryptString($request->role)
             ]);
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'User Berhasil Disimpan.'
-            ], 200);
+            return Response::success('User Berhasil Disimpan.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -188,11 +153,7 @@ class UserController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $user = User::find($decrypted_id);
         if (!$user) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'User Tidak Ditemukan.'
-            ], 404);
+            return Response::error('User Tidak Ditemukan.', null, 404);
         }
 
         DB::beginTransaction();
@@ -201,20 +162,12 @@ class UserController extends Controller
             $user->delete();
             DB::commit();
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'User berhasil dihapus.'
-            ], 200);
+            return Response::success('User Berhasil Dihapus.');
         } catch (\Exception $err) {
             DB::rollBack();
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 }
