@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
 use App\Models\Sanctum\PersonalAccessToken;
@@ -15,11 +16,7 @@ class TokenController extends Controller
     {
         $data = $request->user()->currentAccessToken();
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'data' => ['name' => $data->name]
-        ], 200);
+        return Response::success(null, ['data' => ['name' => $data->name]]);
     }
 
     public function clearExpiredToken()
@@ -27,19 +24,11 @@ class TokenController extends Controller
         try {
             PersonalAccessToken::where('expires_at', '<=', Carbon::now())->delete();
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 200,
-                'message' => 'Token deleted successfully.'
-            ], 200);
+            return Response::success('Token deleted successfully.');
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -57,48 +46,28 @@ class TokenController extends Controller
             ];
         });
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
-            'logs' => $data
-        ], 200);
+        return Response::success(null, ['logs' => $data]);
     }
 
     public function logoutToken(Request $request, $token_name)
     {
         $token = PersonalAccessToken::whereName($token_name)->first();
         if (!$token) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Token Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Token Tidak Ditemukan.', null, 404);
         }
 
         if ($token->tokenable_id == $request->user()->id) {
             try {
                 $token->delete();
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'message' => 'Berhasil Logout.'
-                ], 200);
+                return Response::success('Berhasil Logout.');
             } catch (\Exception $err) {
                 Log::error($err->getMessage());
 
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 500,
-                    'message' => '[500] Server Error'
-                ], 500);
+                return Response::error('[500] Server Error');
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 }
