@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Note;
 use Illuminate\Http\Request;
@@ -22,9 +23,7 @@ class NoteController extends Controller
             return $item;
         });
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'notes' => $data,
             'pagination' => [
                 'current_page' => $paginate->currentPage(),
@@ -36,7 +35,7 @@ class NoteController extends Controller
                 'next_page_url' => $paginate->nextPageUrl(),
                 'prev_page_url' => $paginate->previousPageUrl()
             ]
-        ], 200);
+        ]);
     }
 
     public function store(Request $request)
@@ -47,11 +46,7 @@ class NoteController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         try {
@@ -62,19 +57,11 @@ class NoteController extends Controller
                 'note' => Crypt::encryptString($request->note)
             ]);
 
-            return response()->json([
-                'status' => true,
-                'statusCode' => 201,
-                'message' => 'Catatan Berhasil Ditambahkan.'
-            ], 201);
+            return Response::success('Catatan Berhasil Ditambahkan.', null, 201);
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'statusCode' => 500,
-                'message' => '[500] Server Error'
-            ], 500);
+            return Response::error('[500] Server Error');
         }
     }
 
@@ -82,11 +69,7 @@ class NoteController extends Controller
     {
         $note = Note::whereSlug($slug)->first();
         if (!$note) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Catatan Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -94,36 +77,20 @@ class NoteController extends Controller
                 $note->title = $note->title ? $note->decrypt($note->title) : null;
                 $note->note = $note->decrypt($note->note);
 
-                return response()->json([
-                    'status' => true,
-                    'statusCode' => 200,
-                    'data' => $note
-                ], 200);
+                return Response::success(null, ['data' => $note]);
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 403,
-                    'message' => 'Akses Ditolak.'
-                ], 403);
+                return Response::error('Akses Ditolak.', null, 403);
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function update(Request $request, $slug)
     {
         $note = Note::whereSlug($slug)->first();
         if (!$note) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Catatan Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -132,11 +99,7 @@ class NoteController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -147,45 +110,25 @@ class NoteController extends Controller
                         'note' => $note->encrypt($request->note)
                     ]);
 
-                    return response()->json([
-                        'status' => true,
-                        'statusCode' => 200,
-                        'message' => 'Catatan Berhasil Disimpan.'
-                    ], 200);
+                    return Response::success('Catatan Berhasil Disimpan.');
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return response()->json([
-                        'status' => false,
-                        'statusCode' => 500,
-                        'message' => '[500] Server Error'
-                    ], 500);
+                    return Response::error('[500] Server Error');
                 }
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 403,
-                    'message' => 'Akses Ditolak.'
-                ], 403);
+                return Response::error('Akses Ditolak.', null, 403);
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function destroy($slug)
     {
         $note = Note::whereSlug($slug)->first();
         if (!$note) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Catatan Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -193,45 +136,25 @@ class NoteController extends Controller
                 try {
                     $note->delete();
 
-                    return response()->json([
-                        'status' => true,
-                        'statusCode' => 200,
-                        'message' => 'Catatan berhasil dihapus.'
-                    ], 200);
+                    return Response::success('Catatan Berhasil Dihapus.');
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return response()->json([
-                        'status' => false,
-                        'statusCode' => 500,
-                        'message' => '[500] Server Error'
-                    ], 500);
+                    return Response::error('[500] Server Error');
                 }
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 403,
-                    'message' => 'Akses Ditolak.'
-                ], 403);
+                return Response::error('Akses Ditolak.', null, 403);
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function lock(Request $request, $slug)
     {
         $note = Note::whereSlug($slug)->first();
         if (!$note) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Catatan Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -239,11 +162,7 @@ class NoteController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -251,45 +170,25 @@ class NoteController extends Controller
                 try {
                     $note->update(['password' => Hash::make($request->password)]);
 
-                    return response()->json([
-                        'status' => true,
-                        'statusCode' => 200,
-                        'message' => 'Catatan Berhasil Dikunci.'
-                    ], 200);
+                    return Response::success('Catatan Berhasil Dikunci.');
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return response()->json([
-                        'status' => false,
-                        'statusCode' => 500,
-                        'message' => '[500] Server Error'
-                    ], 500);
+                    return Response::error('[500] Server Error');
                 }
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 400,
-                    'message' => 'Catatan Sudah Dikunci.'
-                ], 400);
+                return Response::error('Catatan Sudah Dikunci.', null, 400);
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
     public function unlock(Request $request, $slug)
     {
         $note = Note::whereSlug($slug)->first();
         if (!$note) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Catatan Tidak Ditemukan.'
-            ], 404);
+            return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -297,11 +196,7 @@ class NoteController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 422,
-                'message' => $validator->errors()
-            ], 422);
+            return Response::error($validator->errors(), null, 422);
         }
 
         if ($note->user_id == auth()->user()->id) {
@@ -310,40 +205,20 @@ class NoteController extends Controller
                     try {
                         $note->update(['password' => null]);
 
-                        return response()->json([
-                            'status' => true,
-                            'statusCode' => 200,
-                            'message' => 'Catatan Berhasil Dibuka.'
-                        ], 200);
+                        return Response::success('Catatan Berhasil Dibuka.');
                     } catch (\Exception $err) {
                         Log::error($err->getMessage());
 
-                        return response()->json([
-                            'status' => false,
-                            'statusCode' => 500,
-                            'message' => '[500] Server Error'
-                        ], 500);
+                        return Response::error('[500] Server Error');
                     }
                 } else {
-                    return response()->json([
-                        'status' => false,
-                        'statusCode' => 400,
-                        'message' => 'Password Yang Anda Masukkan Salah.'
-                    ], 400);
+                    return Response::error('Password Yang Anda Masukkan Salah.', null, 400);
                 }
             } else {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 400,
-                    'message' => 'Catatan Tidak Dikunci.'
-                ], 400);
+                return Response::error('Catatan Tidak Dikunci.', null, 400);
             }
         }
 
-        return response()->json([
-            'status' => false,
-            'statusCode' => 403,
-            'message' => 'Anda Tidak Memiliki Akses.'
-        ], 403);
+        return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 }
