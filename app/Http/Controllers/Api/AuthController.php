@@ -344,11 +344,13 @@ class AuthController extends Controller
             $get_ip = $request->header('User-Ip') ?? $request->ip() ?? null;
             $ip = $get_ip ? str_replace('=', '', $get_ip) : null;
             $ip_info = Http::get("https://ipinfo.io/$ip/json")->object();
+            $fingerprint = $request->header('Fingerprint_') ?? null;
 
             LoginLog::create([
                 'user_id' => $user->id,
                 'token_name' => $token_name,
                 'ip_address' => $ip,
+                'fingerprint' => $fingerprint,
                 'user_agent' => $request->userAgent() ?? null,
                 'city' => $ip_info->city ?? null,
                 'region' => $ip_info->region ?? null,

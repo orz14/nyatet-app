@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('token_name')->unique();
             $table->string('ip_address', 45)->nullable();
+            $table->string('fingerprint')->nullable();
             $table->string('user_agent')->nullable();
             $table->string('city', 100)->nullable();
             $table->string('region', 100)->nullable();

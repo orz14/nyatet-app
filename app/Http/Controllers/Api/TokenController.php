@@ -15,8 +15,14 @@ class TokenController extends Controller
     public function tokenInfo(Request $request)
     {
         $data = $request->user()->currentAccessToken();
+        $log = LoginLog::where('token_name', $data->name)->first(['fingerprint']);
 
-        return Response::success(null, ['data' => ['name' => $data->name]]);
+        return Response::success(null, [
+            'data' => [
+                'name' => $data->name,
+                'fingerprint' => ($log && isset($log->fingerprint)) ? $log->fingerprint : null
+            ]
+        ]);
     }
 
     public function clearExpiredToken()
