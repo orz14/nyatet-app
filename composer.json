@@ -64,7 +64,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "reset": "git reset --hard HEAD"
     },
     "extra": {
         "laravel": {
