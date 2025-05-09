@@ -332,6 +332,29 @@ class AuthController extends Controller
         }
     }
 
+    public function setFingerprint(Request $request)
+    {
+        $data = $request->user()->currentAccessToken();
+        $info = $this->getInfo($request);
+
+        try {
+            LoginLog::where('token_name', $data->name)->update([
+                'ip_address' => $info['ip_address'],
+                'fingerprint' => $info['fingerprint'],
+                'user_agent' => $request->userAgent() ?? null,
+                'city' => $info['city'],
+                'region' => $info['region'],
+                'country' => $info['country']
+            ]);
+
+            return Response::success('Fingerprint Berhasil Disimpan.');
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return Response::error('[500] Server Error');
+        }
+    }
+
     private function generateToken($request, $user, $remember = false): string|null
     {
         DB::beginTransaction();
@@ -340,21 +363,17 @@ class AuthController extends Controller
             $expiresAt = $remember ? null : Carbon::now()->addDays(7);
             // $expiresAt = $remember ? null : Carbon::now()->addMinutes(2);
             $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
-
-            $get_ip = $request->header('User-Ip') ?? $request->ip() ?? null;
-            $ip = $get_ip ? str_replace('=', '', $get_ip) : null;
-            $ip_info = Http::get("https://ipinfo.io/$ip/json")->object();
-            $fingerprint = $request->header('Fingerprint_') ?? null;
+            $info = $this->getInfo($request);
 
             LoginLog::create([
                 'user_id' => $user->id,
                 'token_name' => $token_name,
-                'ip_address' => $ip,
-                'fingerprint' => $fingerprint,
+                'ip_address' => $info['ip_address'],
+                'fingerprint' => $info['fingerprint'],
                 'user_agent' => $request->userAgent() ?? null,
-                'city' => $ip_info->city ?? null,
-                'region' => $ip_info->region ?? null,
-                'country' => $ip_info->country ?? null
+                'city' => $info['city'],
+                'region' => $info['region'],
+                'country' => $info['country']
             ]);
 
             DB::commit();
@@ -364,5 +383,21 @@ class AuthController extends Controller
             Log::error($err->getMessage());
             return null;
         }
+    }
+
+    private function getInfo($request)
+    {
+        $get_ip = $request->header('User-Ip') ?? $request->ip() ?? null;
+        $ip = $get_ip ? str_replace('=', '', $get_ip) : null;
+        $ip_info = Http::get("https://ipinfo.io/$ip/json")->object();
+        $fingerprint = $request->header('Fingerprint_') ?? null;
+
+        return [
+            'ip_address' => $ip,
+            'fingerprint' => $fingerprint,
+            'city' => $ip_info->city ?? null,
+            'region' => $ip_info->region ?? null,
+            'country' => $ip_info->country ?? null
+        ];
     }
 }

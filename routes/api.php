@@ -24,6 +24,7 @@ Route::prefix('/auth')->group(function () {
         Route::patch('/current-user/password', [AuthController::class, 'updatePassword']);
         Route::delete('/current-user', [AuthController::class, 'destroyUser']);
         Route::delete('/logout', [AuthController::class, 'logout']);
+        Route::patch('/set-fingerprint', [AuthController::class, 'setFingerprint']);
     });
 
     Route::get('/{provider}', [AuthController::class, 'redirectToProvider']);
@@ -76,6 +77,8 @@ Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
     Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken'])->middleware('sanctum.admin');
     Route::get('/login-log', [TokenController::class, 'getLoginLog']);
     Route::delete('/logout/{token_name}', [TokenController::class, 'logoutToken']);
+    Route::delete('/clear', [TokenController::class, 'clearToken']);
+    Route::delete('/password/clear', [TokenController::class, 'clearPasswordToken']);
 });
 
 // Artisan Call
