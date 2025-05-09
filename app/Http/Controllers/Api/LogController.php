@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -14,11 +15,7 @@ class LogController extends Controller
         $logFile = storage_path('logs/laravel.log');
 
         if (!File::exists($logFile)) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 404,
-                'message' => 'Log file not found.',
-            ], 404);
+            return Response::error('Log file not found.', null, 404);
         }
 
         $logs = File::get($logFile);
@@ -52,9 +49,7 @@ class LogController extends Controller
             }
         }
 
-        return response()->json([
-            'status' => true,
-            'statusCode' => 200,
+        return Response::success(null, [
             'logs' => $parsedLogs,
             'pagination' => [
                 'current_page' => (int) $currentPage,
@@ -65,8 +60,8 @@ class LogController extends Controller
                 'first_page_url' => $request->url() . '?page=1',
                 'next_page_url' => ($currentPage < $totalPages) ? $request->url() . '?page=' . ($currentPage + 1) : null,
                 'prev_page_url' => ($currentPage > 1) ? $request->url() . '?page=' . ($currentPage - 1) : null
-            ],
-        ], 200);
+            ]
+        ]);
     }
 
     public function store(Request $request)
@@ -79,37 +74,21 @@ class LogController extends Controller
                 case 'info':
                     Log::info($request->message);
 
-                    return response()->json([
-                        'status' => true,
-                        'statusCode' => 200,
-                        'message' => 'Log has been stored.',
-                    ], 200);
+                    return Response::success('Log has been stored.');
                     break;
 
                 case 'error':
                     Log::error($request->message);
 
-                    return response()->json([
-                        'status' => true,
-                        'statusCode' => 200,
-                        'message' => 'Log has been stored.',
-                    ], 200);
+                    return Response::success('Log has been stored.');
                     break;
 
                 default:
-                    return response()->json([
-                        'status' => false,
-                        'statusCode' => 400,
-                        'message' => 'Invalid type.',
-                    ], 400);
+                    return Response::error('Invalid type.', null, 400);
                     break;
             }
         } else {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 403,
-                'message' => 'Anda Tidak Memiliki Akses.'
-            ], 403);
+            return Response::error('Anda Tidak Memiliki Akses.', null, 403);
         }
     }
 }

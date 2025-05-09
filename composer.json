@@ -42,7 +42,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/Generate.php"
+            "app/Helpers/Generate.php",
+            "app/Helpers/Response.php"
         ]
     },
     "autoload-dev": {
@@ -63,7 +64,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "reset": "git reset --hard HEAD"
     },
     "extra": {
         "laravel": {

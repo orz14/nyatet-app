@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\Generate;
+use App\Helpers\Response as HelpersResponse;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
@@ -19,18 +21,14 @@ class HandleCsrfToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
-            $get_ip = $request->header('User-Ip') ?? $request->ip();
-            $cache_name = 'csrf_' . str_replace(['.', '='], '', $get_ip);
+        if ((env('APP_ENV') != 'local') && in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+            $get_fingerprint = $request->header('Fingerprint_');
+            $cache_name = "csrf_$get_fingerprint";
             $cachedData = Cache::get($cache_name);
             $csrfToken = $request->header('X-CSRF-TOKEN');
 
             if (!$cachedData || !$csrfToken) {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 419,
-                    'message' => 'CSRF token mismatch.'
-                ], 419);
+                return HelpersResponse::error('CSRF token mismatch.', null, 419);
             }
 
             try {
@@ -38,24 +36,25 @@ class HandleCsrfToken
             } catch (\Exception $err) {
                 Log::error($err->getMessage());
 
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 419,
-                    'message' => 'CSRF token invalid.'
-                ], 419);
+                return HelpersResponse::error('CSRF token invalid.', null, 419);
             }
 
             if ($decryptedToken != $cachedData['csrf_token']) {
-                return response()->json([
-                    'status' => false,
-                    'statusCode' => 419,
-                    'message' => 'CSRF token invalid.'
-                ], 419);
+                return HelpersResponse::error('CSRF token invalid.', null, 419);
             }
-
-            $cachedData['usage'] += 1;
-            Cache::put($cache_name, $cachedData, Carbon::now()->addDays(1));
         }
         return $next($request);
+    }
+
+    public function terminate($request, $response)
+    {
+        if ((env('APP_ENV') != 'local') && in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+            $get_fingerprint = $request->header('Fingerprint_');
+            $cache_name = "csrf_$get_fingerprint";
+
+            Cache::put($cache_name, [
+                'csrf_token' => Generate::randomString(32)
+            ], Carbon::now()->addDays(1));
+        }
     }
 }
