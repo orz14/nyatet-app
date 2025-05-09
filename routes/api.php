@@ -24,6 +24,7 @@ Route::prefix('/auth')->group(function () {
         Route::patch('/current-user/password', [AuthController::class, 'updatePassword']);
         Route::delete('/current-user', [AuthController::class, 'destroyUser']);
         Route::delete('/logout', [AuthController::class, 'logout']);
+        Route::patch('/set-fingerprint', [AuthController::class, 'setFingerprint']);
     });
 
     Route::get('/{provider}', [AuthController::class, 'redirectToProvider']);
