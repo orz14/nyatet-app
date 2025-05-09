@@ -8,6 +8,7 @@ use App\Models\LoginLog;
 use App\Models\Sanctum\PersonalAccessToken;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TokenController extends Controller
@@ -75,5 +76,33 @@ class TokenController extends Controller
         }
 
         return Response::error('Anda Tidak Memiliki Akses.', null, 403);
+    }
+
+    public function clearToken()
+    {
+        try {
+            PersonalAccessToken::delete();
+
+            return Response::success('Token deleted successfully.');
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return Response::error('[500] Server Error');
+        }
+    }
+
+    public function clearPasswordToken()
+    {
+        try {
+            DB::table('password_reset_tokens')
+                ->where('created_at', '<', Carbon::now()->subMinutes(60))
+                ->delete();
+
+            return Response::success('Token deleted successfully.');
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return Response::error('[500] Server Error');
+        }
     }
 }
