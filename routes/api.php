@@ -92,3 +92,5 @@ Route::get('/check-connection', CheckConnectionController::class);
 
 Route::get('/log', [LogController::class, 'getLog'])->middleware(['auth:sanctum', 'sanctum.admin']);
 Route::post('/log', [LogController::class, 'store']);
+Route::get('/next-log', [LogController::class, 'nextLogGet'])->middleware(['auth:sanctum', 'sanctum.admin']);
+Route::post('/next-log', [LogController::class, 'nextLogStore']);

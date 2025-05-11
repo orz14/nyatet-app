@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use ObjectId\ObjectId;
 
 class LogController extends Controller
 {
@@ -86,6 +90,65 @@ class LogController extends Controller
                 default:
                     return Response::error('Invalid type.', null, 400);
                     break;
+            }
+        } else {
+            return Response::error('Anda Tidak Memiliki Akses.', null, 403);
+        }
+    }
+
+    public function nextLogGet()
+    {
+        $logs = DB::table('next_logs')->orderBy('id', 'desc')->get()->map(function ($item) {
+            return [
+                'timestamp' => $item->created_at,
+                'level' => $item->level,
+                'content' => json_decode($item->content)
+            ];
+        });
+
+        if ($logs->count() == 0) {
+            return Response::error('Log not found.', null, 404);
+        }
+
+        return Response::success(null, ['logs' => $logs]);
+    }
+
+    public function nextLogStore(Request $request)
+    {
+        $origin = parse_url($request->headers->get('Origin'), PHP_URL_HOST);
+        $host = explode(',', env('SANCTUM_STATEFUL_DOMAINS'));
+
+        if (in_array($origin, $host)) {
+            $validator = Validator::make($request->all(), [
+                'timestamp' => ['required'],
+                'level' => ['required', 'string'],
+                'content' => ['required']
+            ]);
+
+            if ($validator->fails()) {
+                return Response::error($validator->errors(), null, 422);
+            }
+
+            $logLevel = ['info', 'warning', 'error'];
+            $level = strtolower($request->level);
+
+            if (!in_array($level, $logLevel)) {
+                return Response::error('Invalid level.', null, 400);
+            }
+
+            try {
+                DB::table('next_logs')->insert([
+                    'id' => ObjectId::generate(),
+                    'level' => $level,
+                    'content' => json_encode($request->content),
+                    'created_at' => Carbon::parse($request->timestamp)
+                ]);
+
+                return Response::success('Log has been stored.', null, 201);
+            } catch (\Exception $err) {
+                Log::error($err->getMessage());
+
+                return Response::error('[500] Server Error');
             }
         } else {
             return Response::error('Anda Tidak Memiliki Akses.', null, 403);
