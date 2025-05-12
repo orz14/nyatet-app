@@ -98,17 +98,14 @@ class LogController extends Controller
 
     public function nextLogGet()
     {
-        $logs = DB::table('next_logs')->orderBy('id', 'desc')->get()->map(function ($item) {
-            return [
-                'timestamp' => $item->created_at,
-                'level' => $item->level,
-                'content' => json_decode($item->content)
-            ];
-        });
+        $logPath = storage_path('logs/next-log.json');
 
-        if ($logs->count() == 0) {
+        if (!file_exists($logPath)) {
             return Response::error('Log not found.', null, 404);
         }
+
+        $content = file_get_contents($logPath);
+        $logs = json_decode($content, true);
 
         return Response::success(null, ['logs' => $logs]);
     }
@@ -136,13 +133,21 @@ class LogController extends Controller
                 return Response::error('Invalid level.', null, 400);
             }
 
+            $logPath = storage_path('logs/next-log.json');
+            $newLog = [
+                'timestamp' => Carbon::parse($request->timestamp)->toDateTimeString(),
+                'level' => $level,
+                'content' => $request->content
+            ];
+
             try {
-                DB::table('next_logs')->insert([
-                    'id' => ObjectId::generate(),
-                    'level' => $level,
-                    'content' => json_encode($request->content),
-                    'created_at' => Carbon::parse($request->timestamp)
-                ]);
+                if (!file_exists($logPath)) {
+                    file_put_contents($logPath, json_encode([$newLog], JSON_PRETTY_PRINT));
+                } else {
+                    $logs = json_decode(file_get_contents($logPath), true);
+                    $logs[] = $newLog;
+                    file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
+                }
 
                 return Response::success('Log has been stored.', null, 201);
             } catch (\Exception $err) {
@@ -152,6 +157,23 @@ class LogController extends Controller
             }
         } else {
             return Response::error('Anda Tidak Memiliki Akses.', null, 403);
+        }
+    }
+
+    public function nextLogDestroy()
+    {
+        try {
+            $logPath = storage_path('logs/next-log.json');
+
+            if (file_exists($logPath)) {
+                file_put_contents($logPath, json_encode([], JSON_PRETTY_PRINT));
+            }
+
+            return Response::success('Log has been cleared.');
+        } catch (\Exception $err) {
+            Log::error($err->getMessage());
+
+            return Response::error('[500] Server Error');
         }
     }
 }
