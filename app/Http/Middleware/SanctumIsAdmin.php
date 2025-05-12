@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\Response as HelpersResponse;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +17,7 @@ class SanctumIsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (! auth()->check() || $request->user()->role_id != 1) {
-            return response()->json([
-                'status' => false,
-                'statusCode' => 403,
-                'message' => 'Anda Tidak Memiliki Akses.'
-            ], 403);
+            return HelpersResponse::error('Anda Tidak Memiliki Akses.', null, 403);
         }
 
         return $next($request);
