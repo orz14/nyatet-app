@@ -77,8 +77,8 @@ Route::prefix('/token')->middleware('auth:sanctum')->group(function () {
     Route::delete('/expired/clear', [TokenController::class, 'clearExpiredToken'])->middleware('sanctum.admin');
     Route::get('/login-log', [TokenController::class, 'getLoginLog']);
     Route::delete('/logout/{token_name}', [TokenController::class, 'logoutToken']);
-    Route::delete('/clear', [TokenController::class, 'clearToken']);
-    Route::delete('/password/clear', [TokenController::class, 'clearPasswordToken']);
+    Route::delete('/clear', [TokenController::class, 'clearToken'])->middleware('sanctum.admin');
+    Route::delete('/password/clear', [TokenController::class, 'clearPasswordToken'])->middleware('sanctum.admin');
 });
 
 // Artisan Call
