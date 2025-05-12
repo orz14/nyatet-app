@@ -78,10 +78,12 @@ class TokenController extends Controller
         return Response::error('Anda Tidak Memiliki Akses.', null, 403);
     }
 
-    public function clearToken()
+    public function clearToken(Request $request)
     {
+        $data = $request->user()->currentAccessToken();
+
         try {
-            PersonalAccessToken::delete();
+            PersonalAccessToken::where('name', '!=', $data->name)->delete();
 
             return Response::success('Token deleted successfully.');
         } catch (\Exception $err) {
