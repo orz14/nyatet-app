@@ -338,7 +338,7 @@ class AuthController extends Controller
         $info = $this->getInfo($request);
 
         try {
-            LoginLog::where('token_name', $data->name)->update([
+            DB::table('login_logs')->where('token_name', $data->name)->update([
                 'ip_address' => $info['ip_address'],
                 'fingerprint' => $info['fingerprint'],
                 'user_agent' => $request->userAgent() ?? null,
@@ -365,7 +365,7 @@ class AuthController extends Controller
             $token = $user->createToken($token_name, ["*"], $expiresAt)->plainTextToken;
             $info = $this->getInfo($request);
 
-            LoginLog::create([
+            DB::table('login_logs')->insert([
                 'user_id' => $user->id,
                 'token_name' => $token_name,
                 'ip_address' => $info['ip_address'],
