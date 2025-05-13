@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Generate;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Models\LoginLog;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
@@ -21,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Socialite\Facades\Socialite;
+use ObjectId\ObjectId;
 
 class AuthController extends Controller
 {
@@ -366,6 +366,7 @@ class AuthController extends Controller
             $info = $this->getInfo($request);
 
             DB::table('login_logs')->insert([
+                'id' => ObjectId::generate(),
                 'user_id' => $user->id,
                 'token_name' => $token_name,
                 'ip_address' => $info['ip_address'],
