@@ -17,30 +17,28 @@ class CheckConnectionController extends Controller
     public function __invoke(Request $request)
     {
         $get_fingerprint = $request->header('Fingerprint_');
-        // if (!$request->is('api/auth/logout')) {
-        //     $get_authorization = $request->header('Authorization');
-        //     if ($get_authorization) {
-        //         $parts = explode(' ', $get_authorization);
-        //         $token = $parts[1];
-        //         $tokenParts = explode('|', $token);
-        //         $accessToken = DB::table('personal_access_tokens')->where('id', $tokenParts[0])->first(['name']);
+        $get_authorization = $request->header('Authorization');
+        if ($get_authorization) {
+            $parts = explode(' ', $get_authorization);
+            $token = $parts[1];
+            $tokenParts = explode('|', $token);
+            $accessToken = DB::table('personal_access_tokens')->where('id', $tokenParts[0])->first(['name']);
 
-        //         if ($accessToken) {
-        //             $log = DB::table('login_logs')->where('token_name', $accessToken->name)->first(['fingerprint']);
-        //             if (!$log || ($log->fingerprint != $get_fingerprint)) {
-        //                 try {
-        //                     DB::table('personal_access_tokens')->where('id', $tokenParts[0])->delete();
-        //                     return Response::error('Fingerprint invalid.', null, 401);
-        //                 } catch (\Exception $err) {
-        //                     Log::error($err->getMessage());
-        //                     return Response::error('Internal Server Error');
-        //                 }
-        //             }
-        //         } else {
-        //             return Response::error('Token invalid.', null, 401);
-        //         }
-        //     }
-        // }
+            if ($accessToken) {
+                $log = DB::table('login_logs')->where('token_name', $accessToken->name)->first(['fingerprint']);
+                if (!$log || ($log->fingerprint != $get_fingerprint)) {
+                    try {
+                        DB::table('personal_access_tokens')->where('id', $tokenParts[0])->delete();
+                        return Response::error('Fingerprint invalid.', null, 401);
+                    } catch (\Exception $err) {
+                        Log::error($err->getMessage());
+                        return Response::error('Internal Server Error');
+                    }
+                }
+            } else {
+                return Response::error('Token invalid.', null, 401);
+            }
+        }
 
         $cache_name = "csrf_$get_fingerprint";
         $cachedData = Cache::get($cache_name);
