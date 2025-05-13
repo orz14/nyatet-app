@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Generate;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Models\LoginLog;
-use App\Models\Sanctum\PersonalAccessToken;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -24,13 +22,18 @@ class CheckConnectionController extends Controller
             $parts = explode(' ', $get_authorization);
             $token = $parts[1];
             $tokenParts = explode('|', $token);
-            $accessToken = PersonalAccessToken::where('id', $tokenParts[0])->first(['name']);
+            $accessToken = DB::table('personal_access_tokens')->where('id', $tokenParts[0])->first(['name']);
 
             if ($accessToken) {
-                $log = LoginLog::where('token_name', $accessToken->name)->first(['fingerprint']);
+                $log = DB::table('login_logs')->where('token_name', $accessToken->name)->first(['fingerprint']);
                 if (!$log || ($log->fingerprint != $get_fingerprint)) {
-                    PersonalAccessToken::where('id', $tokenParts[0])->delete();
-                    return Response::error('Fingerprint invalid.', null, 401);
+                    try {
+                        DB::table('personal_access_tokens')->where('id', $tokenParts[0])->delete();
+                        return Response::error('Fingerprint invalid.', null, 401);
+                    } catch (\Exception $err) {
+                        Log::error($err->getMessage());
+                        return Response::error('Internal Server Error');
+                    }
                 }
             } else {
                 return Response::error('Token invalid.', null, 401);

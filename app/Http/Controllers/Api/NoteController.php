@@ -61,7 +61,7 @@ class NoteController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -114,7 +114,7 @@ class NoteController extends Controller
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return Response::error('[500] Server Error');
+                    return Response::error('Internal Server Error');
                 }
             } else {
                 return Response::error('Akses Ditolak.', null, 403);
@@ -140,7 +140,7 @@ class NoteController extends Controller
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return Response::error('[500] Server Error');
+                    return Response::error('Internal Server Error');
                 }
             } else {
                 return Response::error('Akses Ditolak.', null, 403);
@@ -174,7 +174,7 @@ class NoteController extends Controller
                 } catch (\Exception $err) {
                     Log::error($err->getMessage());
 
-                    return Response::error('[500] Server Error');
+                    return Response::error('Internal Server Error');
                 }
             } else {
                 return Response::error('Catatan Sudah Dikunci.', null, 400);
@@ -209,7 +209,7 @@ class NoteController extends Controller
                     } catch (\Exception $err) {
                         Log::error($err->getMessage());
 
-                        return Response::error('[500] Server Error');
+                        return Response::error('Internal Server Error');
                     }
                 } else {
                     return Response::error('Password Yang Anda Masukkan Salah.', null, 400);
