@@ -17,12 +17,11 @@ class RoleController extends Controller
 {
     public function getAllRole()
     {
-        $data = DB::table('roles')->orderBy('id', 'asc')->get(['id', 'role'])->map(function ($item) {
-            $count = DB::table('users')->where('role_id', $item->id)->count();
+        $data = Role::withCount('users')->orderBy('id', 'asc')->get()->map(function ($item) {
             return [
                 'id' => Crypt::encryptString($item->id),
                 'role' => $item->role,
-                'users_count' => $count
+                'users_count' => $item->users_count,
             ];
         });
 
