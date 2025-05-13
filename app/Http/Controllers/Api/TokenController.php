@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Models\LoginLog;
-use App\Models\Sanctum\PersonalAccessToken;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +15,7 @@ class TokenController extends Controller
     public function tokenInfo(Request $request)
     {
         $data = $request->user()->currentAccessToken();
-        $log = LoginLog::where('token_name', $data->name)->first(['fingerprint']);
+        $log = DB::table('login_logs')->where('token_name', $data->name)->first(['fingerprint']);
 
         return Response::success(null, [
             'data' => [
@@ -29,7 +28,7 @@ class TokenController extends Controller
     public function clearExpiredToken()
     {
         try {
-            PersonalAccessToken::where('expires_at', '<=', Carbon::now())->delete();
+            DB::table('personal_access_tokens')->where('expires_at', '<=', Carbon::now())->delete();
 
             return Response::success('Token deleted successfully.');
         } catch (\Exception $err) {
@@ -58,14 +57,14 @@ class TokenController extends Controller
 
     public function logoutToken(Request $request, $token_name)
     {
-        $token = PersonalAccessToken::whereName($token_name)->first();
+        $token = DB::table('personal_access_tokens')->whereName($token_name)->first(['tokenable_id']);
         if (!$token) {
             return Response::error('Token Tidak Ditemukan.', null, 404);
         }
 
         if ($token->tokenable_id == $request->user()->id) {
             try {
-                $token->delete();
+                DB::table('personal_access_tokens')->whereName($token_name)->delete();
 
                 return Response::success('Berhasil Logout.');
             } catch (\Exception $err) {
@@ -83,7 +82,7 @@ class TokenController extends Controller
         $data = $request->user()->currentAccessToken();
 
         try {
-            PersonalAccessToken::where('name', '!=', $data->name)->delete();
+            DB::table('personal_access_tokens')->where('name', '!=', $data->name)->delete();
 
             return Response::success('Token deleted successfully.');
         } catch (\Exception $err) {

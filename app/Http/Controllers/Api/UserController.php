@@ -22,16 +22,16 @@ class UserController extends Controller
         $paginate = User::with(['role'])->orderBy('role_id', 'asc')->orderBy('name', 'asc')->simplePaginate(10);
         $data = $paginate->getCollection()->map(function ($item) {
             return [
-                'id' => $item->encrypt($item->id),
+                'id' => Crypt::encryptString($item->id),
                 'name' => $item->name,
                 'username' => $item->username,
                 'email' => $item->email,
                 'role' => [
-                    'id' => $item->encrypt($item->role->id),
+                    'id' => Crypt::encryptString($item->role->id),
                     'role' => $item->role->role
                 ],
-                'github_id' => $item->encrypt($item->github_id),
-                'google_id' => $item->encrypt($item->google_id),
+                'github_id' => Crypt::encryptString($item->github_id),
+                'google_id' => Crypt::encryptString($item->google_id),
                 'avatar' => $item->avatar,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at
@@ -96,16 +96,16 @@ class UserController extends Controller
 
         return Response::success(null, [
             'data' => [
-                'id' => $user->encrypt($user->id),
+                'id' => Crypt::encryptString($user->id),
                 'name' => $user->name,
                 'username' => $user->username,
                 'email' => $user->email,
                 'role' => [
-                    'id' => $user->encrypt($user->role->id),
+                    'id' => Crypt::encryptString($user->role->id),
                     'role' => $user->role->role
                 ],
-                'github_id' => $user->encrypt($user->github_id),
-                'google_id' => $user->encrypt($user->google_id),
+                'github_id' => Crypt::encryptString($user->github_id),
+                'google_id' => Crypt::encryptString($user->google_id),
                 'avatar' => $user->avatar,
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at
@@ -116,15 +116,15 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $decrypted_id = Crypt::decryptString($id);
-        $user = User::find($decrypted_id);
+        $user = DB::table('users')->where('id', $decrypted_id)->exists();
         if (!$user) {
             return Response::error('User Tidak Ditemukan.', null, 404);
         }
 
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'min:5', 'max:20', Rule::unique(User::class)->ignore($user->id)],
-            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'username' => ['required', 'string', 'min:5', 'max:20', Rule::unique(User::class)->ignore($decrypted_id)],
+            'email' => ['required', 'string', 'email', 'indisposable', 'max:255', Rule::unique(User::class)->ignore($decrypted_id)],
             'role' => ['required']
         ]);
 
@@ -133,7 +133,7 @@ class UserController extends Controller
         }
 
         try {
-            $user->update([
+            DB::table('users')->where('id', $decrypted_id)->update([
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
@@ -151,15 +151,15 @@ class UserController extends Controller
     public function destroy($id)
     {
         $decrypted_id = Crypt::decryptString($id);
-        $user = User::find($decrypted_id);
+        $user = DB::table('users')->where('id', $decrypted_id)->exists();
         if (!$user) {
             return Response::error('User Tidak Ditemukan.', null, 404);
         }
 
         DB::beginTransaction();
         try {
-            $user->tokens()->delete();
-            $user->delete();
+            DB::table('personal_access_tokens')->where('tokenable_id', $decrypted_id)->delete();
+            DB::table('users')->where('id', $decrypted_id)->delete();
             DB::commit();
 
             return Response::success('User Berhasil Dihapus.');

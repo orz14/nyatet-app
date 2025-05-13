@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -15,11 +15,9 @@ class NoteController extends Controller
 {
     public function getAllNote()
     {
-        $paginate = Note::whereUserId(auth()->user()->id)->orderBy('updated_at', 'desc')->simplePaginate(10);
+        $paginate = DB::table('notes')->whereUserId(auth()->user()->id)->orderBy('updated_at', 'desc')->simplePaginate(10, ['slug', 'title', 'created_at', 'updated_at']);
         $data = $paginate->getCollection()->map(function ($item) {
-            $item->title = $item->title ? $item->decrypt($item->title) : null;
-            $item->note = 'hidden';
-
+            $item->title = $item->title ? Crypt::decryptString($item->title) : null;
             return $item;
         });
 
@@ -50,7 +48,7 @@ class NoteController extends Controller
         }
 
         try {
-            Note::create([
+            DB::table('notes')->insert([
                 'user_id' => auth()->user()->id,
                 'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
                 'title' => $request->title ? Crypt::encryptString($request->title) : null,
@@ -67,15 +65,16 @@ class NoteController extends Controller
 
     public function getNote($slug)
     {
-        $note = Note::whereSlug($slug)->first();
+        $note = DB::table('notes')->whereSlug($slug)->first(['user_id', 'slug', 'title', 'note', 'password', 'created_at', 'updated_at']);
         if (!$note) {
             return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
 
         if ($note->user_id == auth()->user()->id) {
             if (!isset($note->password)) {
-                $note->title = $note->title ? $note->decrypt($note->title) : null;
-                $note->note = $note->decrypt($note->note);
+                unset($note->user_id, $note->password);
+                $note->title = $note->title ? Crypt::decryptString($note->title) : null;
+                $note->note = Crypt::decryptString($note->note);
 
                 return Response::success(null, ['data' => $note]);
             } else {
@@ -88,7 +87,7 @@ class NoteController extends Controller
 
     public function update(Request $request, $slug)
     {
-        $note = Note::whereSlug($slug)->first();
+        $note = DB::table('notes')->whereSlug($slug)->first(['user_id', 'password']);
         if (!$note) {
             return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
@@ -105,9 +104,9 @@ class NoteController extends Controller
         if ($note->user_id == auth()->user()->id) {
             if (!isset($note->password)) {
                 try {
-                    $note->update([
-                        'title' => $request->title ? $note->encrypt($request->title) : null,
-                        'note' => $note->encrypt($request->note)
+                    DB::table('notes')->whereSlug($slug)->update([
+                        'title' => $request->title ? Crypt::encryptString($request->title) : null,
+                        'note' => Crypt::encryptString($request->note)
                     ]);
 
                     return Response::success('Catatan Berhasil Disimpan.');
@@ -126,7 +125,7 @@ class NoteController extends Controller
 
     public function destroy($slug)
     {
-        $note = Note::whereSlug($slug)->first();
+        $note = DB::table('notes')->whereSlug($slug)->first(['user_id', 'password']);
         if (!$note) {
             return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
@@ -134,7 +133,7 @@ class NoteController extends Controller
         if ($note->user_id == auth()->user()->id) {
             if (!isset($note->password)) {
                 try {
-                    $note->delete();
+                    DB::table('notes')->whereSlug($slug)->delete();
 
                     return Response::success('Catatan Berhasil Dihapus.');
                 } catch (\Exception $err) {
@@ -152,7 +151,7 @@ class NoteController extends Controller
 
     public function lock(Request $request, $slug)
     {
-        $note = Note::whereSlug($slug)->first();
+        $note = DB::table('notes')->whereSlug($slug)->first(['user_id', 'password']);
         if (!$note) {
             return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
@@ -168,7 +167,7 @@ class NoteController extends Controller
         if ($note->user_id == auth()->user()->id) {
             if (!isset($note->password)) {
                 try {
-                    $note->update(['password' => Hash::make($request->password)]);
+                    DB::table('notes')->whereSlug($slug)->update(['password' => Hash::make($request->password)]);
 
                     return Response::success('Catatan Berhasil Dikunci.');
                 } catch (\Exception $err) {
@@ -186,7 +185,7 @@ class NoteController extends Controller
 
     public function unlock(Request $request, $slug)
     {
-        $note = Note::whereSlug($slug)->first();
+        $note = DB::table('notes')->whereSlug($slug)->first(['user_id', 'password']);
         if (!$note) {
             return Response::error('Catatan Tidak Ditemukan.', null, 404);
         }
@@ -203,7 +202,7 @@ class NoteController extends Controller
             if (isset($note->password)) {
                 if (Hash::check($request->password, $note->password)) {
                     try {
-                        $note->update(['password' => null]);
+                        DB::table('notes')->whereSlug($slug)->update(['password' => null]);
 
                         return Response::success('Catatan Berhasil Dibuka.');
                     } catch (\Exception $err) {
