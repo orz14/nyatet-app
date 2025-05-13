@@ -50,7 +50,7 @@ class NoteController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
-            flash('[500] Server Error', 'err');
+            flash('Internal Server Error', 'err');
 
             return to_route('note.index');
         }
@@ -103,7 +103,7 @@ class NoteController extends Controller
                 } catch (\Exception $e) {
                     Log::error($e->getMessage());
 
-                    flash('[500] Server Error', 'err');
+                    flash('Internal Server Error', 'err');
 
                     return to_route('note.index');
                 }

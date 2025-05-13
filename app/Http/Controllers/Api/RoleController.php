@@ -51,7 +51,7 @@ class RoleController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -100,7 +100,7 @@ class RoleController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -124,7 +124,7 @@ class RoleController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 }

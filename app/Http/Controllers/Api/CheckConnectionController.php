@@ -32,7 +32,7 @@ class CheckConnectionController extends Controller
                         return Response::error('Fingerprint invalid.', null, 401);
                     } catch (\Exception $err) {
                         Log::error($err->getMessage());
-                        return Response::error('[500] Server Error');
+                        return Response::error('Internal Server Error');
                     }
                 }
             } else {

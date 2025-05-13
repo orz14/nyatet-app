@@ -22,7 +22,7 @@ class SessionStatus extends Component
     #[On('nyatetError')]
     public function nyatetError()
     {
-        return $this->sessionStatus('[500] Server Error');
+        return $this->sessionStatus('Internal Server Error');
     }
 
     #[On('nyatetNotMine')]

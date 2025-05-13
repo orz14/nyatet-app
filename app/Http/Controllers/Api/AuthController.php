@@ -112,7 +112,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error', ['type' => 'server_error']);
+            return Response::error('Internal Server Error', ['type' => 'server_error']);
         }
     }
 
@@ -139,7 +139,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -173,7 +173,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -315,7 +315,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -328,7 +328,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
@@ -351,7 +351,7 @@ class AuthController extends Controller
         } catch (\Exception $err) {
             Log::error($err->getMessage());
 
-            return Response::error('[500] Server Error');
+            return Response::error('Internal Server Error');
         }
     }
 
