@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Models\Todo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,12 +15,11 @@ class TodoController extends Controller
 {
     public function getAllTodo()
     {
-        $data = Todo::whereUserId(auth()->user()->id)
+        $data = DB::table('todos')->whereUserId(auth()->user()->id)
             ->whereDate('created_at', Carbon::today())
-            ->get()
+            ->get(['slug', 'content', 'is_done', 'date', 'created_at', 'updated_at'])
             ->map(function ($item) {
-                $item->content = $item->decrypt($item->content);
-
+                $item->content = Crypt::decryptString($item->content);
                 return $item;
             });
 
@@ -29,11 +28,14 @@ class TodoController extends Controller
 
     public function getAllHistoryTodo()
     {
-        $paginate = Todo::whereUserId(auth()->user()->id)->whereDate('created_at', '!=', Carbon::today())->latest()->simplePaginate(20);
+        $paginate = DB::table('todos')
+            ->whereUserId(auth()->user()->id)
+            ->whereDate('created_at', '!=', Carbon::today())->latest()
+            ->simplePaginate(20, ['slug', 'content', 'is_done', 'date', 'created_at', 'updated_at']);
+
         $data = $paginate->groupBy('date')->map(function ($group) {
             return $group->map(function ($item) {
-                $item->content = $item->decrypt($item->content);
-
+                $item->content = Crypt::decryptString($item->content);
                 return $item;
             });
         });
@@ -64,7 +66,7 @@ class TodoController extends Controller
         }
 
         try {
-            Todo::create([
+            DB::table('todos')->insert([
                 'user_id' => auth()->user()->id,
                 'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
                 'content' => Crypt::encryptString($request->content),
@@ -81,7 +83,7 @@ class TodoController extends Controller
 
     public function changeStatus($slug)
     {
-        $todo = Todo::whereSlug($slug)->first();
+        $todo = DB::table('todos')->whereSlug($slug)->first(['user_id', 'is_done']);
         if (!$todo) {
             return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
@@ -89,7 +91,7 @@ class TodoController extends Controller
         if ($todo->user_id == auth()->user()->id) {
             if (!$todo->is_done) {
                 try {
-                    $todo->update(['is_done' => true]);
+                    DB::table('todos')->whereSlug($slug)->update(['is_done' => true]);
 
                     return Response::success('Todo Berhasil Diperbarui.');
                 } catch (\Exception $err) {
@@ -107,13 +109,14 @@ class TodoController extends Controller
 
     public function getTodo($slug)
     {
-        $todo = Todo::whereSlug($slug)->first();
+        $todo = DB::table('todos')->whereSlug($slug)->first(['user_id', 'content']);
         if (!$todo) {
             return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
 
         if ($todo->user_id == auth()->user()->id) {
-            $todo->content = $todo->decrypt($todo->content);
+            $todo->content = Crypt::decryptString($todo->content);
+            unset($todo->user_id);
 
             return Response::success(null, ['data' => $todo]);
         }
@@ -123,7 +126,7 @@ class TodoController extends Controller
 
     public function update(Request $request, $slug)
     {
-        $todo = Todo::whereSlug($slug)->first();
+        $todo = DB::table('todos')->whereSlug($slug)->first(['user_id']);
         if (!$todo) {
             return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
@@ -138,8 +141,8 @@ class TodoController extends Controller
 
         if ($todo->user_id == auth()->user()->id) {
             try {
-                $todo->update([
-                    'content' => $todo->encrypt($request->todo)
+                DB::table('todos')->whereSlug($slug)->update([
+                    'content' => Crypt::encryptString($request->todo)
                 ]);
 
                 return Response::success('Todo Berhasil Diperbarui.');
@@ -155,14 +158,14 @@ class TodoController extends Controller
 
     public function destroy($slug)
     {
-        $todo = Todo::whereSlug($slug)->first();
+        $todo = DB::table('todos')->whereSlug($slug)->first(['user_id']);
         if (!$todo) {
             return Response::error('Todo Tidak Ditemukan.', null, 404);
         }
 
         if ($todo->user_id == auth()->user()->id) {
             try {
-                $todo->delete();
+                DB::table('todos')->whereSlug($slug)->delete();
 
                 return Response::success('List Berhasil Dihapus.');
             } catch (\Exception $err) {
