@@ -126,15 +126,26 @@ class AuthController extends Controller
             return Response::error($validator->errors(), null, 422);
         }
 
-        try {
-            $status = FacadesPassword::sendResetLink(
-                $request->only('email')
-            );
+        if (!DB::table('users')->where('email', $request->email)->exists()) {
+            return Response::error('Email tidak terdaftar.', null, 404);
+        }
 
-            if ($status == FacadesPassword::RESET_LINK_SENT) {
-                return Response::success('Kami telah mengirimkan tautan pengaturan ulang kata sandi Anda melalui email!');
-            } else {
-                return Response::error('Email tidak terdaftar.', null, 400);
+        try {
+            $status = FacadesPassword::sendResetLink($request->only('email'));
+
+            switch ($status) {
+                case FacadesPassword::RESET_LINK_SENT:
+                    return Response::success('Kami telah mengirimkan tautan pengaturan ulang kata sandi Anda melalui email!');
+                    break;
+                case FacadesPassword::INVALID_USER:
+                    return Response::error('Email tidak terdaftar.', null, 404);
+                    break;
+                case FacadesPassword::RESET_THROTTLED:
+                    return Response::error('Terlalu sering meminta reset password. Silakan coba beberapa saat lagi.', null, 429);
+                    break;
+                default:
+                    return Response::error('Gagal mengirim tautan reset password. Silakan coba lagi nanti.');
+                    break;
             }
         } catch (\Exception $err) {
             Log::error($err->getMessage());
@@ -155,20 +166,32 @@ class AuthController extends Controller
             return Response::error($validator->errors(), null, 422);
         }
 
+        if (!DB::table('users')->where('email', $request->email)->exists()) {
+            return Response::error('Email tidak terdaftar.', null, 404);
+        }
+
         try {
             $status = FacadesPassword::reset(
                 $request->only('email', 'password', 'password_confirmation', 'token'),
                 function ($user) use ($request) {
                     $user->forceFill(['password' => Hash::make($request->password)])->save();
-
                     event(new PasswordReset($user));
                 }
             );
 
-            if ($status == FacadesPassword::PASSWORD_RESET) {
-                return Response::success('Password Anda berhasil diubah.');
-            } else {
-                return Response::error('Token tidak valid.', null, 400);
+            switch ($status) {
+                case FacadesPassword::PASSWORD_RESET:
+                    return Response::success('Password Anda berhasil diubah.');
+                    break;
+                case FacadesPassword::INVALID_TOKEN:
+                    return Response::error('Token tidak valid atau sudah kadaluarsa.', null, 400);
+                    break;
+                case FacadesPassword::INVALID_USER:
+                    return Response::error('Email tidak terdaftar.', null, 404);
+                    break;
+                default:
+                    return Response::error('Gagal mereset password. Silakan coba lagi nanti.');
+                    break;
             }
         } catch (\Exception $err) {
             Log::error($err->getMessage());
