@@ -21,7 +21,7 @@ class HandleCsrfToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $envCheck = (env('APP_ENV') != 'local');
+        $envCheck = env('APP_ENV') != 'local';
         $methodCheck = in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE']);
         $pathCheck = !$request->is('api/next-log');
 
@@ -52,7 +52,11 @@ class HandleCsrfToken
 
     public function terminate($request, $response)
     {
-        if ((env('APP_ENV') != 'local') && in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+        $envCheck = env('APP_ENV') != 'local';
+        $methodCheck = in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE']);
+        $pathCheck = !$request->is('api/next-log');
+
+        if ($envCheck && $methodCheck && $pathCheck) {
             $get_fingerprint = $request->header('Fingerprint_');
             $cache_name = "csrf_$get_fingerprint";
 
