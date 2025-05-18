@@ -29,6 +29,7 @@ class CheckConnectionController extends Controller
                 if (!$log || ($log->fingerprint != $get_fingerprint)) {
                     try {
                         DB::table('personal_access_tokens')->where('id', $tokenParts[0])->delete();
+                        Log::info('Fingerprint invalid.');
                         return Response::error('Fingerprint invalid.', null, 401);
                     } catch (\Exception $err) {
                         Log::error($err->getMessage());
@@ -36,6 +37,7 @@ class CheckConnectionController extends Controller
                     }
                 }
             } else {
+                Log::info('Token invalid.');
                 return Response::error('Token invalid.', null, 401);
             }
         }
