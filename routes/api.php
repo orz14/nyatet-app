@@ -12,9 +12,9 @@ use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Testing
-// Route::get('/test', function () {
-//     return response()->json(['status' => true]);
-// });
+Route::get('/test', function () {
+    return response()->json(['status' => true]);
+});
 
 // Auth
 Route::prefix('/auth')->group(function () {
