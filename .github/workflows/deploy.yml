@@ -1,9 +1,8 @@
-name: Deploy to Shared Hosting
+name: Deploy Laravel ke Hosting
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
@@ -13,8 +12,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: 36.50.77.79
-          username: orzverse
           port: 64000
+          username: orzverse
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             bash ~/deploy.sh
