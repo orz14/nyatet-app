@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 // Testing
 Route::get('/test', function () {
     return response()->json([
-        'statusss' => true,
+        'status' => true,
         'message' => Inspiring::quote()
     ]);
 });
