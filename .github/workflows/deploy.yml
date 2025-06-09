@@ -2,13 +2,16 @@ name: Deploy Laravel ke Hosting
 
 on:
   push:
-    branches: [main]
+    branches:
+      - dev
+      - main
 
 jobs:
-  deploy:
+  deploy-dev:
+    if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - name: Deploy ke be-nyatet (dev branch)
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: 36.50.77.79
@@ -17,3 +20,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             bash ~/deploy.sh be-nyatet
+
+  deploy-main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy ke nyatet (main branch)
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 36.50.77.79
+          port: 64000
+          username: orzverse
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            bash ~/deploy.sh nyatet
