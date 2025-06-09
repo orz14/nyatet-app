@@ -12,7 +12,7 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: be-nyatet.orzverse.com
+          host: orzverse.com
           username: orzverse
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
