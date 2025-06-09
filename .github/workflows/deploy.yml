@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "bash ~/deploy.sh be-nyatet"
+            bash ~/deploy.sh be-nyatet
 
   deploy-main:
     if: github.ref == 'refs/heads/main'
@@ -33,4 +33,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "bash ~/deploy.sh nyatet"
+            bash ~/deploy.sh nyatet
