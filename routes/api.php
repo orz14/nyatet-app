@@ -9,12 +9,16 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\TodoController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\UserController;
+use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Route;
 
 // Testing
-Route::get('/test', function () {
-    return response()->json(['status' => true]);
-});
+// Route::get('/test', function () {
+//     return response()->json([
+//         'status' => true,
+//         'message' => Inspiring::quote()
+//     ]);
+// });
 
 // Auth
 Route::prefix('/auth')->group(function () {

@@ -16,4 +16,4 @@ jobs:
           username: orzverse
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            bash ~/deploy.sh
+            bash ~/deploy.sh be-nyatet
