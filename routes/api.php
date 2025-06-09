@@ -11,6 +11,11 @@ use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
+// Testing
+// Route::get('/test', function () {
+//     return response()->json(['status' => true]);
+// });
+
 // Auth
 Route::prefix('/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
