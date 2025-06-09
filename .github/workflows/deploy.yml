@@ -2,7 +2,7 @@ name: Deploy Laravel ke Hosting
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   deploy:
