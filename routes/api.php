@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 // Testing
 Route::get('/test', function () {
-    return response()->json(['status' => true]);
+    return response()->json(['statuss' => true]);
 });
 
 // Auth
