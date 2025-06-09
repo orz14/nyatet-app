@@ -14,9 +14,9 @@ jobs:
       - name: Deploy ke be-nyatet (dev branch)
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: 36.50.77.79
-          port: 64000
-          username: orzverse
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             bash ~/deploy.sh be-nyatet
@@ -28,9 +28,9 @@ jobs:
       - name: Deploy ke nyatet (main branch)
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: 36.50.77.79
-          port: 64000
-          username: orzverse
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             bash ~/deploy.sh nyatet
