@@ -12,8 +12,9 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: orzverse.com
+          host: 36.50.77.79
           username: orzverse
+          port: 64000
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             bash ~/deploy.sh
