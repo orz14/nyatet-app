@@ -13,12 +13,12 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Route;
 
 // Testing
-// Route::get('/test', function () {
-//     return response()->json([
-//         'status' => true,
-//         'message' => Inspiring::quote()
-//     ]);
-// });
+Route::get('/test', function () {
+    return response()->json([
+        'status' => true,
+        'message' => Inspiring::quote()
+    ]);
+});
 
 // Auth
 Route::prefix('/auth')->group(function () {
