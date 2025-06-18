@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,9 @@ class NoteController extends Controller
                 'user_id' => auth()->user()->id,
                 'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
                 'title' => $request->title ? Crypt::encryptString($request->title) : null,
-                'note' => Crypt::encryptString($request->note)
+                'note' => Crypt::encryptString($request->note),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
 
             return Response::success('Catatan Berhasil Ditambahkan.', null, 201);
@@ -106,7 +109,8 @@ class NoteController extends Controller
                 try {
                     DB::table('notes')->whereSlug($slug)->update([
                         'title' => $request->title ? Crypt::encryptString($request->title) : null,
-                        'note' => Crypt::encryptString($request->note)
+                        'note' => Crypt::encryptString($request->note),
+                        'updated_at' => Carbon::now()
                     ]);
 
                     return Response::success('Catatan Berhasil Disimpan.');
@@ -167,7 +171,10 @@ class NoteController extends Controller
         if ($note->user_id == auth()->user()->id) {
             if (!isset($note->password)) {
                 try {
-                    DB::table('notes')->whereSlug($slug)->update(['password' => Hash::make($request->password)]);
+                    DB::table('notes')->whereSlug($slug)->update([
+                        'password' => Hash::make($request->password),
+                        'updated_at' => Carbon::now()
+                    ]);
 
                     return Response::success('Catatan Berhasil Dikunci.');
                 } catch (\Exception $err) {
@@ -202,7 +209,10 @@ class NoteController extends Controller
             if (isset($note->password)) {
                 if (Hash::check($request->password, $note->password)) {
                     try {
-                        DB::table('notes')->whereSlug($slug)->update(['password' => null]);
+                        DB::table('notes')->whereSlug($slug)->update([
+                            'password' => null,
+                            'updated_at' => Carbon::now()
+                        ]);
 
                         return Response::success('Catatan Berhasil Dibuka.');
                     } catch (\Exception $err) {

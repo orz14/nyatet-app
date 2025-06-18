@@ -70,7 +70,9 @@ class TodoController extends Controller
                 'user_id' => auth()->user()->id,
                 'slug' => substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 10),
                 'content' => Crypt::encryptString($request->content),
-                'date' => date('Y-m-d')
+                'date' => date('Y-m-d'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
 
             return Response::success('List Berhasil Ditambahkan.', null, 201);
@@ -91,7 +93,10 @@ class TodoController extends Controller
         if ($todo->user_id == auth()->user()->id) {
             if (!$todo->is_done) {
                 try {
-                    DB::table('todos')->whereSlug($slug)->update(['is_done' => true]);
+                    DB::table('todos')->whereSlug($slug)->update([
+                        'is_done' => true,
+                        'updated_at' => Carbon::now()
+                    ]);
 
                     return Response::success('Todo Berhasil Diperbarui.');
                 } catch (\Exception $err) {
@@ -142,7 +147,8 @@ class TodoController extends Controller
         if ($todo->user_id == auth()->user()->id) {
             try {
                 DB::table('todos')->whereSlug($slug)->update([
-                    'content' => Crypt::encryptString($request->todo)
+                    'content' => Crypt::encryptString($request->todo),
+                    'updated_at' => Carbon::now()
                 ]);
 
                 return Response::success('Todo Berhasil Diperbarui.');

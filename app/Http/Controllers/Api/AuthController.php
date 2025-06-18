@@ -367,7 +367,8 @@ class AuthController extends Controller
                 'user_agent' => $request->userAgent() ?? null,
                 'city' => $info['city'],
                 'region' => $info['region'],
-                'country' => $info['country']
+                'country' => $info['country'],
+                'updated_at' => Carbon::now()
             ]);
 
             return Response::success('Fingerprint Berhasil Disimpan.');
@@ -397,7 +398,9 @@ class AuthController extends Controller
                 'user_agent' => $request->userAgent() ?? null,
                 'city' => $info['city'],
                 'region' => $info['region'],
-                'country' => $info['country']
+                'country' => $info['country'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
 
             DB::commit();
